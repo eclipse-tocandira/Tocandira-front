@@ -1,0 +1,8 @@
+.Main {
+    display: flex;
+    background-color: #323F6F;
+    position: absolute;
+    min-width: 100vw;
+    min-height : 100vh;
+    margin: -8px -8px;
+}

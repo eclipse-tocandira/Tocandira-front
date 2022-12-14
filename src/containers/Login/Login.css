@@ -1,0 +1,10 @@
+.Login {
+    display: flex;
+    justify-content: center;
+}
+
+.Login_grid {
+    min-height: 60vh;
+    justify-content: center;
+    max-width: 20rem;
+}
