@@ -8,5 +8,7 @@
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-export const INVALID = 'INVALID';
+export const INVALID_ENTRY = 'INVALID_ENTRY';
+export const INVALID_CONNECTION = 'INVALID_CONNECTION';
 export const VALIDATE = 'VALIDATE';
+export const CLEAR_INVALID = 'CLEAR_INVALID';

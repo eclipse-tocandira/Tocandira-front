@@ -15,17 +15,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { Button, Card, Typography, CardContent,
-    TextField, Grid, CardMedia } from '@mui/material'
+    TextField, Grid, CardMedia, Collapse } from '@mui/material'
 // Local Imports
 import './Login.css';
 import * as authActions from '../../store/auth/actions'
 import * as routeNames from '../../routeNames'
+import CustomAlert from '../../component/CustomAlert/CustomAlert'
 
 // #######################################
 
 /** The login screen and the App entrypoint.
- * @property `props.auth`: Redux access to auth store.
- * @property `props.global`: Redux access to global store.
+ * @param props.auth: Redux access to auth store.
+ * @param props.global: Redux access to global store.
  * @method `props.onLoginSubmit`: Redux function for auth store `login` action.
  * @method `props.handleUsernameInput`: Save username entry in state as typed.
  * @method `props.handlePasswordInput`: Save password entry in state as typed. */
@@ -39,24 +40,52 @@ class Login extends React.PureComponent {
         }
     }
 
-    /** Save the username to component state as typed */
+    /** Set an element to be the intial focus of the screen
+     * @param ele: Reference to the element */
+    focusThisElement=(ele)=>{
+        this.focalElement = ele;
+    }
+
+    /** Save the username to component state as typed 
+     * @param event: The event that called this handler */
     handleUsernameInput=(event) => {
         const newState = {...this.state};
         newState.login = {...this.state.login};
         newState.login.username = event.target.value;
         this.setState(newState);
     }
-    /** Save the password to component state as typed */
+    /** Save the password to component state as typed 
+     * @param event: The event that called this handler */
     handlePasswordInput=(event) => {
         const newState = {...this.state};
         newState.login = {...this.state.login};
         newState.login.password = event.target.value;
         this.setState(newState);
     }
+    /** Watch for the enter key, call login submission if caught
+     * @param event: The event that called this handler*/
+    handleEnterPress=(event)=>{
+        if(event.key=='Enter'){
+            this.handleLoginSubmit();
+        }
+    }
+    /** Submit the username and passord information to login */
+    handleLoginSubmit=()=>{
+        // NOTE: This hides the errors prior to a new login request.
+        //       It is important so the user can see that it recieved
+        //       a new error and not the same as before.
+        this.props.onClearError();
+        this.props.onLoginSubmit(this.props.global.backend_instance, this.state.login);
+    }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */ 
     render(){
+
+        // Prepare alert component to show a message to the user
+        alert = <CustomAlert type='error' elevate
+            reset={this.props.onClearError}
+            msg={this.props.auth.validation.help_text}/>
 
         // Check if the user has a stored token
         let authorized = null;
@@ -99,8 +128,10 @@ class Login extends React.PureComponent {
                                     type='text'
                                     fullWidth={true}
                                     value={this.state.login.username}
-                                    error={this.props.auth.validation.error}
-                                    onChange={this.handleUsernameInput}>
+                                    error={this.props.auth.validation.data_error}
+                                    onChange={this.handleUsernameInput}
+                                    onKeyPress={this.handleEnterPress}
+                                    inputRef={this.focusThisElement}>
                                     </TextField>
                                 </Grid>
                                 {/* Password prompt */}
@@ -110,9 +141,9 @@ class Login extends React.PureComponent {
                                     autoComplete="current-password"
                                     fullWidth={true}
                                     value={this.state.login.password}
+                                    error={this.props.auth.validation.data_error}
                                     onChange={this.handlePasswordInput}
-                                    error={this.props.auth.validation.error}
-                                    helperText={this.props.auth.validation.help_text}>
+                                    onKeyPress={this.handleEnterPress}>
                                     </TextField>
                                 </Grid>
                                 {/* Login Button */}
@@ -120,7 +151,7 @@ class Login extends React.PureComponent {
                                     color='primary'
                                     size='medium'
                                     fullWidth={true}
-                                    onClick={this.props.onLoginSubmit.bind(this, this.props.global.backend_instance, this.state.login)}>
+                                    onClick={this.handleLoginSubmit}>
                                         LOGIN
                                     </Button>
                                 </Grid>
@@ -128,10 +159,21 @@ class Login extends React.PureComponent {
                         </CardContent>
                     </Card>
                 </Grid>
+                {/* Descriptive Error Indicator */}
+                <Grid item>
+                    <Collapse in={this.props.auth.validation.error}>{alert}</Collapse>
+                </Grid>
             </Grid>
             </div>
         );
         return(jsx_component);
+    };
+
+    /** Component lifecycle CREATION ending */
+    componentDidMount() {
+        if (this.focalElement!==undefined){
+            this.focalElement.focus()
+        }
     };
     
 }
@@ -144,7 +186,8 @@ const reduxStateToProps = (state) =>({
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
-    onLoginSubmit: (api_instance,usrdata)=>dispatch(authActions.login(api_instance,usrdata))
+    onLoginSubmit: (api_instance,usrdata)=>dispatch(authActions.login(api_instance,usrdata)),
+    onClearError: ()=>dispatch(authActions.clearInvalid())
 });
 
 // Make this component visible on import

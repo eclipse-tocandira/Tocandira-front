@@ -6,6 +6,7 @@
 
 // Imports from modules
 import qs from 'qs';
+import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
 
@@ -22,12 +23,25 @@ export const login=(api_instance,logindata) => (dispatch) => {
         (res) => dispatch(saveLogin(res.data.access_token, res.data.token_type))
     )
     .catch(
-        (req) => dispatch(invalid())
+        (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(invalidConnection());
+            }else{
+                //AxiosError.ERR_BAD_REQUEST
+                dispatch(invalidEntry());
+            }
+        }
     )
 };
 
+/** Redux action to set an error of invalid entries */
+export const invalidEntry=() => ({type:actionTypes.INVALID_ENTRY});
+
 /** Redux action to mark the login request as invalid */
-export const invalid=() => ({type:actionTypes.INVALID});
+export const invalidConnection=() => ({type:actionTypes.INVALID_CONNECTION});
+
+/** Redux action to clear the invalid status */
+export const clearInvalid=() => ({type:actionTypes.CLEAR_INVALID});
 
 /** Redux action to logout the user */
 export const logout=() => ({type:actionTypes.LOGOUT});

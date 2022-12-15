@@ -14,6 +14,7 @@ const initialState = {
     token: null,
     token_type: null,
     validation:{
+        data_error: false,
         error: false,
         help_text:""
     }
@@ -29,17 +30,21 @@ const reducer = (state=initialState, action) => {
         case actionTypes.LOGIN:
             newState.token = action.token;
             newState.token_type = action.token_type;
-            newState.validation = {error: false, help_text:""}
+            newState.validation = {error: false, data_error: false, help_text:""}
             break
-        case actionTypes.INVALID:
-            newState.token = null;
-            newState.token_type = null;
-            newState.validation = {error: true, help_text:"Invalid Username or Password."}
+        case actionTypes.INVALID_ENTRY:
+            newState.validation = {error: true, data_error: true, help_text:"Invalid Username or Password."}
+            break
+        case actionTypes.INVALID_CONNECTION:
+            newState.validation = {error: true, data_error: false, help_text:"Unable to connect to Server"}
+            break
+        case actionTypes.CLEAR_INVALID:
+            newState.validation = {error: false, data_error: false, help_text:""}
             break
         case actionTypes.LOGOUT:
             newState.token = null;
             newState.token_type = null;
-            newState.validation = {error: false, help_text:""}
+            newState.validation = {error: false, data_error: false, help_text:""}
             break
         case actionTypes.VALIDATE:
             console.warn('[reducers/auth] "',action.type,'" Not implemented')
