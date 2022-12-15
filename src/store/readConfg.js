@@ -1,4 +1,7 @@
-/** This module contains...
+/** This module contains the function to 
+ * read the config.json file that contains
+ * informations about routing and the
+ * connectivity to the backend api.
  * 
  * Copyright (c) 2017 Aimirim STI.
 */

@@ -1,4 +1,5 @@
-/** This module contains...
+/** This module contains the redux
+ * store definitions
  * 
  * Copyright (c) 2017 Aimirim STI.
  * Dependencies are:

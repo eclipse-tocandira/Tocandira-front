@@ -6,6 +6,7 @@
  * Dependencies are:
  * - react
  * - react-redux
+ * - @mui/material
 */
 
 // Imports from modules;
@@ -20,7 +21,8 @@ import * as authActions from '../../store/auth/actions'
 
 /** The main page of the application
 * @property `props.auth`: Redux access to auth store.
-* @property `props.global`: Redux access to global store.*/
+* @property `props.global`: Redux access to global store.
+* @method `props.onLogoutSubmit`: Redux function for auth stote `logout` action.*/
 class Main extends React.PureComponent {
 
     /** Defines the component state variables */

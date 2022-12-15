@@ -3,6 +3,12 @@
  * application.
  * 
  * Copyright (c) 2017 Aimirim STI.
+ * 
+ * Dependencies are:
+ * - react
+ * - react-dom
+ * - react-redux
+ * - react-router-dom
 */
 
 // Imports from modules

@@ -14,10 +14,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import {
-    Button, Card, Typography, CardContent,
-    TextField, Grid, CardMedia
-} from '@mui/material'
+import { Button, Card, Typography, CardContent,
+    TextField, Grid, CardMedia } from '@mui/material'
 // Local Imports
 import './Login.css';
 import * as authActions from '../../store/auth/actions'
@@ -25,9 +23,12 @@ import * as routeNames from '../../routeNames'
 
 // #######################################
 
-/** The login screen
-* @property `props.auth`: Redux access to auth store.
-* @property `props.global`: Redux access to global store.*/
+/** The login screen and the App entrypoint.
+ * @property `props.auth`: Redux access to auth store.
+ * @property `props.global`: Redux access to global store.
+ * @method `props.onLoginSubmit`: Redux function for auth store `login` action.
+ * @method `props.handleUsernameInput`: Save username entry in state as typed.
+ * @method `props.handlePasswordInput`: Save password entry in state as typed. */
 class Login extends React.PureComponent {
     
     /** Defines the component state variables */
@@ -69,7 +70,7 @@ class Login extends React.PureComponent {
             <div className='Login'>
             {authorized}
             <Grid container className='Login_grid' direction="column" spacing={'1rem'} > 
-
+                {/* Aimirim Logo */}
                 <Grid item>
                     <CardMedia component="img" image={process.env.PUBLIC_URL+'/aimirim_Qsmall.png'} alt="Company Logo"/>
                 </Grid>
@@ -78,18 +79,21 @@ class Login extends React.PureComponent {
                     <Card sx={{borderRadius:'3%'}}>
                         <CardContent>
                             <Grid container spacing='1rem' direction="column" alignItems="stretch">
+                                {/* Card Title */}
                                 <Grid item> <Typography variant='h5'
                                     align='left'
                                     color='text.secondary'>
                                         Login 
                                     </Typography>
                                 </Grid>
+                                {/* Card subtitle */}
                                 <Grid item marginTop='-1rem'> <Typography variant='subtitle1'
                                     align='left'
                                     color='text.secondary'>
                                         Historian Configuration Tool
                                     </Typography>
                                 </Grid>
+                                {/* Username prompt */}
                                 <Grid item> <TextField variant="outlined"
                                     label="Username"
                                     type='text'
@@ -99,6 +103,7 @@ class Login extends React.PureComponent {
                                     onChange={this.handleUsernameInput}>
                                     </TextField>
                                 </Grid>
+                                {/* Password prompt */}
                                 <Grid item> <TextField variant="outlined"
                                     label="Password"
                                     type="password"
@@ -110,6 +115,7 @@ class Login extends React.PureComponent {
                                     helperText={this.props.auth.validation.help_text}>
                                     </TextField>
                                 </Grid>
+                                {/* Login Button */}
                                 <Grid item marginTop='1rem'> <Button variant="contained"
                                     color='primary'
                                     size='medium'

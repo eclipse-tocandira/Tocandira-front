@@ -15,9 +15,10 @@ import { Outlet, Navigate } from 'react-router-dom';
 
 // #######################################
 
-/** Description
-* @property `props.`:
-* @method `props.`: */
+/** A component to protect the routes from unauthorized access
+ * @property `props.auth`: Is the user authorized?
+ * @property `props.redirect`: The route to redirect the 
+ * application if not authorized. */
 class ProtectedRoute extends React.PureComponent {
     
     /** Defines the component property types */

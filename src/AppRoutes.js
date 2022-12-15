@@ -17,14 +17,13 @@ import {Route, Routes, Navigate} from 'react-router-dom';
 import ProtectedRoute from './component/ProtectedRoute/ProtectedRoute';
 import withRouter from './withRouter';
 import Login from './containers/Login/Login';
-import * as routeNames from './routeNames'
 import Main from './containers/Main/Main';
+import * as routeNames from './routeNames'
 
 // #######################################
 
-/** Description
-* @property `props.`:
-* @method `props.`: */
+/** The main Page that handles the Routing
+* @property `props.auth`: Redux access to auth store */
 class AppRoutes extends React.PureComponent {
 
     /** Defines the component visualization.
@@ -34,7 +33,7 @@ class AppRoutes extends React.PureComponent {
             <Routes>
                 <Route path={'/'} element={<Navigate to={routeNames.LOGIN}/>}/>
                 <Route path={routeNames.LOGIN} element={<Login/>}/>
-                <Route element={<ProtectedRoute auth={this.props.auth.token!==null} redirect={'/'}/>}>
+                <Route element={ <ProtectedRoute auth={this.props.auth.token!==null} redirect={'/'}/> }>
                     <Route path={routeNames.MAIN} element={<Main/>}/>
                 </Route>
             </Routes>
@@ -44,7 +43,7 @@ class AppRoutes extends React.PureComponent {
     
 }
 
-/** */
+/** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
     auth: state.auth
 });
