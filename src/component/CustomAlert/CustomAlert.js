@@ -13,7 +13,7 @@
 // Imports from modules;
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AlertTitle, Alert, IconButton, Card, Collapse } from '@mui/material';
+import { AlertTitle, Alert, IconButton, Card } from '@mui/material';
 import { Close } from '@mui/icons-material';
 
 // #######################################
