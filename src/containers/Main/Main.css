@@ -1,8 +1,15 @@
 .Main {
     display: flex;
-    background-color: #323F6F;
-    position: absolute;
+    flex-direction: row;
     min-width: 100vw;
     min-height : 100vh;
     margin: -8px -8px;
+    background-color: #323F6F;
+}
+
+.MainCard {
+    flex: 1 1 auto;
+    padding: 2rem 0 0 2rem;
+    background-color: #eee;
+    border-radius: 2rem 0 0 0;
 }

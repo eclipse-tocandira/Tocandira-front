@@ -12,11 +12,14 @@
 // Imports from modules;
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button } from '@mui/material';
+import { Stack, Button, Card, CardContent, Typography, CardActions } from '@mui/material';
 // Local Imports
 import './Main.css';
 import * as authActions from '../../store/auth/actions'
 import * as globalActions from '../../store/global/actions'
+import CollectorCard from '../../component/CollectorCard/CollectorCard';
+import DataSourceCard from '../../component/DataSourceCard/DataSourceCard';
+import DataPointCard from '../../component/DataPointCard/DataPointCard';
 
 // #######################################
 
@@ -28,7 +31,11 @@ class Main extends React.PureComponent {
 
     /** Defines the component state variables */
     state = {
-
+        collector:{
+            ip:'localhost:4800',
+            interval:12,
+            timeout:30
+        }
     }
 
     /** Description.
@@ -37,26 +44,87 @@ class Main extends React.PureComponent {
         this.props.onTokenInvalid()
         this.props.onLogoutSubmit()
     }
+    /** Description.
+    * @param ``: */
+    handleCollectorIP=(event) => {
+        const newState = {...this.state};
+        newState.collector = {...this.state.collector};
+        newState.collector.ip = event.target.value;
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: */
+    handleCollectorInterval=(event) => {
+        const newState = {...this.state};
+        newState.collector = {...this.state.collector};
+        newState.collector.interval = event.target.value;
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: */
+    handleCollectorTimeout=(event) => {
+        const newState = {...this.state};
+        newState.collector = {...this.state.collector};
+        newState.collector.timeout = event.target.value;
+        this.setState(newState);
+    }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
         const jsx_component = (
-            <div className='Main' style={{justifyContent:'center'}}>
+            <div className='Main'>
+            
                 <Button variant='contained'
-                sx={{alignSelf:'center'}}
-                color='inherit'
-                fullWidth={false}
-                onClick={this.handleLogoutSubmission}>
-                    LOGOUT
+                    sx={{margin:'1rem', alignSelf:'flex-end'}}
+                    size='large'
+                    color='inherit'
+                    fullWidth={false}
+                    onClick={this.handleLogoutSubmission}>
+                        LOGOUT
                 </Button>
-                <Button variant='contained'
-                sx={{alignSelf:'center'}}
-                color='success'
-                fullWidth={false}
-                onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
-                    CHECK
-                </Button>
+
+            <Stack direction='column' flexGrow='1' alignItems='stretch'>
+                <Typography variant='h3'
+                    align='left'
+                    color='white'
+                    margin='1rem 0 1rem 0'>
+                        Main Configurations 
+                </Typography>
+
+                <Card className='MainCard'>
+                    <CardContent>
+                        <Stack spacing='5rem' direction='column'>
+                            <Stack direction='row' spacing='5rem'>
+                                <CollectorCard
+                                    ip={this.state.collector.ip}
+                                    interval={this.state.collector.interval}
+                                    timeout={this.state.collector.timeout}
+                                    onIpChange={this.handleCollectorIP}
+                                    onIntervalChange={this.handleCollectorInterval}
+                                    onTimeoutChange={this.handleCollectorTimeout}/>
+                                <DataSourceCard/>
+                            </Stack>
+                        <DataPointCard/>
+                        </Stack>
+                    </CardContent>
+                    <CardActions>
+                    <Stack direction='row' spacing='2rem' margin='1rem'>
+                        <Button variant='contained'
+                        size='large'
+                        color='primary'>
+                            APPLY
+                        </Button>
+
+                        <Button variant='contained'
+                        size='large'
+                        color='inherit'>
+                            RESET
+                        </Button>
+                    </Stack>
+                    </CardActions>
+                </Card>
+            </Stack>
             </div>
         );
         return(jsx_component);
