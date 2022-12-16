@@ -65,7 +65,7 @@ class Login extends React.PureComponent {
     /** Watch for the enter key, call login submission if caught
      * @param event: The event that called this handler*/
     handleEnterPress=(event)=>{
-        if(event.key=='Enter'){
+        if(event.key==='Enter'){
             this.handleLoginSubmit();
         }
     }
@@ -83,7 +83,7 @@ class Login extends React.PureComponent {
     render(){
 
         // Prepare alert component to show a message to the user
-        alert = <CustomAlert type='error' elevate
+        const alert = <CustomAlert type='error' elevate
             reset={this.props.onClearError}
             msg={this.props.auth.validation.help_text}/>
 
