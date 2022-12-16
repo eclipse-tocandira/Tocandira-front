@@ -16,6 +16,7 @@ import { Button } from '@mui/material';
 // Local Imports
 import './Main.css';
 import * as authActions from '../../store/auth/actions'
+import * as globalActions from '../../store/global/actions'
 
 // #######################################
 
@@ -30,6 +31,13 @@ class Main extends React.PureComponent {
 
     }
 
+    /** Description.
+    * @param ``: */
+    handleLogoutSubmission=() => {
+        this.props.onTokenInvalid()
+        this.props.onLogoutSubmit()
+    }
+
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
@@ -39,12 +47,25 @@ class Main extends React.PureComponent {
                 sx={{alignSelf:'center'}}
                 color='inherit'
                 fullWidth={false}
-                onClick={this.props.onLogoutSubmit}>
+                onClick={this.handleLogoutSubmission}>
                     LOGOUT
+                </Button>
+                <Button variant='contained'
+                sx={{alignSelf:'center'}}
+                color='success'
+                fullWidth={false}
+                onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
+                    CHECK
                 </Button>
             </div>
         );
         return(jsx_component);
+    };
+
+    componentDidMount() {
+        if (this.props.auth.token_valid){
+            this.props.onTokenValid(this.props.auth.token, this.props.auth.token_type)
+        }
     };
 
 }
@@ -58,6 +79,9 @@ const reduxStateToProps = (state) =>({
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onLogoutSubmit: ()=>dispatch(authActions.logout()),
+    onTokenInvalid: ()=>dispatch(globalActions.clearAuthToken()),
+    onTokenValid: (token,token_type)=>dispatch(globalActions.setAuthToken(token,token_type)),
+    onCheckToken: (api_instance)=>dispatch(authActions.validate(api_instance)),
 });
 
 // Make this component visible on import

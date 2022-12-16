@@ -19,15 +19,11 @@ const saveLogin=(token,type) => ({type:actionTypes.LOGIN, token:token, token_typ
 export const login=(api_instance,logindata) => (dispatch) => {
     api_instance.post('/login',qs.stringify(logindata),
         {headers: { 'content-type': 'application/x-www-form-urlencoded' }})
-    .then(
-        (res) => dispatch(saveLogin(res.data.access_token, res.data.token_type))
-    )
-    .catch(
-        (req) => {
+    .then( (res) => dispatch(saveLogin(res.data.access_token, res.data.token_type)) )
+    .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
                 dispatch(invalidConnection());
             }else{
-                //AxiosError.ERR_BAD_REQUEST
                 dispatch(invalidEntry());
             }
         }
@@ -46,5 +42,19 @@ export const clearInvalid=() => ({type:actionTypes.CLEAR_INVALID});
 /** Redux action to logout the user */
 export const logout=() => ({type:actionTypes.LOGOUT});
 
-/** Redux action to validate the token in memmory */
-export const validate=() => ({type:actionTypes.VALIDATE});
+/** Redux action to save the validation result */
+const saveValidCheck=() => ({type:actionTypes.VALIDATE});
+
+/** Redux action to validate the current token */
+export const validate=(api_instance) => (dispatch) => {
+    api_instance.get('/validate')
+    .then( (res) => dispatch(saveValidCheck()) )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(invalidConnection());
+            }else{
+                dispatch(logout());
+            }
+        }
+    )
+};

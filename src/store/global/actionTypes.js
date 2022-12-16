@@ -7,3 +7,5 @@
 // #######################################
 
 export const SET_CONF = 'SET_CONFIGURATIONS';
+export const SET_AUTH = 'SET_AUTHENTICATION';
+export const UNSET_AUTH = 'CLEAR_AUTHENTICATION';

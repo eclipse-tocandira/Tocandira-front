@@ -89,7 +89,7 @@ class Login extends React.PureComponent {
 
         // Check if the user has a stored token
         let authorized = null;
-        if (this.props.auth.token!==null){
+        if (this.props.auth.token_valid){
             // Send him to the main page
             authorized = <Navigate to={routeNames.MAIN}/>
         }

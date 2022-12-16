@@ -13,6 +13,7 @@ import * as actionTypes from './actionTypes'
 const initialState = {
     token: null,
     token_type: null,
+    token_valid: false,
     validation:{
         data_error: false,
         error: false,
@@ -30,6 +31,7 @@ const reducer = (state=initialState, action) => {
         case actionTypes.LOGIN:
             newState.token = action.token;
             newState.token_type = action.token_type;
+            newState.token_valid = true;
             newState.validation = {error: false, data_error: false, help_text:""}
             break
         case actionTypes.INVALID_ENTRY:
@@ -44,10 +46,11 @@ const reducer = (state=initialState, action) => {
         case actionTypes.LOGOUT:
             newState.token = null;
             newState.token_type = null;
+            newState.token_valid = false;
             newState.validation = {error: false, data_error: false, help_text:""}
             break
         case actionTypes.VALIDATE:
-            console.warn('[reducers/auth] "',action.type,'" Not implemented')
+            newState.token_valid = true;
             break
         default:
             // console.debug('[reducers/auth]',action)
