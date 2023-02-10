@@ -28,8 +28,8 @@ class TitledCard extends React.PureComponent {
     
     /** Recieves a content and add it to the card grid
      * @param content: A JSX component. */
-    buildContent=(content)=>(
-        <Grid item>
+    buildContent=(content,index)=>(
+        <Grid item key={index}>
             {content}
         </Grid>
     )
