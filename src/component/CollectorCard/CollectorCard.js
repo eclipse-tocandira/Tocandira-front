@@ -5,7 +5,7 @@
  * 
  * Dependencies are:
  * - react
- * - 
+ * - @mui/material
 */
 
 // Imports from modules;
@@ -90,7 +90,7 @@ class CollectorCard extends React.PureComponent {
                 onBlur={this.handleVadidateIP}/>
             <TextField variant="standard"
                 label="Port"
-                type='number'
+                type='tel'
                 size='medium'
                 fullWidth={true}
                 value={this.props.port}
@@ -98,7 +98,7 @@ class CollectorCard extends React.PureComponent {
         </Stack>,
         <TextField variant="standard"
             label="Save Interval"
-            type='number'
+            type='tel'
             size='medium'
             InputProps={{ endAdornment: <InputAdornment position="end">seconds</InputAdornment> }}
             fullWidth={true}
@@ -107,7 +107,7 @@ class CollectorCard extends React.PureComponent {
         ];
 
         const jsx_component = (
-            <TitledCard cardprops={{maxWidth:'20rem', maxHeight:'18rem'}}
+            <TitledCard cardprops={{maxWidth:'20rem', maxHeight:'15rem'}}
                 title='Data Aquisition' contents={card_contents}/>
         );
         return(jsx_component);
