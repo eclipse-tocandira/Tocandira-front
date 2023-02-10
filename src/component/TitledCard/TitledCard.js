@@ -5,6 +5,7 @@
  * 
  * Dependencies are:
  * - react 
+ * - @mui/material
 */
 
 // Imports from modules;
