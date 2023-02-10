@@ -58,7 +58,7 @@ class Main extends React.PureComponent {
     handleCollectorInterval=(event) => {
         const newState = {...this.state};
         newState.collector = {...this.state.collector};
-        newState.collector.interval = event.target.value;
+        newState.collector.interval = parseInt(event.target.value);
         this.setState(newState);
     }
     /** Description.
@@ -66,7 +66,7 @@ class Main extends React.PureComponent {
     handleCollectorPort=(event) => {
         const newState = {...this.state};
         newState.collector = {...this.state.collector};
-        newState.collector.port = event.target.value;
+        newState.collector.port = parseInt(event.target.value);
         this.setState(newState);
     }
 
