@@ -36,6 +36,26 @@ class Main extends React.PureComponent {
             valid_ip:true,
             port:4800,
             interval:12
+        },
+        datasource:{
+            content_rows:[
+                {name:"test",plc_ip:"0.0.0.0",protocol:{name:"Siemens"}},
+                {name:"test2",plc_ip:"1.1.1.1",protocol:{name:"Siemens"}},
+                {name:"test3",plc_ip:"1.1.1.1",protocol:{name:"Rockwell"}},
+                {name:"test4",plc_ip:"1.1.1.1",protocol:{name:"Rockwell"}},
+                {name:"test5",plc_ip:"1.1.1.1",protocol:{name:"Modbus"}}
+            ],
+            selected_row:{name:null,id:-1}
+        },
+        datapoint:{
+            content_rows:[
+                {name:"var1",description:"my variable 1",datasource_name:"test1",access:{name:"Siemens",data:{address:"DB100.DBD48"}}},
+                {name:"var2",description:"my variable 2",datasource_name:"test3",access:{name:"Rockwell",data:{tag_name:"VAZ_VAPOR"}}},
+                {name:"var3",description:"my variable 3",datasource_name:"test3",access:{name:"Rockwell",data:{tag_name:"Fix_ANALOG[75]"}}},
+                {name:"var4",description:"my variable 4",datasource_name:"test1",access:{name:"Siemens",data:{address:"DB203.DBX8.8"}}},
+                {name:"var5",description:"my variable 5",datasource_name:"test5",access:{name:"Modbus",data:{address:"47751"}}}
+            ],
+            selected_row:{name:null,id:-1}
         }
     }
 
@@ -69,6 +89,67 @@ class Main extends React.PureComponent {
         newState.collector.port = parseInt(event.target.value);
         this.setState(newState);
     }
+
+    /** Description.
+    * @param ``: */
+     handleDataSourceRowClick=(name,index) => {
+        const newDatasource = {...this.state.datasource};
+        if (name===this.state.datasource.selected_row.name){
+            newDatasource.selected_row = {name:null,id:-1};
+        } else {
+            newDatasource.selected_row = {name:name,id:index};
+        }
+        this.setState({datasource:newDatasource});
+    }
+    /** Description.
+    * @param ``: */
+    handleDataSourceNewClick=() => {
+        const newDatasource = {...this.state.datasource};
+        this.setState({datasource:newDatasource});
+    }
+    /** Description.
+    * @param ``: */
+    handleDataSourceEditClick=() => {
+        const newDatasource = {...this.state.datasource};
+        this.setState({datasource:newDatasource});
+    }
+    /** Description.
+    * @param ``: */
+    handleDataSourceDeleteClick=() => {
+        const newDatasource = {...this.state.datasource};
+        this.setState({datasource:newDatasource});
+    }
+
+    /** Description.
+    * @param ``: */
+     handleDataPointRowClick=(name,index) => {
+        const newDatapoint = {...this.state.datapoint};
+        if (name===this.state.datapoint.selected_row.name){
+            newDatapoint.selected_row = {name:null,id:-1};
+        } else {
+            newDatapoint.selected_row = {name:name,id:index};
+        }
+        this.setState({datapoint:newDatapoint});
+    }
+    /** Description.
+    * @param ``: */
+    handleDataPointNewClick=() => {
+        const newDatapoint = {...this.state.datapoint};
+        this.setState({datapoint:newDatapoint});
+    }
+    /** Description.
+    * @param ``: */
+    handleDataPointEditClick=() => {
+        const newDatapoint = {...this.state.datapoint};
+        this.setState({datapoint:newDatapoint});
+    }
+    /** Description.
+    * @param ``: */
+    handleDataPointDeleteClick=() => {
+        const newDatapoint = {...this.state.datapoint};
+        this.setState({datapoint:newDatapoint});
+    }
+
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
@@ -105,9 +186,21 @@ class Main extends React.PureComponent {
                                     onIpChange={this.handleCollectorIP}
                                     onPortChange={this.handleCollectorPort}
                                     onIntervalChange={this.handleCollectorInterval}/>
-                                <DataSourceCard/>
+                                <DataSourceCard
+                                    content_rows={this.state.datasource.content_rows}
+                                    selected_row={this.state.datasource.selected_row}
+                                    onRowClick={this.handleDataSourceRowClick}
+                                    onNewClick={this.handleDataSourceNewClick}
+                                    onEditClick={this.handleDataSourceEditClick}
+                                    onDeleteClick={this.handleDataSourceDeleteClick}/>
                             </Stack>
-                        <DataPointCard/>
+                        <DataPointCard
+                            content_rows={this.state.datapoint.content_rows}
+                            selected_row={this.state.datapoint.selected_row}
+                            onRowClick={this.handleDataPointRowClick}
+                            onNewClick={this.handleDataPointNewClick}
+                            onEditClick={this.handleDataPointEditClick}
+                            onDeleteClick={this.handleDataPointDeleteClick}/>
                         </Stack>
                     </CardContent>
                     <CardActions>
