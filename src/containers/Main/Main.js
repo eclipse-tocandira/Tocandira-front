@@ -32,9 +32,10 @@ class Main extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         collector:{
-            ip:'localhost:4800',
-            interval:12,
-            timeout:30
+            ip:'127.0.0.1',
+            valid_ip:true,
+            port:4800,
+            interval:12
         }
     }
 
@@ -62,10 +63,10 @@ class Main extends React.PureComponent {
     }
     /** Description.
     * @param ``: */
-    handleCollectorTimeout=(event) => {
+    handleCollectorPort=(event) => {
         const newState = {...this.state};
         newState.collector = {...this.state.collector};
-        newState.collector.timeout = event.target.value;
+        newState.collector.port = event.target.value;
         this.setState(newState);
     }
 
@@ -98,11 +99,12 @@ class Main extends React.PureComponent {
                             <Stack direction='row' spacing='5rem'>
                                 <CollectorCard
                                     ip={this.state.collector.ip}
+                                    port={this.state.collector.port}
                                     interval={this.state.collector.interval}
                                     timeout={this.state.collector.timeout}
                                     onIpChange={this.handleCollectorIP}
-                                    onIntervalChange={this.handleCollectorInterval}
-                                    onTimeoutChange={this.handleCollectorTimeout}/>
+                                    onPortChange={this.handleCollectorPort}
+                                    onIntervalChange={this.handleCollectorInterval}/>
                                 <DataSourceCard/>
                             </Stack>
                         <DataPointCard/>
