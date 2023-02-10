@@ -1,0 +1,40 @@
+/** This module holds the view of the React
+ * component `TextCell`
+ * 
+ * Copyright (c) 2017 Aimirim STI.
+ * 
+ * Dependencies are:
+ * - react 
+*/
+
+// Imports from modules;
+import React from 'react';
+import PropTypes from 'prop-types';
+import {TableCell} from '@mui/material'
+
+// #######################################
+
+/** Description
+* @property `props.`:
+* @method `props.`: */
+class TextCell extends React.PureComponent {
+    
+    /** Defines the component property types */
+    static propTypes = {
+        text:PropTypes.string
+    };
+    /** Defines the component visualization.
+    * @returns JSX syntax element */
+    render(){
+        const jsx_component = (
+            <TableCell  align="left" size='small'>
+                {this.props.text}
+            </TableCell>
+        );
+        return(jsx_component);
+    };
+    
+}
+
+// Make this component visible on import
+export default TextCell;
