@@ -93,7 +93,7 @@ class Main extends React.PureComponent {
                         Main Configurations 
                 </Typography>
 
-                <Card className='MainCard'>
+                <Card className='MainCard' sx={{borderRadius:"1rem 0 0 0",backgroundColor:"#eee"}}>
                     <CardContent>
                         <Stack spacing='5rem' direction='column'>
                             <Stack direction='row' spacing='5rem'>
