@@ -43,9 +43,7 @@ class TitledCard extends React.PureComponent {
                 <CardContent sx={{padding:'1rem 2rem'}}>
                 <Grid container spacing='1rem' direction="column" alignItems="stretch">
                     <Grid item>
-                        <Typography variant='h5'
-                        align='left'
-                        color='text.secondary'>
+                        <Typography variant='h5' align='left' color='text.secondary'>
                             {this.props.title}
                         </Typography>
                     </Grid>
