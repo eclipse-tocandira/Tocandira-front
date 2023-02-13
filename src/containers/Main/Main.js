@@ -176,8 +176,8 @@ class Main extends React.PureComponent {
 
                 <Card className='MainCard' sx={{borderRadius:"1rem 0 0 0",backgroundColor:"#eee"}}>
                     <CardContent>
-                        <Stack spacing='5rem' direction='column'>
-                            <Stack direction='row' spacing='5rem'>
+                        <Stack spacing='3rem' direction='column'>
+                            <Stack direction='row' spacing='3rem'>
                                 <CollectorCard
                                     ip={this.state.collector.ip}
                                     port={this.state.collector.port}
