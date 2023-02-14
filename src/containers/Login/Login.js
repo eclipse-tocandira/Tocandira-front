@@ -19,6 +19,7 @@ import { Button, Card, Typography, CardContent,
 // Local Imports
 import './Login.css';
 import * as authActions from '../../store/auth/actions'
+import * as globalActions from '../../store/global/actions'
 import * as routeNames from '../../routeNames'
 import CustomAlert from '../../component/CustomAlert/CustomAlert'
 
@@ -175,6 +176,14 @@ class Login extends React.PureComponent {
             this.focalElement.focus()
         }
     };
+
+    /** Component lifecycle DELETION begining */
+    componentWillUnmount() {
+        if (this.props.auth.token_valid){
+            this.props.onTokenValid(this.props.auth.token, this.props.auth.token_type)
+        }
+    };
+    
     
 }
 
@@ -187,7 +196,8 @@ const reduxStateToProps = (state) =>({
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onLoginSubmit: (api_instance,usrdata)=>dispatch(authActions.login(api_instance,usrdata)),
-    onClearError: ()=>dispatch(authActions.clearInvalid())
+    onClearError: ()=>dispatch(authActions.clearInvalid()),
+    onTokenValid: (token,token_type)=>dispatch(globalActions.setAuthToken(token,token_type)),
 });
 
 // Make this component visible on import

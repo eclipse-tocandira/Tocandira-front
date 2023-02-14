@@ -167,10 +167,7 @@ class Main extends React.PureComponent {
                 </Button>
 
             <Stack direction='column' flexGrow='1' alignItems='stretch'>
-                <Typography variant='h3'
-                    align='left'
-                    color='white'
-                    margin='1rem 0 1rem 0'>
+                <Typography variant='h3' align='left' color='white' margin='1rem 0 1rem 0'>
                         Main Configurations 
                 </Typography>
 
@@ -225,12 +222,6 @@ class Main extends React.PureComponent {
         return(jsx_component);
     };
 
-    componentDidMount() {
-        if (this.props.auth.token_valid){
-            this.props.onTokenValid(this.props.auth.token, this.props.auth.token_type)
-        }
-    };
-
 }
 
 /** Map the Redux state to some component props */
@@ -243,7 +234,6 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onLogoutSubmit: ()=>dispatch(authActions.logout()),
     onTokenInvalid: ()=>dispatch(globalActions.clearAuthToken()),
-    onTokenValid: (token,token_type)=>dispatch(globalActions.setAuthToken(token,token_type)),
     onCheckToken: (api_instance)=>dispatch(authActions.validate(api_instance)),
 });
 
