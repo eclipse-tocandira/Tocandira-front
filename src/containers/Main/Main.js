@@ -31,12 +31,6 @@ class Main extends React.PureComponent {
 
     /** Defines the component state variables */
     state = {
-        collector:{
-            ip:'127.0.0.1',
-            valid_ip:true,
-            port:4800,
-            interval:12
-        },
         datasource:{
             content_rows:[
                 {name:"test",plc_ip:"0.0.0.0",protocol:{name:"Siemens"}},
@@ -65,31 +59,7 @@ class Main extends React.PureComponent {
         this.props.onTokenInvalid()
         this.props.onLogoutSubmit()
     }
-    /** Description.
-    * @param ``: */
-    handleCollectorIP=(event) => {
-        const newState = {...this.state};
-        newState.collector = {...this.state.collector};
-        newState.collector.ip = event.target.value;
-        this.setState(newState);
-    }
-    /** Description.
-    * @param ``: */
-    handleCollectorInterval=(event) => {
-        const newState = {...this.state};
-        newState.collector = {...this.state.collector};
-        newState.collector.interval = parseInt(event.target.value);
-        this.setState(newState);
-    }
-    /** Description.
-    * @param ``: */
-    handleCollectorPort=(event) => {
-        const newState = {...this.state};
-        newState.collector = {...this.state.collector};
-        newState.collector.port = parseInt(event.target.value);
-        this.setState(newState);
-    }
-
+    
     /** Description.
     * @param ``: */
      handleDataSourceRowClick=(name,index) => {
@@ -175,14 +145,7 @@ class Main extends React.PureComponent {
                     <CardContent>
                         <Stack spacing='3rem' direction='column'>
                             <Stack direction='row' spacing='3rem'>
-                                <CollectorCard
-                                    ip={this.state.collector.ip}
-                                    port={this.state.collector.port}
-                                    interval={this.state.collector.interval}
-                                    timeout={this.state.collector.timeout}
-                                    onIpChange={this.handleCollectorIP}
-                                    onPortChange={this.handleCollectorPort}
-                                    onIntervalChange={this.handleCollectorInterval}/>
+                                <CollectorCard/>
                                 <DataSourceCard
                                     content_rows={this.state.datasource.content_rows}
                                     selected_row={this.state.datasource.selected_row}

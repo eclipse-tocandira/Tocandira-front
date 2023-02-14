@@ -5,16 +5,19 @@
  * 
  * Dependencies are:
  * - react
+ * - react-redux
  * - @mui/material
 */
 
 // Imports from modules;
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Stack, InputAdornment, TextField } from '@mui/material';
 
 // Local Imports
 import TitledCard from '../TitledCard/TitledCard'
+import * as collectorActions from '../../store/collector/actions'
 
 // #######################################
 
@@ -25,27 +28,60 @@ class CollectorCard extends React.PureComponent {
     
     /** Defines the component state variables */
     state = {
+        ip:'127.0.0.1',
+        port:4800,
+        interval:12,
         valid_ip: true,
     }
 
     /** Defines the component property types */
     static propTypes = {
-        ip: PropTypes.string,
-        port: PropTypes.number,
-        interval: PropTypes.number,
-        onIpChange: PropTypes.func,
-        onLooseIpFocus: PropTypes.func,
-        onPortChange: PropTypes.func,
-        onIntervalChange: PropTypes.func,
     };
     
     /** Watch for the enter key, call ip validation if found
      * @param event: The event that called this handler*/
      handleEnterPress=(event)=>{
         if(event.key==='Enter'){
-            this.handleVadidateIP(event);
+            this.handlePropsUpdateWithCheck(event);
         }
     }
+    /** Description.
+    * @param ``: */
+     handleCollectorIP=(event) => {
+        const newState = {...this.state};
+        newState.ip = event.target.value;
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: */
+    handleCollectorInterval=(event) => {
+        const newState = {...this.state};
+        newState.interval = parseInt(event.target.value);
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: */
+    handleCollectorPort=(event) => {
+        const newState = {...this.state};
+        newState.port = parseInt(event.target.value);
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handlePropsUpdateWithCheck=(event) => {
+        this.handleVadidateIP(event)
+        this.handlePropsUpdate()
+    }
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handlePropsUpdate=() => {
+        if (this.state.valid_ip) {
+            this.props.onPropsUpdate(this.state.ip,this.state.port,this.state.interval)
+        }
+    }
+
     /** Check for a valid IP address inserted.
     * @param event: The event that called this handler*/
      handleVadidateIP=(event) => {
@@ -55,20 +91,17 @@ class CollectorCard extends React.PureComponent {
         // Get the invalid parts only
         const invalidSubips = subips.filter((ele,index) => {
             let valid = false;
-            // Check for size
-            if (index<4){
-                // Check for number
-                valid = /^\d+$/.test(ele);
-                if (valid) {
-                    const ele_int = parseInt(ele);
-                    // Check for IP number range
-                    valid = ele_int>=0 && ele_int<=255;
-                }
+            // Check for number
+            valid = /^\d+$/.test(ele);
+            if (valid) {
+                const ele_int = parseInt(ele);
+                // Check for IP number range
+                valid = ele_int>=0 && ele_int<=255;
             }
             return(!valid)
         })
         // Check if invalid parts are present
-        newState.valid_ip = invalidSubips.length === 0
+        newState.valid_ip = (invalidSubips.length===0) && (subips.length===4)
         this.setState(newState);
     }
     
@@ -83,18 +116,20 @@ class CollectorCard extends React.PureComponent {
                 type='text'
                 size='medium'
                 fullWidth={true}
-                value={this.props.ip}
+                value={this.state.ip}
                 error={!this.state.valid_ip}
-                onChange={this.props.onIpChange}
+                onChange={this.handleCollectorIP}
                 onKeyPress={this.handleEnterPress}
-                onBlur={this.handleVadidateIP}/>
+                onBlur={this.handlePropsUpdateWithCheck}/>
             <TextField variant="standard"
                 label="Port"
                 type='tel'
                 size='medium'
                 fullWidth={true}
-                value={this.props.port}
-                onChange={this.props.onPortChange}/>
+                value={this.state.port}
+                onChange={this.handleCollectorPort}
+                onKeyPress={this.handlePropsUpdate}
+                onBlur={this.handlePropsUpdate}/>
         </Stack>,
         <TextField variant="standard"
             label="Save Interval"
@@ -102,8 +137,10 @@ class CollectorCard extends React.PureComponent {
             size='medium'
             InputProps={{ endAdornment: <InputAdornment position="end">seconds</InputAdornment> }}
             fullWidth={true}
-            value={this.props.interval}
-            onChange={this.props.onIntervalChange}/>,
+            value={this.state.interval}
+            onChange={this.handleCollectorInterval}
+            onKeyPress={this.handlePropsUpdate}
+            onBlur={this.handlePropsUpdate}/>,
         ];
 
         const jsx_component = (
@@ -112,8 +149,29 @@ class CollectorCard extends React.PureComponent {
         );
         return(jsx_component);
     };
+
+    componentDidMount() {
+        this.props.onGetProps(this.props.global.backend_instance)
+        const newState = {...this.state};
+        newState.ip = this.props.collector.ip;
+        newState.port = this.props.collector.port;
+        newState.interval = this.props.collector.interval;
+        this.setState(newState);
+    };
     
 }
 
+/** Map the Redux state to some component props */
+const reduxStateToProps = (state) =>({
+    global: state.global,
+    collector: state.collector
+});
+
+/** Map the Redux actions dispatch to some component props */
+const reduxDispatchToProps = (dispatch) =>({
+    onPropsUpdate:(ip,port,int)=>{dispatch(collectorActions.setParams(ip,port,int))},
+    onGetProps:(api)=>{dispatch(collectorActions.getParams(api))}
+});
+
 // Make this component visible on import
-export default CollectorCard;
+export default connect(reduxStateToProps,reduxDispatchToProps)(CollectorCard);
