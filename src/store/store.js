@@ -13,6 +13,7 @@ import thunk from 'redux-thunk';
 // Local Imports
 import globalReducer from './global/reducer';
 import authReducer from './auth/reducer';
+import collectorReducer from './collector/reducer';
 
 // #######################################
 
@@ -20,7 +21,7 @@ import authReducer from './auth/reducer';
 const rootReducer = combineReducers({
     global: globalReducer,
     auth: authReducer,
-    // api: apiReducer
+    collector: collectorReducer
 });
 
 // Configure the Redux Storage
