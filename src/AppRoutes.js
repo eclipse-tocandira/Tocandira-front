@@ -33,7 +33,7 @@ class AppRoutes extends React.PureComponent {
             <Routes>
                 <Route path={'/'} element={<Navigate to={routeNames.LOGIN}/>}/>
                 <Route path={routeNames.LOGIN} element={<Login/>}/>
-                <Route element={ <ProtectedRoute auth={this.props.auth.token!==null} redirect={'/'}/> }>
+                <Route element={ <ProtectedRoute auth={this.props.auth.token_valid} redirect={'/'}/> }>
                     <Route path={routeNames.MAIN} element={<Main/>}/>
                 </Route>
             </Routes>

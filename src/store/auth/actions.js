@@ -52,9 +52,8 @@ export const validate=(api_instance) => (dispatch) => {
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
                 dispatch(invalidConnection());
-            }else{
-                dispatch(logout());
             }
+            dispatch(logout());
         }
     )
 };
