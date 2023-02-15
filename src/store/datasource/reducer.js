@@ -20,7 +20,7 @@ const reducer = (state=initialState, action) => {
     const newState = {...state};
     // Check and select correct action
     switch ( action.type ) {
-        case actionTypes.GET_DATA:
+        case actionTypes.GET_DSDATA:
             newState.ds_content = [...action.dslist];
             break
         default:

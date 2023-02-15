@@ -12,7 +12,7 @@ import * as actionTypes from './actionTypes';
 // #######################################
 
 /** Redux action to */
-const saveData=(dslist) => ({type:actionTypes.GET_DATA, dslist:dslist});
+const saveData=(dslist) => ({type:actionTypes.GET_DSDATA, dslist:dslist});
 
 /** The request done prior to `saveParams` function */
 export const getData=(api_instance) => (dispatch) => {
