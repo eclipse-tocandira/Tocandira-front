@@ -15,7 +15,7 @@ import globalReducer from './global/reducer';
 import authReducer from './auth/reducer';
 import popupsReducer from './popups/reducer';
 import collectorReducer from './collector/reducer';
-
+import datasourceReducer from './datasource/reducer';
 // #######################################
 
 // Join all Reducers
@@ -23,7 +23,8 @@ const rootReducer = combineReducers({
     global: globalReducer,
     auth: authReducer,
     popups: popupsReducer,
-    collector: collectorReducer
+    collector: collectorReducer,
+    datasource: datasourceReducer,
 });
 
 // Configure the Redux Storage
