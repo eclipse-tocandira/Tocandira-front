@@ -31,16 +31,6 @@ class Main extends React.PureComponent {
 
     /** Defines the component state variables */
     state = {
-        datapoint:{
-            content_rows:[
-                {name:"var1",description:"my variable 1",datasource_name:"test1",access:{name:"Siemens",data:{address:"DB100.DBD48"}}},
-                {name:"var2",description:"my variable 2",datasource_name:"test3",access:{name:"Rockwell",data:{tag_name:"VAZ_VAPOR"}}},
-                {name:"var3",description:"my variable 3",datasource_name:"test3",access:{name:"Rockwell",data:{tag_name:"Fix_ANALOG[75]"}}},
-                {name:"var4",description:"my variable 4",datasource_name:"test1",access:{name:"Siemens",data:{address:"DB203.DBX8.8"}}},
-                {name:"var5",description:"my variable 5",datasource_name:"test5",access:{name:"Modbus",data:{address:"47751"}}}
-            ],
-            selected_row:{name:null,id:-1}
-        }
     }
 
     /** Description.
@@ -49,38 +39,6 @@ class Main extends React.PureComponent {
         this.props.onTokenInvalid()
         this.props.onLogoutSubmit()
     }
-    
-
-    /** Description.
-    * @param ``: */
-     handleDataPointRowClick=(name,index) => {
-        const newDatapoint = {...this.state.datapoint};
-        if (name===this.state.datapoint.selected_row.name){
-            newDatapoint.selected_row = {name:null,id:-1};
-        } else {
-            newDatapoint.selected_row = {name:name,id:index};
-        }
-        this.setState({datapoint:newDatapoint});
-    }
-    /** Description.
-    * @param ``: */
-    handleDataPointNewClick=() => {
-        const newDatapoint = {...this.state.datapoint};
-        this.setState({datapoint:newDatapoint});
-    }
-    /** Description.
-    * @param ``: */
-    handleDataPointEditClick=() => {
-        const newDatapoint = {...this.state.datapoint};
-        this.setState({datapoint:newDatapoint});
-    }
-    /** Description.
-    * @param ``: */
-    handleDataPointDeleteClick=() => {
-        const newDatapoint = {...this.state.datapoint};
-        this.setState({datapoint:newDatapoint});
-    }
-
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
@@ -114,13 +72,7 @@ class Main extends React.PureComponent {
                                 <CollectorCard/>
                                 <DataSourceCard/>
                             </Stack>
-                        <DataPointCard
-                            content_rows={this.state.datapoint.content_rows}
-                            selected_row={this.state.datapoint.selected_row}
-                            onRowClick={this.handleDataPointRowClick}
-                            onNewClick={this.handleDataPointNewClick}
-                            onEditClick={this.handleDataPointEditClick}
-                            onDeleteClick={this.handleDataPointDeleteClick}/>
+                        <DataPointCard/>
                         </Stack>
                     </CardContent>
                     <CardActions>
