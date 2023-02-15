@@ -18,3 +18,16 @@ export const ImplementedProtocols = [
     {name:"Rockwell", class:Rockwell},
     {name:"Modbus", class:Modbus}
 ]
+
+/** Description.
+    * @param ``: 
+    * @returns */
+export function getDataPointAddress(row, prot_name) {
+    let address;
+    if (prot_name==="Rockwell"){
+        address = row.access.data.tag_name;
+    } else {
+        address = row.access.data.address;
+    }
+    return(address)
+}
