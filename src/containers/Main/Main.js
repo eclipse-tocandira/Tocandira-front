@@ -124,8 +124,13 @@ class Main extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+
+        // NOTE: The onClick event in Main <div> will be executed
+        //       after any Click on configuration screen by "bubbling",
+        //       this is the easiest way to perform a continuous token
+        //       check and logout the user when it becomes invalid.
         const jsx_component = (
-            <div className='Main'>
+            <div className='Main' onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
             
                 <Button variant='contained'
                     sx={{margin:'1rem', alignSelf:'flex-end'}}
