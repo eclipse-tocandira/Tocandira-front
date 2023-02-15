@@ -56,14 +56,18 @@ class CollectorCard extends React.PureComponent {
     * @param ``: */
     handleCollectorInterval=(event) => {
         const newState = {...this.state};
-        newState.interval = parseInt(event.target.value);
+        let num = parseInt(event.target.value);
+        if (isNaN(num)){num=0};
+        newState.interval = num;
         this.setState(newState);
     }
     /** Description.
     * @param ``: */
     handleCollectorPort=(event) => {
         const newState = {...this.state};
-        newState.port = parseInt(event.target.value);
+        let num = parseInt(event.target.value);
+        if (isNaN(num)){num=0};
+        newState.port = num;
         this.setState(newState);
     }
     /** Description.
