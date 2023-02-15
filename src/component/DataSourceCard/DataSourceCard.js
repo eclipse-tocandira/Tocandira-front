@@ -5,18 +5,23 @@
  * 
  * Dependencies are:
  * - react 
+ * - react-redux
  * - @mui/material
 */
 
 // Imports from modules;
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {TableRow, Checkbox} from '@mui/material'
 // Local Imports
 import TitledCard from '../TitledCard/TitledCard';
 import DataTable from '../DataTable/DataTable';
 import TextCell from '../DataTable/TextCell';
 import CheckCell from '../DataTable/CheckCell';
+import DataSourcePopup from '../../component/Popups/DataSourcePopup'
+import * as popupsActions from '../../store/popups/actions'
+import * as datasourceActions from '../../store/datasource/actions'
 
 // #######################################
 
@@ -27,21 +32,58 @@ class DataSourceCard extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
-        content_rows:PropTypes.arrayOf(PropTypes.object),
-        selected_row:PropTypes.object,
-        onRowClick:PropTypes.func,
-        onNewClick:PropTypes.func,
-        onEditClick:PropTypes.func,
-        onDeleteClick:PropTypes.func,
     };
+
+    /** Defines the component state variables */
+    state = {
+        selected_row:{name:null,id:-1}
+    }
+
+    /** Description.
+    * @param ``: */
+     handleRowClick=(name,index) => {
+        const newState = {...this.state};
+        if (name===this.state.selected_row.name){
+            newState.selected_row = {name:null,id:-1};
+        } else {
+            newState.selected_row = {name:name,id:index};
+        }
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: */
+    handleNewClick=() => {
+        this.props.onOpenPopup(true);
+        const newState = {...this.state};
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: */
+    handleEditClick=() => {
+        const newState = {...this.state};
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: */
+    handleDeleteClick=() => {
+        const newState = {...this.state};
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handlePopUpLeave=() => {
+        this.props.onGetDataSource(this.props.global.backend_instance)
+        this.props.onOpenPopup(false)
+    }
 
     /** Description.
     * @param ``: 
     * @returns */
-     buildContentRow=(row, index) => {
-        const is_selected = row.name===this.props.selected_row.name;
+    buildContentRow=(row, index) => {
+        const is_selected = row.name===this.state.selected_row.name;
         const content = <TableRow hover
-            onClick={this.props.onRowClick.bind(this,row.name,index)}
+            onClick={this.handleRowClick.bind(this,row.name,index)}
             role="checkbox"
             tabIndex={-1}
             key={index}
@@ -61,14 +103,17 @@ class DataSourceCard extends React.PureComponent {
             <DataTable
                 headers={["Name","IP Address","Protocol"]}
                 ncols_to_actions={2}
-                content_rows={this.props.content_rows}
-                selected_row={this.props.selected_row}
+                content_rows={this.props.datasource.ds_content}
+                selected_row={this.state.selected_row}
                 buildContentRow={this.buildContentRow}
-                onRowClick={this.props.onRowClick}
-                onNewClick={this.props.onNewClick}
-                onEditClick={this.props.onEditClick}
-                onDeleteClick={this.props.onDeleteClick}/>,
-            ];
+                onRowClick={this.handleRowClick}
+                onNewClick={this.handleNewClick}
+                onEditClick={this.handleEditClick}
+                onDeleteClick={this.handleDeleteClick}/>,
+            <DataSourcePopup 
+                open={this.props.popups.open_ds}
+                onCancelClick={this.handlePopUpLeave}/>
+            ]; 
 
         const jsx_component = (
             <TitledCard cardprops={{flex:'1 1 auto'}}
@@ -76,8 +121,25 @@ class DataSourceCard extends React.PureComponent {
         );
         return(jsx_component);
     };
+
+    componentDidMount() {
+        this.props.onGetDataSource(this.props.global.backend_instance)
+    };
     
 }
 
+/** Map the Redux state to some component props */
+const reduxStateToProps = (state) =>({
+    global: state.global,
+    popups: state.popups,
+    datasource: state.datasource
+});
+
+/** Map the Redux actions dispatch to some component props */
+const reduxDispatchToProps = (dispatch) =>({
+    onOpenPopup:(open)=>dispatch(popupsActions.openDataSourcePopup(open)),
+    onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
+});
+
 // Make this component visible on import
-export default DataSourceCard;
+export default connect(reduxStateToProps,reduxDispatchToProps)(DataSourceCard);

@@ -31,16 +31,6 @@ class Main extends React.PureComponent {
 
     /** Defines the component state variables */
     state = {
-        datasource:{
-            content_rows:[
-                {name:"test",plc_ip:"0.0.0.0",protocol:{name:"Siemens"}},
-                {name:"test2",plc_ip:"1.1.1.1",protocol:{name:"Siemens"}},
-                {name:"test3",plc_ip:"1.1.1.1",protocol:{name:"Rockwell"}},
-                {name:"test4",plc_ip:"1.1.1.1",protocol:{name:"Rockwell"}},
-                {name:"test5",plc_ip:"1.1.1.1",protocol:{name:"Modbus"}}
-            ],
-            selected_row:{name:null,id:-1}
-        },
         datapoint:{
             content_rows:[
                 {name:"var1",description:"my variable 1",datasource_name:"test1",access:{name:"Siemens",data:{address:"DB100.DBD48"}}},
@@ -60,35 +50,6 @@ class Main extends React.PureComponent {
         this.props.onLogoutSubmit()
     }
     
-    /** Description.
-    * @param ``: */
-     handleDataSourceRowClick=(name,index) => {
-        const newDatasource = {...this.state.datasource};
-        if (name===this.state.datasource.selected_row.name){
-            newDatasource.selected_row = {name:null,id:-1};
-        } else {
-            newDatasource.selected_row = {name:name,id:index};
-        }
-        this.setState({datasource:newDatasource});
-    }
-    /** Description.
-    * @param ``: */
-    handleDataSourceNewClick=() => {
-        const newDatasource = {...this.state.datasource};
-        this.setState({datasource:newDatasource});
-    }
-    /** Description.
-    * @param ``: */
-    handleDataSourceEditClick=() => {
-        const newDatasource = {...this.state.datasource};
-        this.setState({datasource:newDatasource});
-    }
-    /** Description.
-    * @param ``: */
-    handleDataSourceDeleteClick=() => {
-        const newDatasource = {...this.state.datasource};
-        this.setState({datasource:newDatasource});
-    }
 
     /** Description.
     * @param ``: */
@@ -151,13 +112,7 @@ class Main extends React.PureComponent {
                         <Stack spacing='3rem' direction='column'>
                             <Stack direction='row' spacing='3rem'>
                                 <CollectorCard/>
-                                <DataSourceCard
-                                    content_rows={this.state.datasource.content_rows}
-                                    selected_row={this.state.datasource.selected_row}
-                                    onRowClick={this.handleDataSourceRowClick}
-                                    onNewClick={this.handleDataSourceNewClick}
-                                    onEditClick={this.handleDataSourceEditClick}
-                                    onDeleteClick={this.handleDataSourceDeleteClick}/>
+                                <DataSourceCard/>
                             </Stack>
                         <DataPointCard
                             content_rows={this.state.datapoint.content_rows}
