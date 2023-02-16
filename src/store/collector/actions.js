@@ -8,6 +8,7 @@
 import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
+import { emitNetworkErrorAlert } from '../popups/actions';
 
 // #######################################
 
@@ -18,16 +19,13 @@ export const setParams=(ip,port,interval) => ({type:actionTypes.SET_PARAMS, ip:i
 /** Redux action to */
 export const clearInvalid=() => ({type:actionTypes.CLEAR_INVALID});
 
-/** Redux action to mark the request as invalid */
-export const invalidConnection=() => ({type:actionTypes.INVALID_CONNECTION});
-
 /** The request done prior to `saveParams` function */
 export const getParams=(api_instance) => (dispatch) => {
     api_instance.get('/collector')
     .then( (res) => dispatch(setParams(res.data.ip, res.data.port, res.data.update_period)) )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
-                dispatch(invalidConnection());
+                dispatch(emitNetworkErrorAlert());
             }else{
                 dispatch(invalidEntry(req.response.data.detail));
             }

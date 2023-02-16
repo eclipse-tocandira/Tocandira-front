@@ -15,7 +15,7 @@ const initialState = {
     port:4800,
     interval:12,
     validation:{
-        error:false,
+        data_error:false,
         help_text:""
     }
 };
@@ -30,16 +30,13 @@ const reducer = (state=initialState, action) => {
             newState.ip = action.ip;
             newState.port = action.port;
             newState.interval = action.interval;
-            newState.validation = {error: false, data_error: false, help_text:""}
+            newState.validation = {data_error: false, help_text:""}
             break
         case actionTypes.CLEAR_INVALID:
-            newState.validation = {error: false, help_text:""}
-            break
-        case actionTypes.INVALID_CONNECTION:
-            newState.validation = {error: true, help_text:"Unable to connect to Server"}
+            newState.validation = {data_error: false, help_text:""}
             break
         case actionTypes.INVALID_ENTRY:
-            newState.validation = {error: true, help_text:action.msg}
+            newState.validation = {data_error: true, help_text:action.msg}
             break
         default:
             // console.debug('[reducers/auth]',action)

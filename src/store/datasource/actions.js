@@ -8,6 +8,7 @@
 import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
+import { emitNetworkErrorAlert } from '../popups/actions';
 
 // #######################################
 
@@ -20,7 +21,7 @@ export const getData=(api_instance) => (dispatch) => {
     .then( (res) => dispatch(saveData(res.data)) )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
-                // dispatch(invalidConnection());
+                dispatch(emitNetworkErrorAlert());
             }else{
                 // dispatch(invalidEntry(req.response.data.detail));
             }

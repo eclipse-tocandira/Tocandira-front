@@ -25,4 +25,7 @@ export const emitAlert = (text,type,options={}) => {
 };
 
 /** Redux action to  */
+export const emitNetworkErrorAlert = (options={}) => {emitAlert('Unable to Connect to Server','error',options)};
+
+/** Redux action to  */
 export const removeSnackbar = key => ({type: actionTypes.REMOVE_ALERT,key,});

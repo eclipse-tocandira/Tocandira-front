@@ -9,7 +9,7 @@ import qs from 'qs';
 import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
-import { emitAlert } from '../popups/actions';
+import { emitNetworkErrorAlert, emitAlert } from '../popups/actions';
 
 // #######################################
 
@@ -23,7 +23,7 @@ export const login=(api_instance,logindata) => (dispatch) => {
     .then( (res) => dispatch(saveLogin(res.data.access_token, res.data.token_type)) )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
-                dispatch(emitAlert('Unable to Connect to Server.','error'))
+                dispatch(emitNetworkErrorAlert())
             }else{
                 dispatch(invalidEntry());
             }
@@ -49,7 +49,9 @@ export const validate=(api_instance) => (dispatch) => {
     .then( (res) => dispatch(saveValidCheck()) )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
-                dispatch(emitAlert('Server Disconected.','error'))
+                dispatch(emitNetworkErrorAlert())
+            }else{
+                dispatch(emitAlert('User Authentication Expired','info'))
             }
             dispatch(logout());
         }
