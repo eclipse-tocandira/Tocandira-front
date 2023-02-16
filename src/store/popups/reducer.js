@@ -13,6 +13,7 @@ import * as actionTypes from './actionTypes'
 const initialState = {
     open_ds:false,
     open_dp:false,
+    open_verify:false,
 };
 
 /** Auth reducer definition */
@@ -26,6 +27,9 @@ const reducer = (state=initialState, action) => {
             break
         case actionTypes.OPEN_DATAPOINT:
             newState.open_dp = action.open;
+            break
+        case actionTypes.OPEN_VERIFY:
+            newState.open_verify = action.open;
             break
         default:
             // console.debug('[reducers/auth]',action)
