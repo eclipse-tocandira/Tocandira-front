@@ -13,6 +13,7 @@ import * as actionTypes from './actionTypes'
 const initialState = {
     open_ds:false,
     open_dp:false,
+    notifications: [],
 };
 
 /** Auth reducer definition */
@@ -26,6 +27,16 @@ const reducer = (state=initialState, action) => {
             break
         case actionTypes.OPEN_DATAPOINT:
             newState.open_dp = action.open;
+            break
+        case actionTypes.ADD_ALERT:
+            newState.notifications = [...state.notifications,
+                {key: action.key, ...action.notification},
+            ];
+            break
+        case actionTypes.REMOVE_ALERT:
+            newState.notifications = state.notifications.filter(
+                notification => notification.key !== action.key,
+            );
             break
         default:
             // console.debug('[reducers/auth]',action)
