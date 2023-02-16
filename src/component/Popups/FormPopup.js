@@ -47,7 +47,7 @@ class FormPopup extends React.PureComponent {
     };
 
     static defaultProps = {
-        cardWidth:'sx',
+        cardWidth:'xs',
     }
 
     /** Defines the component visualization.
