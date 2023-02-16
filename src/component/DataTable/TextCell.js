@@ -21,7 +21,7 @@ class TextCell extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
-        text:PropTypes.string
+        text:PropTypes.any
     };
     /** Defines the component visualization.
     * @returns JSX syntax element */
