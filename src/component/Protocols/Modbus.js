@@ -8,6 +8,10 @@
 // Imports from modules
 import { TextField, Stack } from "@mui/material";
 
+// Local Imports
+import SimpleSelect from "../SimpleSelect/SimpleSelect";
+import {getDataPointAddress} from "../Protocols/Protocols";
+
 // #######################################
 
 
@@ -21,24 +25,68 @@ class Modbus {
         <Stack direction="column" spacing='1rem'>
             <TextField variant="outlined" label="Name" type='text' required
                 fullWidth
+                InputLabelProps={{ shrink: true }}
                 value={values.name}
+                placeholder={defaults.name}
                 onChange={events.onNameChange}
                 sx={{marginBottom:'1rem'}}>
             </TextField>
             <Stack direction="row" spacing="1rem">
                 <TextField variant="outlined" label="IP Address" type='text' required
                     fullWidth
-                    value={values.ip}
+                    InputLabelProps={{ shrink: true }}
+                    value={values.plc_ip}
+                    placeholder={defaults.plc_ip}
                     onChange={events.onIpChange}>
                 </TextField>
                 <TextField variant="outlined" label="Port" type='tel' required
                     fullWidth
-                    value={values.port}
+                    InputLabelProps={{ shrink: true }}
+                    value={values.plc_port.toString()}
+                    placeholder={defaults.plc_port.toString()}
                     onChange={events.onPortChange}>
                 </TextField>
                 <TextField variant="outlined" label="Slave ID" type='number' required
-                    value={values.slave_id}
+                    InputLabelProps={{ shrink: true }}
+                    value={values.protocol.data.slave_id}
+                    placeholder={defaults.protocol.data.slave_id}
                     onChange={events.onSlaveIdChange}>
+                </TextField>
+            </Stack>
+        </Stack>
+        return(comp_list);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static dataPointFields=(events,values,defaults) => {
+        const comp_list = 
+        <Stack direction="column" spacing='1rem'>
+            <TextField variant="outlined" label="Name" type='text' required
+                fullWidth
+                value={values.name}
+                placeholder={defaults.name}
+                onChange={events.onNameChange}>
+            </TextField>
+            <TextField variant="outlined" label="Description" type='text' required
+                fullWidth
+                value={values.description}
+                placeholder={defaults.description}
+                onChange={events.onDescriptionChange}>
+            </TextField>
+            <Stack direction="row" spacing="1rem">
+                <SimpleSelect
+                        fullWidth
+                        label={"Function Code"}
+                        list={defaults.access.data.func_code.menuItems}
+                        value={values.access.data.func_code}
+                        defaultValue={defaults.access.data.func_code.defaultValue}/>
+                <TextField variant="outlined" label="Address" type='text' required
+                    fullWidth
+                    value={getDataPointAddress(values,values.access.name)}
+                    placeholder={getDataPointAddress(defaults,defaults.access.name)}
+                    onChange={events.onAddressChange}>
                 </TextField>
             </Stack>
         </Stack>

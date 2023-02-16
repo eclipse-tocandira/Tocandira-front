@@ -35,18 +35,32 @@ class DataSourcePopup extends React.PureComponent {
         protocol_info:{
             Siemens:{
                 events:{},
-                values:{name:"Example111",ip:"0.0.0.0",port:502,rack:0,slot:1},
-                defaults:{plc: { defaultValue:"S7-300", menuItems: ["S7-200","S7-300","S7-400","S7-1200","S7-1500"] }}
+                values:{name: null,plc_ip: null,plc_port: 102,protocol: {
+                    name: "Siemens",data: {
+                        rack: "0",slot: "1",plc: "S7-300"}}},
+                defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 102,protocol: {
+                    name: "Siemens",data: {
+                        rack: "0",slot: "1",plc: {
+                            defaultValue: "S7-300",menuItems: ["S7-200","S7-300","S7-400","S7-1200","S7-1500"]}}}}
             },
             Rockwell:{
                 events:{},
-                values:{name:"Example222",ip:"1.1.1.1",port:44818,slot:1,path:"1,16,A,11"},
-                defaults:{connection: { defaultValue:"Ethernet", menuItems: ["Ethernet","DH+"] }}
+                values:{name: null,plc_ip: null,plc_port: 44818,protocol: {
+                    name: "Rockwell", data: {
+                        path: null,slot: "0",connection: "Ethernet"}}},
+                defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 44818,protocol: {
+                    name: "Rockwell", data: {
+                        path: "1,16,A,11",slot: "0",connection: {
+                            defaultValue: "Ethernet",menuItems: ["Ethernet","DH+"]}}}}
             },
             Modbus:{
                 events:{},
-                values:{name:"Example333",ip:"2.2.2.2",port:502,slave_id:1},
-                defaults:{}
+                values:{ name: null,plc_ip: null,plc_port: 502,protocol: {
+                    name: "Modbus",data: {
+                    slave_id: "0"}}},
+                defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 502,protocol: {
+                    name: "Modbus",data: {
+                    slave_id: "0"}}}
             }
         }
     };
