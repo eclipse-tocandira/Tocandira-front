@@ -17,9 +17,11 @@ import { Stack, Button, Card, CardContent, Typography, CardActions } from '@mui/
 import './Main.css';
 import * as authActions from '../../store/auth/actions'
 import * as globalActions from '../../store/global/actions'
+import * as popupsActions from '../../store/popups/actions'
 import CollectorCard from '../../component/CollectorCard/CollectorCard';
 import DataSourceCard from '../../component/DataSourceCard/DataSourceCard';
 import DataPointCard from '../../component/DataPointCard/DataPointCard';
+import VerifyPopup from '../../component/Popups/VerifyPopup';
 
 // #######################################
 
@@ -50,7 +52,8 @@ class Main extends React.PureComponent {
         //       check and logout the user when it becomes invalid.
         const jsx_component = (
             <div className='Main' onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
-            
+                <VerifyPopup open={this.props.popups.open_verify}/>
+
                 <Button variant='contained'
                     sx={{margin:'1rem', alignSelf:'flex-end'}}
                     size='large'
@@ -88,6 +91,13 @@ class Main extends React.PureComponent {
                         color='inherit'>
                             RESET
                         </Button>
+
+                        <Button variant='contained'
+                        size='large'
+                        onClick={this.props.onVerify.bind(this,true)}
+                        color='success'>
+                            VEFIRY
+                        </Button>
                     </Stack>
                     </CardActions>
                 </Card>
@@ -102,7 +112,8 @@ class Main extends React.PureComponent {
 /** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
     auth: state.auth,
-    global: state.global
+    global: state.global,
+    popups: state.popups
 });
 
 /** Map the Redux actions dispatch to some component props */
@@ -110,6 +121,7 @@ const reduxDispatchToProps = (dispatch) =>({
     onLogoutSubmit: ()=>dispatch(authActions.logout()),
     onTokenInvalid: ()=>dispatch(globalActions.clearAuthToken()),
     onCheckToken: (api_instance)=>dispatch(authActions.validate(api_instance)),
+    onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
 });
 
 // Make this component visible on import
