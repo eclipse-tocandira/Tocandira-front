@@ -17,6 +17,16 @@ import {getDataPointAddress} from "../Protocols/Protocols";
 
 class Modbus {
 
+    NAME="Modbus"
+
+    static parseDataSourdeDefault2Values=(defaults) => ({
+        name: "",plc_ip: "",plc_port: defaults.plc_port, protocol: {
+            name: this.NAME,data: {
+                slave_id: defaults.protocol.data.slave_id
+            }
+        }
+    })
+
     /** Description.
     * @param ``: 
     * @returns */
@@ -42,7 +52,7 @@ class Modbus {
                 <TextField variant="outlined" label="Port" type='tel' required
                     fullWidth
                     InputLabelProps={{ shrink: true }}
-                    value={values.plc_port.toString()}
+                    value={values.plc_port}
                     placeholder={defaults.plc_port.toString()}
                     onChange={events.onPortChange}>
                 </TextField>
