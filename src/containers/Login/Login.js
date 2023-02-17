@@ -114,7 +114,7 @@ class Login extends React.PureComponent {
                                 <Grid item marginTop='-1rem'> <Typography variant='subtitle1'
                                     align='left'
                                     color='text.secondary'>
-                                        Historian Configuration Tool
+                                        Tocandira Configuration Tool
                                     </Typography>
                                 </Grid>
                                 {/* Username prompt */}
