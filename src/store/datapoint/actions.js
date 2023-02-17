@@ -48,3 +48,22 @@ export const postDataConfirm=(api_instance, dpname) => (dispatch) => {
         }
     )
 };
+
+const saveProtocolDefault=(defaults,protocol) => ({type:actionTypes.GET_DP_DEFAULTS, protocol:protocol, defaults:defaults})
+
+/** The request done prior to `saveProtocols` function */
+export const getDefaults=(api_instance, prot_list) => (dispatch) => {
+    prot_list.forEach(element => {
+        api_instance.get('/datapoint_defaults/'+element)
+        .then( (res) => dispatch(saveProtocolDefault(res.data,element)) )
+        .catch( (req) => {
+                if(req.code===AxiosError.ERR_NETWORK){
+                    dispatch(emitNetworkErrorAlert());
+                }else{
+                // dispatch(invalidEntry(req.response.data.detail));
+            }
+            }
+        )
+    });
+    
+};

@@ -13,6 +13,7 @@ import { getDataPointAddress } from '../../component/Protocols/Protocols';
 /** Initial state of the auth redux */
 const initialState = {
     dp_content:[],
+    dp_defaults:{},
     dp_verify:[]
 };
 
@@ -41,6 +42,10 @@ const reducer = (state=initialState, action) => {
                     row.response = action.dplist.response
                 }
             })
+            break
+        case actionTypes.GET_DP_DEFAULTS:
+            newState.dp_defaults = {...state.dp_defaults};
+            newState.dp_defaults[action.protocol] = action.defaults;
             break
         default:
             // console.debug('[reducers/auth]',action)
