@@ -92,13 +92,21 @@ class Rockwell {
                 placeholder={defaults.description}
                 onChange={events.onDescriptionChange}>
             </TextField>
-            <TextField variant="outlined" label="Address" type='text' required
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                value={getDataPointAddress(values,values.access.name)}
-                placeholder={getDataPointAddress(defaults,defaults.access.name)}
-                onChange={events.onAddressChange}>
-            </TextField>
+            <Stack direction="row" spacing="1rem">
+                <SimpleSelect
+                    fullWidth
+                    label={"Type"}
+                    list={defaults.num_type.menuItems}
+                    value={values.num_type}
+                    defaultValue={defaults.num_type.defaultValue}/>
+                <TextField variant="outlined" label="Address" type='text' required
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    value={getDataPointAddress(values,values.access.name)}
+                    placeholder={getDataPointAddress(defaults,defaults.access.name)}
+                    onChange={events.onAddressChange}>
+                </TextField>
+            </Stack>
         </Stack>
         return(comp_list);
     }

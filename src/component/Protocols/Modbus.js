@@ -77,13 +77,19 @@ class Modbus {
                 placeholder={defaults.description}
                 onChange={events.onDescriptionChange}>
             </TextField>
+            <SimpleSelect
+                fullWidth
+                label={"Function Code"}
+                list={defaults.access.data.func_code.menuItems}
+                value={values.access.data.func_code}
+                defaultValue={defaults.access.data.func_code.defaultValue}/>
             <Stack direction="row" spacing="1rem">
                 <SimpleSelect
-                        fullWidth
-                        label={"Function Code"}
-                        list={defaults.access.data.func_code.menuItems}
-                        value={values.access.data.func_code}
-                        defaultValue={defaults.access.data.func_code.defaultValue}/>
+                    fullWidth
+                    label={"Type"}
+                    list={defaults.num_type.menuItems}
+                    value={values.num_type}
+                    defaultValue={defaults.num_type.defaultValue}/>
                 <TextField variant="outlined" label="Address" type='text' required
                     fullWidth
                     InputLabelProps={{ shrink: true }}
