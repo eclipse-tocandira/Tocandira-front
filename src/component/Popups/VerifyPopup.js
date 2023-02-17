@@ -38,12 +38,6 @@ class VerifyPopup extends React.PureComponent {
     };
     /** Defines the component state variables */
     state = {
-        content_rows: [
-           {"name" : "name1",  "address" : "address1",  "status" :  true,  "response": '1'},
-           {"name" : "name2",  "address" : "address2",  "status" :  false,  "response": '2'},
-           {"name" : "name3",  "address" : "address3",  "status" :  false,  "response": '3'},
-        ],
-        selected_row:{name:null,id:-1},
     };
     // /** Context Definition*/
     // static contextType ;
@@ -66,30 +60,39 @@ class VerifyPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
      buildContentRow=(row, index) => {
-        console.log("Valor de row", row);
-        let response = '123456'
-        let color = null
+        let response = null
+        let icon = null
 
-        if (row.status){
-            color='success';
+        if (row.status === null){
+            icon = <MoreHorizIcon />
+        } else if (row.status === true) {
+            icon = <CheckCircleIcon color='success' />
+            response = row.response
         } else {
-            color='error';
+            icon = <CancelIcon color='error' />
         };
-
-        const icon =  <CheckCircleIcon color={color} />
 
         const content = (
         <TableRow
             tabIndex={-1}
             key={index}
         >
-            {[row.name, getDataPointAddress(row,row.access.name), icon, response].map(
+            {[row.name, row.address, icon, response].map(
                 (text, index) => <TextCell text={text} key={index}/>
             )}
         </TableRow>
         )
         return(content);
-    }
+    };
+
+        /** Description.
+    * @param ``: 
+    * @returns */
+    handleCheckClick=() => {
+        this.props.datapoint.dp_verify.map((row) => {
+            this.props.onGetDataPointVerify(this.props.global.backend_instance, row.name);
+        })
+    };
     
     /** Defines the component visualization.
     * @returns JSX syntax element */
@@ -104,6 +107,7 @@ class VerifyPopup extends React.PureComponent {
                 <Stack direction="column" spacing='1rem' flexGrow='1' alignItems="stretch">
                     <Button
                         variant='contained'
+                        onClick={this.handleCheckClick}
                         color='primary'
                         size='medium'
                         fullWidth={true}
@@ -114,7 +118,7 @@ class VerifyPopup extends React.PureComponent {
                     <DataTable
                         headers={["Name","Address","Status","Response"]}
                         with_checkbox={false}
-                        content_rows={this.props.datapoint.dp_content}
+                        content_rows={this.props.datapoint.dp_verify}
                         selected_row={this.state.selected_row}
                         buildContentRow={this.buildContentRow}
                         with_action_items={false}
@@ -130,6 +134,7 @@ class VerifyPopup extends React.PureComponent {
 
 /** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
+    global: state.global,
     popups: state.popups,
     datapoint: state.datapoint
 });
@@ -137,6 +142,7 @@ const reduxStateToProps = (state) =>({
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
+    onGetDataPointVerify:(api, name_protocol)=>dispatch(datapointActions.postDataConfirm(api, name_protocol)),
 });
 
 // Make this component visible on import
