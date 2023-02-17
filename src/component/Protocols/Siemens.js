@@ -77,20 +77,27 @@ class Siemens {
     static dataPointFields=(events,values,defaults) => {
         const comp_list = 
         <Stack direction="column" spacing='1rem'>
+            <TextField variant="outlined" label="Protocol" type='text' disabled
+                size="small" fullWidth value={values.access.name}
+                sx={{marginBottom:'1rem'}}>
+            </TextField>
             <TextField variant="outlined" label="Name" type='text' required
                 fullWidth
+                InputLabelProps={{ shrink: true }}
                 value={values.name}
                 placeholder={defaults.name}
                 onChange={events.onNameChange}>
             </TextField>
             <TextField variant="outlined" label="Description" type='text' required
                 fullWidth
+                InputLabelProps={{ shrink: true }}
                 value={values.description}
                 placeholder={defaults.description}
                 onChange={events.onDescriptionChange}>
             </TextField>
             <TextField variant="outlined" label="Address" type='text' required
                 fullWidth
+                InputLabelProps={{ shrink: true }}
                 value={getDataPointAddress(values,values.access.name)}
                 placeholder={getDataPointAddress(defaults,defaults.access.name)}
                 onChange={events.onAddressChange}>
