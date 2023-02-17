@@ -14,7 +14,7 @@ import { getDataPointAddress } from '../../component/Protocols/Protocols';
 const initialState = {
     dp_content:[],
     dp_defaults:{},
-    dp_verify:[]
+    dp_verify:[],
 };
 
 /** Auth reducer definition */
@@ -35,11 +35,11 @@ const reducer = (state=initialState, action) => {
                 })
             );
             break
-        case actionTypes.CONFIRM_DPDATA_PENDING:
+        case actionTypes.VERIFY_DPDATA_PENDING:
             newState.dp_verify.map((row) => {
-                if (row.name === action.dpname){
-                    row.status = action.dplist.status
-                    row.response = action.dplist.response
+            if (row.name === action.dpname){
+                row.status = action.dplist.status
+                row.response = action.dplist.response
                 }
             })
             break

@@ -46,14 +46,16 @@ class VerifyPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleSaveClick=() => {
-        this.handleCancelClick();
+        const status_true = this.props.datapoint.dp_verify.filter((el) => el.status )
+        this.props.onPutDataPointConfirm(this.props.global.backend_instance, status_true);
+        this.props.onVerify(false)
     };
 
     /** Description.
     * @param ``: 
     * @returns */
     handleCancelClick=() => {
-        this.props.onVerify(false);
+        this.props.onVerify(false)
     };
 
     /** Description.
@@ -85,12 +87,12 @@ class VerifyPopup extends React.PureComponent {
         return(content);
     };
 
-        /** Description.
+    /** Description.
     * @param ``: 
     * @returns */
     handleCheckClick=() => {
         this.props.datapoint.dp_verify.map((row) => {
-            this.props.onGetDataPointVerify(this.props.global.backend_instance, row.name);
+            this.props.onPostDataPointVerify(this.props.global.backend_instance, row.name);
         })
     };
     
@@ -129,7 +131,7 @@ class VerifyPopup extends React.PureComponent {
         );
         return(jsx_component);
     };
-    
+
 }
 
 /** Map the Redux state to some component props */
@@ -142,7 +144,10 @@ const reduxStateToProps = (state) =>({
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
-    onGetDataPointVerify:(api, name_protocol)=>dispatch(datapointActions.postDataConfirm(api, name_protocol)),
+    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
+    // onUpdateDataPending: ()=>dispatch(datapointActions.updateDataPending()),
+    onPostDataPointVerify:(api, name_protocol)=>dispatch(datapointActions.postDataVerify(api, name_protocol)),
+    onPutDataPointConfirm:(api, name_protocol)=>dispatch(datapointActions.putDataComfirm(api, name_protocol)),
 });
 
 // Make this component visible on import
