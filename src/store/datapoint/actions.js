@@ -15,6 +15,12 @@ import { emitNetworkErrorAlert } from '../popups/actions';
 /** Redux action to */
 const saveData=(dplist) => ({type:actionTypes.GET_DPDATA, dplist:dplist});
 
+// /** Redux action to */
+const saveDataConfirm=(dplist, dpname) => ({type:actionTypes.CONFIRM_DPDATA_PENDING, dplist:dplist, dpname:dpname});
+
+/** Redux action to */
+export const updateDataPending=() => ({type:actionTypes.UPDATE_DPDATA_PENDING});
+
 /** The request done prior to `saveParams` function */
 export const getData=(api_instance) => (dispatch) => {
     api_instance.get('/datapoints')
@@ -22,6 +28,20 @@ export const getData=(api_instance) => (dispatch) => {
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
                 dispatch(emitNetworkErrorAlert())
+            }else{
+                // dispatch(invalidEntry(req.response.data.detail));
+            }
+        }
+    )
+};
+
+/** The request done prior to `saveParams` function */
+export const postDataConfirm=(api_instance, dpname) => (dispatch) => {
+    api_instance.post('/test/' + dpname)
+    .then( (res) => dispatch(saveDataConfirm(res.data, dpname)) )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                // dispatch(invalidConnection());
             }else{
                 // dispatch(invalidEntry(req.response.data.detail));
             }
