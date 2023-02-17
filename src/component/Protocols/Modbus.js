@@ -27,6 +27,12 @@ class Modbus {
         }
     })
 
+    static parseDataPointDefault2Values=(defaults) => ({
+        name: "", description: "", num_type: defaults.num_type.defaultValue, datasource_name: "", access: {
+            name: this.NAME,data: {
+                address: "", func_code: defaults.access.data.func_code.defaultValue}}
+    })
+
     /** Description.
     * @param ``: 
     * @returns */

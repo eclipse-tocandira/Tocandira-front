@@ -17,6 +17,7 @@ import {Collapse, Stack } from '@mui/material'
 import FormPopup from  './FormPopup'
 import {ImplementedProtocols} from '../Protocols/Protocols'
 import SimpleSelect from '../SimpleSelect/SimpleSelect';
+import * as datapointActions from '../../store/datapoint/actions'
 //import './DataPointPopup.css';
 
 // #######################################
@@ -32,41 +33,19 @@ class DataPointPopup extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         ds_selected:"",
-        protocol_info:{
-            Siemens:{
-                events:{},
-                values:{ name: "", description: "", num_type: "REAL", datasource_name: "", access: {
-                    name: "Siemens",data: {
-                      address: ""}}},
-                defaults:{ name: "Variable name", description: "Variable description", num_type: {
-                    defaultValue: "REAL",menuItems: ["BOOL","INT","DINT","REAL"]}, datasource_name: "PLC name", access: {
-                    name: "Siemens",data: {
-                      address: "DB100.DBD818"}}}
-            },
-            Rockwell:{
-                events:{},
-                values:{ name: "", description: "", num_type: "REAL", datasource_name: "", access: {
-                    name: "Rockwell", data: {
-                      tag_name: "FIX_ANALOG[32]" }}},
-                defaults:{ name: "Variable name", description: "Variable description", num_type: {
-                    defaultValue: "REAL",menuItems: ["BOOL","INT","DINT","REAL"]}, datasource_name: "PLC name", access: {
-                        name: "Rockwell", data: {
-                            tag_name: "FIX_ANALOG[32]" }}}
-            },
-            Modbus:{
-                events:{},
-                values:{ name: "", description: "", num_type: "REAL", datasource_name: "PLC name", access: {
-                    name: "Modbus", data: {
-                      address: "", func_code: "4 - HOLDING REGISTER"}}},
-                defaults:{ name: "Variable name", description: "Variable description", num_type: {
-                    defaultValue: "REAL",menuItems: ["BOOL","INT","DINT","REAL"]}, datasource_name: "PLC name", access: {
-                    name: "Modbus", data: {
-                      address: "32004", func_code: {
-                        defaultValue: "4 - HOLDING REGISTER", menuItems: ["0 - COIL","1 - STATUS","3 - INPUT REGISTER","4 - HOLDING REGISTER"]}}}}
-            }
-        }
+        need_defaults_update:true,
+        info_dp:{}
     };
     
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleDefaultsChange=(status) => {
+        const newState = {...this.state};
+        newState.need_defaults_update = status;
+        this.setState(newState);
+    }
+
     /** Description.
     * @param ``: 
     * @returns */
@@ -89,7 +68,17 @@ class DataPointPopup extends React.PureComponent {
     * @returns */
     handleDataSourceChange=(event) => {
         const newState = {...this.state};
-        newState.ds_selected = event.target.value;
+        const ds_name = event.target.value;
+        const dsrow = this.props.datasource.ds_content.find(ele=>ele.name===ds_name);
+        const prot_name = dsrow.protocol.name;
+        const dp_defaults = this.props.datapoint.dp_defaults[prot_name];
+        const prot_class = ImplementedProtocols.find(ele=>ele.name===prot_name).class;
+        const info = prot_class.parseDataPointDefault2Values(dp_defaults);
+
+        newState.ds_selected = ds_name;
+        newState.info_dp = {...this.state.info_dp};
+        newState.info_dp[prot_name] = info;
+
         this.setState(newState);
     }
 
@@ -134,8 +123,13 @@ class DataPointPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     buildSpecificProtocolFields=(ele) =>{
-        const args = this.state.protocol_info[ele.name]
-        return({name:ele.name, fields:ele.class.dataPointFields(args.events,args.values,args.defaults)})
+        const defaults = this.props.datapoint.dp_defaults[ele.name]
+        const values = this.state.info_dp[ele.name]
+        let dp_form = null;
+        if(defaults && values){
+            dp_form = ele.class.dataPointFields({},values,defaults)
+        }
+        return({name:ele.name, fields:dp_form})
     }
 
     /** Defines the component visualization.
@@ -165,16 +159,29 @@ class DataPointPopup extends React.PureComponent {
         );
         return(jsx_component);
     };
+
+    componentDidUpdate() {
+        if(this.state.need_defaults_update) {
+            if (this.props.datasource.protocol_avail.length!==0) {
+                this.props.onGetDefaults(this.props.global.backend_instance,this.props.datasource.protocol_avail)
+                this.handleDefaultsChange(false)
+            }
+        }
+    }
     
 }
 
 /** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
+    global: state.global,
     datasource: state.datasource,
+    datapoint: state.datapoint,
 });
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
+    onGetDefaults:(api,prot_list)=>dispatch(datapointActions.getDefaults(api,prot_list)),
 });
+
 // Make this component visible on import
 export default connect(reduxStateToProps,reduxDispatchToProps)(DataPointPopup);

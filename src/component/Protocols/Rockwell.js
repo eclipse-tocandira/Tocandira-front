@@ -29,6 +29,12 @@ class Rockwell {
         }
     })
 
+    static parseDataPointDefault2Values=(defaults) => ({
+        name: "", description: "", num_type: defaults.num_type.defaultValue, datasource_name: "", access: {
+            name: this.NAME,data: {
+              tag_name: ""}}
+    })
+
     /** Description.
     * @param ``: 
     * @returns */
