@@ -26,20 +26,13 @@ const reducer = (state=initialState, action) => {
             newState.dp_content = [...action.dplist];
             break
         case actionTypes.UPDATE_DPDATA_PENDING:
-            let list_verify = [];
-            newState.dp_content.forEach(element => {
-                if (element.pending === true){
-                    return list_verify.push({
-                        name: element.name,
-                        address: getDataPointAddress(element,element.access.name),
-                        status: null, 
-                        response: null
-                    })
-                } else {
-                    return
-                }
-            });
-            newState.dp_verify = list_verify
+            newState.list_verify = state.dp_content.map(
+                (row)=>({
+                    name:row.name,
+                    address:getDataPointAddress(row,row.access.name),
+                    status: null, response: null
+                })
+            );
             break
         case actionTypes.CONFIRM_DPDATA_PENDING:
             newState.dp_verify.map((row) => {
