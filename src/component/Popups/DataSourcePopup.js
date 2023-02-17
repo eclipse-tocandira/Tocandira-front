@@ -10,12 +10,14 @@
 // Imports from modules;
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {Collapse, Stack } from '@mui/material'
 
 // Local Imports
 import FormPopup from  './FormPopup'
 import {ImplementedProtocols} from '../Protocols/Protocols'
 import SimpleSelect from '../SimpleSelect/SimpleSelect';
+import * as datasourceActions from '../../store/datasource/actions'
 //import './DataSourcePopup.css';
 
 // #######################################
@@ -31,38 +33,8 @@ class DataSourcePopup extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         protocol_selected:"",
-        protocol_list:["Siemens","Rockwell","Modbus"],
-        protocol_info:{
-            Siemens:{
-                events:{},
-                values:{name: "",plc_ip: "",plc_port: 102,protocol: {
-                    name: "Siemens",data: {
-                        rack: "0",slot: "1",plc: "S7-300"}}},
-                defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 102,protocol: {
-                    name: "Siemens",data: {
-                        rack: "0",slot: "1",plc: {
-                            defaultValue: "S7-300",menuItems: ["S7-200","S7-300","S7-400","S7-1200","S7-1500"]}}}}
-            },
-            Rockwell:{
-                events:{},
-                values:{name: "",plc_ip: "",plc_port: 44818,protocol: {
-                    name: "Rockwell", data: {
-                        path: "",slot: "0",connection: "Ethernet"}}},
-                defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 44818,protocol: {
-                    name: "Rockwell", data: {
-                        path: "1,16,A,11",slot: "0",connection: {
-                            defaultValue: "Ethernet",menuItems: ["Ethernet","DH+"]}}}}
-            },
-            Modbus:{
-                events:{},
-                values:{ name: "",plc_ip: "",plc_port: 502,protocol: {
-                    name: "Modbus",data: {
-                    slave_id: "0"}}},
-                defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 502,protocol: {
-                    name: "Modbus",data: {
-                    slave_id: "0"}}}
-            }
-        }
+        need_defaults_update:true,
+        info_ds:{},
     };
     
     /** Description.
@@ -87,7 +59,24 @@ class DataSourcePopup extends React.PureComponent {
     * @returns */
     handleProtocolChange=(event) => {
         const newState = {...this.state};
-        newState.protocol_selected = event.target.value;
+        const prot_name = event.target.value;
+        const prot_defaults = this.props.datasource.ds_defaults[prot_name];
+        const prot_class = ImplementedProtocols.find(ele=>ele.name===prot_name).class;
+        const info = prot_class.parseDataSourdeDefault2Values(prot_defaults);
+
+        newState.protocol_selected = prot_name;
+        newState.info_ds = {...this.state.info_ds};
+        newState.info_ds[prot_name] = info;
+
+        this.setState(newState);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleDefaultsChange=(status) => {
+        const newState = {...this.state};
+        newState.need_defaults_update = status;
         this.setState(newState);
     }
 
@@ -128,8 +117,13 @@ class DataSourcePopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     buildSpecificProtocolFields=(ele) =>{
-        const args = this.state.protocol_info[ele.name]
-        return({name:ele.name, fields:ele.class.dataSourceFields(args.events,args.values,args.defaults)})
+        const defaults = this.props.datasource.ds_defaults[ele.name]
+        const values = this.state.info_ds[ele.name]
+        let prot_form = null;
+        if(defaults && values){
+            prot_form = ele.class.dataSourceFields({},values,defaults)
+        }
+        return({name:ele.name, fields:prot_form})
     }
 
     /** Defines the component visualization.
@@ -147,8 +141,8 @@ class DataSourcePopup extends React.PureComponent {
                 <Stack direction="column" spacing='1rem' flexGrow='1' alignItems="stretch">
                     <SimpleSelect
                         label={"Protocol"}
-                        default_value={""}
-                        list={this.state.protocol_list}
+                        default_value={this.props.datasource.protocol_default}
+                        list={this.props.datasource.protocol_avail}
                         value={this.state.protocol_selected}
                         onChange={this.handleProtocolChange}/>
                     {content_array.map(this.buildContents)}
@@ -158,7 +152,27 @@ class DataSourcePopup extends React.PureComponent {
         return(jsx_component);
     };
     
+    componentDidUpdate() {
+        if(this.state.need_defaults_update) {
+            if (this.props.datasource.protocol_avail.length!==0) {
+                this.props.onGetDefaults(this.props.global.backend_instance,this.props.datasource.protocol_avail)
+                this.handleDefaultsChange(false)
+            }
+        }
+    }
+    
 }
 
+/** Map the Redux state to some component props */
+const reduxStateToProps = (state) =>({
+    global: state.global,
+    datasource: state.datasource
+});
+
+/** Map the Redux actions dispatch to some component props */
+const reduxDispatchToProps = (dispatch) =>({
+    onGetDefaults:(api,prot_list)=>dispatch(datasourceActions.getDefaults(api,prot_list)),
+});
+
 // Make this component visible on import
-export default DataSourcePopup;
+export default connect(reduxStateToProps,reduxDispatchToProps)(DataSourcePopup);

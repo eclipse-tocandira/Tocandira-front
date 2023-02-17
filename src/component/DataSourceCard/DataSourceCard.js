@@ -124,6 +124,7 @@ class DataSourceCard extends React.PureComponent {
 
     componentDidMount() {
         this.props.onGetDataSource(this.props.global.backend_instance)
+        this.props.onGetProtocols(this.props.global.backend_instance)
     };
     
 }
@@ -139,6 +140,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onOpenPopup:(open)=>dispatch(popupsActions.openDataSourcePopup(open)),
     onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
+    onGetProtocols:(api)=>dispatch(datasourceActions.getAvailProtocols(api))
 });
 
 // Make this component visible on import
