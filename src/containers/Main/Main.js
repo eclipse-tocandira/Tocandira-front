@@ -15,9 +15,10 @@ import { connect } from 'react-redux';
 import { Stack, Button, Card, CardContent, Typography, CardActions } from '@mui/material';
 // Local Imports
 import './Main.css';
-import * as authActions from '../../store/auth/actions'
-import * as globalActions from '../../store/global/actions'
-import * as popupsActions from '../../store/popups/actions'
+import * as authActions from '../../store/auth/actions';
+import * as globalActions from '../../store/global/actions';
+import * as popupsActions from '../../store/popups/actions';
+import * as datapointActions from '../../store/datapoint/actions';
 import CollectorCard from '../../component/CollectorCard/CollectorCard';
 import DataSourceCard from '../../component/DataSourceCard/DataSourceCard';
 import DataPointCard from '../../component/DataPointCard/DataPointCard';
@@ -40,6 +41,13 @@ class Main extends React.PureComponent {
     handleLogoutSubmission=() => {
         this.props.onTokenInvalid()
         this.props.onLogoutSubmit()
+    }
+
+    /** Description.
+    * @param ``: */
+    handleClickVerify=() => {
+        this.props.onUpdateDataPending()
+        this.props.onVerify(true)
     }
 
     /** Defines the component visualization.
@@ -94,7 +102,7 @@ class Main extends React.PureComponent {
 
                         <Button variant='contained'
                         size='large'
-                        onClick={this.props.onVerify.bind(this,true)}
+                        onClick={this.handleClickVerify}
                         color='success'>
                             VEFIRY
                         </Button>
@@ -113,7 +121,8 @@ class Main extends React.PureComponent {
 const reduxStateToProps = (state) =>({
     auth: state.auth,
     global: state.global,
-    popups: state.popups
+    popups: state.popups,
+    datapoint: state.datapoint,
 });
 
 /** Map the Redux actions dispatch to some component props */
@@ -122,6 +131,7 @@ const reduxDispatchToProps = (dispatch) =>({
     onTokenInvalid: ()=>dispatch(globalActions.clearAuthToken()),
     onCheckToken: (api_instance)=>dispatch(authActions.validate(api_instance)),
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
+    onUpdateDataPending: ()=>dispatch(datapointActions.updateDataPending()),
 });
 
 // Make this component visible on import
