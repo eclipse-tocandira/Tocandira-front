@@ -35,7 +35,7 @@ class DataSourcePopup extends React.PureComponent {
         protocol_info:{
             Siemens:{
                 events:{},
-                values:{name: null,plc_ip: null,plc_port: 102,protocol: {
+                values:{name: "",plc_ip: "",plc_port: 102,protocol: {
                     name: "Siemens",data: {
                         rack: "0",slot: "1",plc: "S7-300"}}},
                 defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 102,protocol: {
@@ -45,9 +45,9 @@ class DataSourcePopup extends React.PureComponent {
             },
             Rockwell:{
                 events:{},
-                values:{name: null,plc_ip: null,plc_port: 44818,protocol: {
+                values:{name: "",plc_ip: "",plc_port: 44818,protocol: {
                     name: "Rockwell", data: {
-                        path: null,slot: "0",connection: "Ethernet"}}},
+                        path: "",slot: "0",connection: "Ethernet"}}},
                 defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 44818,protocol: {
                     name: "Rockwell", data: {
                         path: "1,16,A,11",slot: "0",connection: {
@@ -55,7 +55,7 @@ class DataSourcePopup extends React.PureComponent {
             },
             Modbus:{
                 events:{},
-                values:{ name: null,plc_ip: null,plc_port: 502,protocol: {
+                values:{ name: "",plc_ip: "",plc_port: 502,protocol: {
                     name: "Modbus",data: {
                     slave_id: "0"}}},
                 defaults:{ name: "PLC name",plc_ip: "0.0.0.0",plc_port: 502,protocol: {
@@ -140,7 +140,7 @@ class DataSourcePopup extends React.PureComponent {
         const jsx_component = (
             <FormPopup
                 open={this.props.open}
-                title="New Data Source"
+                title="New DataSource"
                 nameOk="SAVE" nameCancel="CANCEL"
                 onOkClick={this.handleSaveClick}
                 onCancelClick={this.handleCancelClick}>
