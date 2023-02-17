@@ -22,6 +22,7 @@ import CheckCell from '../DataTable/CheckCell';
 import { getDataPointAddress } from '../Protocols/Protocols';
 import * as popupsActions from '../../store/popups/actions';
 import * as datapointActions from '../../store/datapoint/actions';
+import DataPointPopup from '../Popups/DataPointPopup';
 
 // #######################################
 
@@ -112,6 +113,9 @@ class DataPointCard extends React.PureComponent {
                 onNewClick={this.handleNewClick}
                 onEditClick={this.handleEditClick}
                 onDeleteClick={this.handleDeleteClick}/>,
+            <DataPointPopup 
+                open={this.props.popups.open_dp}
+                onCancelClick={this.handlePopUpLeave}/>
             ];
 
         const jsx_component = (
