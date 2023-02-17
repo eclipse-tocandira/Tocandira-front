@@ -19,7 +19,7 @@ class Rockwell {
 
     NAME="Rockwell"
 
-    static parseDataSourdeDefault2Values=(defaults) => ({
+    static parseDataSourceDefault2Values=(defaults) => ({
         name: "",plc_ip: "",plc_port: defaults.plc_port, protocol: {
             name: this.NAME,data: {
                 path: "",

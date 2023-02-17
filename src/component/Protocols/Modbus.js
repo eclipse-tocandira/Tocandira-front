@@ -19,7 +19,7 @@ class Modbus {
 
     NAME="Modbus"
 
-    static parseDataSourdeDefault2Values=(defaults) => ({
+    static parseDataSourceDefault2Values=(defaults) => ({
         name: "",plc_ip: "",plc_port: defaults.plc_port, protocol: {
             name: this.NAME,data: {
                 slave_id: defaults.protocol.data.slave_id

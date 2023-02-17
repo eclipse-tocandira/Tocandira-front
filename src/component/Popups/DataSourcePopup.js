@@ -62,7 +62,7 @@ class DataSourcePopup extends React.PureComponent {
         const prot_name = event.target.value;
         const prot_defaults = this.props.datasource.ds_defaults[prot_name];
         const prot_class = ImplementedProtocols.find(ele=>ele.name===prot_name).class;
-        const info = prot_class.parseDataSourdeDefault2Values(prot_defaults);
+        const info = prot_class.parseDataSourceDefault2Values(prot_defaults);
 
         newState.protocol_selected = prot_name;
         newState.info_ds = {...this.state.info_ds};
