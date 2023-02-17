@@ -31,6 +31,16 @@ class Siemens extends BaseProtocol {
         onPlcChange: this.setDSProtocolProp.bind(context,context,p_name,'plc'),
     })
 
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static getDataPointEvents=(context,p_name) => ({
+        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name'),
+        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description'),
+        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type'),
+        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'address'),
+    })
+
     static parseDataSourceDefault2Values=(defaults) => ({
         name: "",plc_ip: "",plc_port: defaults.plc_port, protocol: {
             name: defaults.protocol.name, data: {
@@ -132,7 +142,8 @@ class Siemens extends BaseProtocol {
                     label={"Type"}
                     list={defaults.num_type.menuItems}
                     value={values.num_type}
-                    defaultValue={defaults.num_type.defaultValue}/>
+                    defaultValue={defaults.num_type.defaultValue}
+                    onChange={events.onNumTypeChange}/>
                 <TextField variant="outlined" label="Address" type='text' required
                     fullWidth
                     InputLabelProps={{ shrink: true }}

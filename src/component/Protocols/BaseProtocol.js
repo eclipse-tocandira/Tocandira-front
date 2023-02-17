@@ -47,6 +47,43 @@ class BaseProtocol {
         newState.info_ds[p_name].protocol.data[property] = event.target.value;
         context.setState(newState);
     }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static getDPBaseState=(context,p_name) => {
+        const newState = {...context.state};
+        newState.info_dp = {...context.state.info_dp};
+        newState.info_dp[p_name] = {...context.state.info_dp[p_name]};
+        return(newState)
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static setDPBaseProp=(context,p_name,property,event) => {
+        const newState = this.getDPBaseState(context,p_name);
+        newState.info_dp[p_name][property] = event.target.value;
+        context.setState(newState);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static getDPProtocolState=(context,p_name) => {
+        const newState = this.getDPBaseState(context,p_name);
+        newState.info_dp[p_name].access.data = {...context.state.info_dp[p_name].access.data};
+        return(newState)
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static setDPProtocolProp=(context,p_name,property,event) => {
+        const newState = this.getDPProtocolState(context,p_name);
+        newState.info_dp[p_name].access.data[property] = event.target.value;
+        context.setState(newState);
+    }
     
 }
 

@@ -28,6 +28,17 @@ class Modbus extends BaseProtocol {
         onSlaveIdChange: this.setDSProtocolProp.bind(context,context,p_name,'slave_id'),
     })
 
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static getDataPointEvents=(context,p_name) => ({
+        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name'),
+        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description'),
+        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type'),
+        onFunctionCodeChange: this.setDPProtocolProp.bind(context,context,p_name,'func_code'),
+        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'address'),
+    })
+
     static parseDataSourceDefault2Values=(defaults) => ({
         name: "",plc_ip: "",plc_port: defaults.plc_port, protocol: {
             name: defaults.protocol.name, data: {
@@ -107,14 +118,16 @@ class Modbus extends BaseProtocol {
                 label={"Function Code"}
                 list={defaults.access.data.func_code.menuItems}
                 value={values.access.data.func_code}
-                defaultValue={defaults.access.data.func_code.defaultValue}/>
+                defaultValue={defaults.access.data.func_code.defaultValue}
+                onChange={events.onFunctionCodeChange}/>
             <Stack direction="row" spacing="1rem">
                 <SimpleSelect
                     fullWidth
                     label={"Type"}
                     list={defaults.num_type.menuItems}
                     value={values.num_type}
-                    defaultValue={defaults.num_type.defaultValue}/>
+                    defaultValue={defaults.num_type.defaultValue}
+                    onChange={events.onNumTypeChange}/>
                 <TextField variant="outlined" label="Address" type='text' required
                     fullWidth
                     InputLabelProps={{ shrink: true }}

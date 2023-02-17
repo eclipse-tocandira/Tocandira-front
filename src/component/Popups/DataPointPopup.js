@@ -125,9 +125,10 @@ class DataPointPopup extends React.PureComponent {
     buildSpecificProtocolFields=(ele) =>{
         const defaults = this.props.datapoint.dp_defaults[ele.name]
         const values = this.state.info_dp[ele.name]
+        const events = ele.class.getDataPointEvents(this,ele.name)
         let dp_form = null;
         if(defaults && values){
-            dp_form = ele.class.dataPointFields({},values,defaults)
+            dp_form = ele.class.dataPointFields(events,values,defaults)
         }
         return({name:ele.name, fields:dp_form})
     }
