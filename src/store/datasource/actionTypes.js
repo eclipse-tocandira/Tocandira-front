@@ -7,3 +7,5 @@
 // #######################################
 
 export const GET_DSDATA = 'GET_DSDATA';
+export const GET_AVAIL_PROTOCOLS = 'GET_AVAIL_PROTOCOLS';
+export const GET_DS_DEFAULTS = 'GET_DS_DEFAULTS';

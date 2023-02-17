@@ -28,3 +28,38 @@ export const getData=(api_instance) => (dispatch) => {
         }
     )
 };
+
+const saveProtocols=(protocols) => ({type:actionTypes.GET_AVAIL_PROTOCOLS, protocols:protocols});
+
+/** The request done prior to `saveProtocols` function */
+export const getAvailProtocols=(api_instance) => (dispatch) => {
+    api_instance.get('/protocol_defaults')
+    .then( (res) => dispatch(saveProtocols(res.data)) )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert());
+            }else{
+                // dispatch(invalidEntry(req.response.data.detail));
+            }
+        }
+    )
+};
+
+const saveProtocolDefault=(defaults,protocol) => ({type:actionTypes.GET_DS_DEFAULTS, protocol:protocol, defaults:defaults})
+
+/** The request done prior to `saveProtocols` function */
+export const getDefaults=(api_instance, prot_list) => (dispatch) => {
+    prot_list.forEach(element => {
+        api_instance.get('/datasource_defaults/'+element)
+        .then( (res) => dispatch(saveProtocolDefault(res.data,element)) )
+        .catch( (req) => {
+                if(req.code===AxiosError.ERR_NETWORK){
+                    dispatch(emitNetworkErrorAlert());
+                }else{
+                // dispatch(invalidEntry(req.response.data.detail));
+            }
+            }
+        )
+    });
+    
+};
