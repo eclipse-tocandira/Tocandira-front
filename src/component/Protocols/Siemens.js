@@ -9,19 +9,31 @@
 import { TextField, Stack } from "@mui/material";
 
 // Local Imports
+import BaseProtocol from "./BaseProtocol"
 import SimpleSelect from "../SimpleSelect/SimpleSelect";
 import {getDataPointAddress} from "../Protocols/Protocols";
 
 // #######################################
 
 
-class Siemens {
+class Siemens extends BaseProtocol {
 
-    NAME="Siemens"
+    
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static getDataSourceEvents=(context,p_name) => ({
+        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name'),
+        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip'),
+        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port'),
+        onRackChange: this.setDSProtocolProp.bind(context,context,p_name,'rack'),
+        onSlotChange: this.setDSProtocolProp.bind(context,context,p_name,'slot'),
+        onPlcChange: this.setDSProtocolProp.bind(context,context,p_name,'plc'),
+    })
 
     static parseDataSourceDefault2Values=(defaults) => ({
         name: "",plc_ip: "",plc_port: defaults.plc_port, protocol: {
-            name: this.NAME,data: {
+            name: defaults.protocol.name, data: {
                 rack: defaults.protocol.data.rack,
                 slot: defaults.protocol.data.slot,
                 plc: defaults.protocol.data.plc.defaultValue
@@ -31,7 +43,7 @@ class Siemens {
 
     static parseDataPointDefault2Values=(defaults) => ({
         name: "", description: "", num_type: defaults.num_type.defaultValue, datasource_name: "", access: {
-            name: "Siemens",data: {
+            name: defaults.access.name, data: {
               address: ""}}
     })
 
@@ -83,7 +95,8 @@ class Siemens {
                     label={"PLC Model"}
                     list={defaults.protocol.data.plc.menuItems}
                     value={values.protocol.data.plc}
-                    defaultValue={defaults.protocol.data.plc.defaultValue}/>
+                    defaultValue={defaults.protocol.data.plc.defaultValue}
+                    onChange={events.onPlcChange}/>
             </Stack>
         </Stack>
         return(comp_list);

@@ -9,19 +9,28 @@
 import { TextField, Stack } from "@mui/material";
 
 // Local Imports
+import BaseProtocol from "./BaseProtocol"
 import SimpleSelect from "../SimpleSelect/SimpleSelect";
 import {getDataPointAddress} from "../Protocols/Protocols";
 
 // #######################################
 
 
-class Modbus {
+class Modbus extends BaseProtocol {
 
-    NAME="Modbus"
+    /** Description.
+    * @param ``: 
+    * @returns */
+    static getDataSourceEvents=(context,p_name) => ({
+        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name'),
+        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip'),
+        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port'),
+        onSlaveIdChange: this.setDSProtocolProp.bind(context,context,p_name,'slave_id'),
+    })
 
     static parseDataSourceDefault2Values=(defaults) => ({
         name: "",plc_ip: "",plc_port: defaults.plc_port, protocol: {
-            name: this.NAME,data: {
+            name: defaults.protocol.name, data: {
                 slave_id: defaults.protocol.data.slave_id
             }
         }
@@ -29,7 +38,7 @@ class Modbus {
 
     static parseDataPointDefault2Values=(defaults) => ({
         name: "", description: "", num_type: defaults.num_type.defaultValue, datasource_name: "", access: {
-            name: this.NAME,data: {
+            name: defaults.access.name, data: {
                 address: "", func_code: defaults.access.data.func_code.defaultValue}}
     })
 

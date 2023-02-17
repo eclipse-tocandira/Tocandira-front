@@ -116,12 +116,13 @@ class DataSourcePopup extends React.PureComponent {
     /** Description.
     * @param ``: 
     * @returns */
-    buildSpecificProtocolFields=(ele) =>{
+    buildSpecificProtocolFields=(ele) => {
         const defaults = this.props.datasource.ds_defaults[ele.name]
         const values = this.state.info_ds[ele.name]
+        const events = ele.class.getDataSourceEvents(this,ele.name)
         let prot_form = null;
-        if(defaults && values){
-            prot_form = ele.class.dataSourceFields({},values,defaults)
+        if (defaults && values) {
+            prot_form = ele.class.dataSourceFields(events,values,defaults)
         }
         return({name:ele.name, fields:prot_form})
     }
