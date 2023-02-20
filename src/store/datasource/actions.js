@@ -114,6 +114,27 @@ export const putData=(api_instance, ds_info) => (dispatch) => {
 };
 
 /** */
+export const deleteData=(api_instance, ds_name) => (dispatch) => {
+    api_instance.delete('/datasource/', ds_name)
+    .then( (res) => {
+        if(res.data[ds_name]){
+            dispatch(emitAlert('DataSource "'+ds_name+'" deleted!','success'));
+            dispatch(getData(api_instance))
+        } else {
+            dispatch(emitAlert('Unable to delete DataSource "'+ds_name+'"','error'))
+        }
+    } )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert());
+            }else{
+            // dispatch(invalidEntry(req.response.data.detail));
+        }
+        }
+    )    
+};
+
+/** */
 export const manageActiveData=(api_instance, ds_name, status) => (dispatch) => {
     api_instance.put('/datasource/'+ds_name+'='+status)
     .then( (res) => {

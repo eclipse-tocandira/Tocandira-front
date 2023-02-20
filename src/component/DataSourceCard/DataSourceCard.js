@@ -76,7 +76,7 @@ class DataSourceCard extends React.PureComponent {
         this.setState(newState);
     }
     handleDeleteProceed=() => {
-        this.props.onManageDataSource(this.props.global.backend_instance,this.state.selected_row.name,false);
+        this.props.onDeleteDataSource(this.props.global.backend_instance,this.state.selected_row.name);
         this.handleDeleteCancel();
     }
     /** Description.
@@ -174,7 +174,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onOpenPopup:(open)=>dispatch(popupsActions.openDataSourcePopup(open)),
     onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
-    onManageDataSource:(api,ds_name,status)=>dispatch(datasourceActions.manageActiveData(api,ds_name,status)),
+    onDeleteDataSource:(api,ds_name)=>dispatch(datasourceActions.deleteData(api,ds_name)),
 });
 
 // Make this component visible on import
