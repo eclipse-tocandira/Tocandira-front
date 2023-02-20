@@ -11,7 +11,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {Collapse, Stack } from '@mui/material'
+import {Collapse, Stack, TextField } from '@mui/material'
 
 // Local Imports
 import FormPopup from  './FormPopup'
@@ -33,7 +33,6 @@ class DataSourcePopup extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         protocol_selected:"",
-        need_defaults_update:true,
         info_ds:{},
     };
     
@@ -48,16 +47,47 @@ class DataSourcePopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleCancelClick=() => {
-        const newState = {...this.state};
-        newState.protocol_selected = "";
-        this.setState(newState);
         this.props.onCancelClick()
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleInfoChange=(prot_name,info) => {
+        const newState = {...this.state};
+        newState.info_ds = {...this.state.info_ds};
+        newState.info_ds[prot_name] = info;
+        this.setState(newState);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleProtocolChange=(prot_name) => {
+        const newState = {...this.state};
+        newState.protocol_selected = prot_name;
+        this.setState(newState);
     }
     
     /** Description.
     * @param ``: 
     * @returns */
-    handleProtocolChange=(event) => {
+    handleFixProtocol=() => {
+        const newState = {...this.state};
+        const row = this.props.datasource.ds_content.find(row=>row.name===this.props.selected_row.name);
+        if (row) {
+            const prot_name = row.protocol.name;
+            newState.protocol_selected = prot_name;
+            newState.info_ds = {...this.state.info_ds};
+            newState.info_ds[prot_name] = row;
+        }
+        this.setState(newState);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleSelectChange=(event) => {
         const newState = {...this.state};
         const prot_name = event.target.value;
         const prot_defaults = this.props.datasource.ds_defaults[prot_name];
@@ -120,6 +150,10 @@ class DataSourcePopup extends React.PureComponent {
         const defaults = this.props.datasource.ds_defaults[ele.name]
         const values = this.state.info_ds[ele.name]
         const events = ele.class.getDataSourceEvents(this,ele.name)
+        if(!this.props.is_new) {
+            // This hack prevents the edit of Name field when editing
+            events.onNameChange = null;
+        }
         let prot_form = null;
         if (defaults && values) {
             prot_form = ele.class.dataSourceFields(events,values,defaults)
@@ -132,6 +166,19 @@ class DataSourcePopup extends React.PureComponent {
     render(){
         const content_array = ImplementedProtocols.map(this.buildSpecificProtocolFields)
 
+        let select_component = null;
+        if (this.props.is_new){
+            select_component = <SimpleSelect
+                label={"Protocol"}
+                default_value={this.props.datasource.protocol_default}
+                list={this.props.datasource.protocol_avail}
+                value={this.state.protocol_selected}
+                onChange={this.handleSelectChange}/>
+        } else {
+            select_component = <TextField variant="outlined" label="Protocol" type='text' disabled
+                fullWidth value={this.state.protocol_selected}/>
+        }
+
         const jsx_component = (
             <FormPopup
                 open={this.props.open}
@@ -140,25 +187,17 @@ class DataSourcePopup extends React.PureComponent {
                 onOkClick={this.handleSaveClick}
                 onCancelClick={this.handleCancelClick}>
                 <Stack direction="column" spacing='1rem' flexGrow='1' alignItems="stretch">
-                    <SimpleSelect
-                        label={"Protocol"}
-                        default_value={this.props.datasource.protocol_default}
-                        list={this.props.datasource.protocol_avail}
-                        value={this.state.protocol_selected}
-                        onChange={this.handleProtocolChange}/>
+                    {select_component}
                     {content_array.map(this.buildContents)}
                 </Stack>
             </FormPopup>
         );
         return(jsx_component);
     };
-    
-    componentDidUpdate() {
-        if(this.state.need_defaults_update) {
-            if (this.props.datasource.protocol_avail.length!==0) {
-                this.props.onGetDefaults(this.props.global.backend_instance,this.props.datasource.protocol_avail)
-                this.handleDefaultsChange(false)
-            }
+
+    componentDidMount=() => {
+        if(!this.props.is_new){
+            this.handleFixProtocol()
         }
     }
     
@@ -172,7 +211,6 @@ const reduxStateToProps = (state) =>({
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
-    onGetDefaults:(api,prot_list)=>dispatch(datasourceActions.getDefaults(api,prot_list)),
 });
 
 // Make this component visible on import
