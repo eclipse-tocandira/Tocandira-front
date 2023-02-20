@@ -122,3 +122,30 @@ export const putData=(api_instance, dp_info) => (dispatch) => {
         }
     )    
 };
+
+/** */
+export const manageActiveData=(api_instance, dp_name, status) => (dispatch) => {
+    api_instance.put('/datapoint/'+dp_name+'='+status)
+    .then( (res) => {
+        if (status){
+            if(!res.data[dp_name]){
+                dispatch(emitAlert('Unable to undo delete of DataSource "'+dp_name+'"','error'))
+            }
+        } else {
+            if(res.data[dp_name]){
+                dispatch(emitAlert('DataSource "'+dp_name+'" deleted!','success'));
+                dispatch(getData(api_instance))
+            } else {
+                dispatch(emitAlert('Unable to delete DataSource "'+dp_name+'"','error'))
+            }
+        }
+    } )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert());
+            }else{
+            // dispatch(invalidEntry(req.response.data.detail));
+        }
+        }
+    )    
+};
