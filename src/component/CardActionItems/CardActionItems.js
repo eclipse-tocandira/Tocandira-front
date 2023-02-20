@@ -48,7 +48,7 @@ class CardActionItems extends React.PureComponent {
                     onClick={this.props.onEditClick}>
                     EDIT
                 </Button>
-                <Button variant='contained' size='small' color='primary'
+                <Button variant='contained' size='small' color='error'
                     disabled={this.props.enable_del_edit}
                     onClick={this.props.onDeleteClick}>
                     DELETE
