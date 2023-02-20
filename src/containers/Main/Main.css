@@ -1,7 +1,7 @@
 .Main {
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    min-height : 100vh;
     margin: -8px ;
     justify-content: space-between;
     background-color: #323F6F;
