@@ -68,15 +68,42 @@ class Main extends React.PureComponent {
         const jsx_component = (
             <div className='Main' onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
                 <VerifyPopup open={this.props.popups.open_verify} onClose={this.handlePopUpLeave}/>
+            
+                <Stack  direction='column' justifyContent='space-between'>
 
-                <Button variant='contained'
-                    sx={{margin:'1rem', alignSelf:'flex-end'}}
-                    size='large'
-                    color='inherit'
-                    fullWidth={false}
-                    onClick={this.handleLogoutSubmission}>
-                        LOGOUT
-                </Button>
+                    <Stack  direction='column' spacing='2rem' margin='0 1rem'>
+                        <Typography variant='h3'>&nbsp;</Typography>
+
+                        <Button variant='contained' fullWidth={false}
+                        size='large'
+                        color='primary'>
+                            APPLY
+                        </Button>
+
+                        <Button variant='contained' fullWidth={false}
+                        size='large'
+                        color='inherit'>
+                            RESET
+                        </Button>
+
+                        <Button variant='contained' fullWidth={false}
+                        size='large'
+                        onClick={this.handleClickVerify}
+                        color='success'>
+                            VEFIRY
+                        </Button>
+                    </Stack>
+
+                    <Button variant='contained'
+                        sx={{ alignSelf:'center', marginBottom:'1rem'}}
+                        size='large'
+                        color='inherit'
+                        fullWidth={false}
+                        onClick={this.handleLogoutSubmission}>
+                            LOGOUT
+                    </Button>
+
+                </Stack>
 
             <Stack direction='column' flexGrow='1' alignItems='stretch'>
                 <Typography variant='h3' align='left' color='white' margin='1rem 0 1rem 0'>
@@ -93,28 +120,6 @@ class Main extends React.PureComponent {
                         <DataPointCard/>
                         </Stack>
                     </CardContent>
-                    <CardActions>
-                    <Stack direction='row' spacing='2rem' margin='1rem'>
-                        <Button variant='contained'
-                        size='large'
-                        color='primary'>
-                            APPLY
-                        </Button>
-
-                        <Button variant='contained'
-                        size='large'
-                        color='inherit'>
-                            RESET
-                        </Button>
-
-                        <Button variant='contained'
-                        size='large'
-                        onClick={this.handleClickVerify}
-                        color='success'>
-                            VEFIRY
-                        </Button>
-                    </Stack>
-                    </CardActions>
                 </Card>
             </Stack>
             </div>

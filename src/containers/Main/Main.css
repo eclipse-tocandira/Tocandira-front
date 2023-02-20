@@ -1,9 +1,9 @@
 .Main {
     display: flex;
     flex-direction: row;
-    min-width: 100vw;
-    min-height : 100vh;
-    margin: -8px -8px;
+    height: 100vh;
+    margin: -8px ;
+    justify-content: space-between;
     background-color: #323F6F;
 }
 
