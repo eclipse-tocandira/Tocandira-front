@@ -20,6 +20,7 @@ import DataTable from '../DataTable/DataTable';
 import TextCell from '../DataTable/TextCell';
 import CheckCell from '../DataTable/CheckCell';
 import DataSourcePopup from '../../component/Popups/DataSourcePopup'
+import DeletePopup from '../../component/Popups/DeletePopup';
 import * as popupsActions from '../../store/popups/actions'
 import * as datasourceActions from '../../store/datasource/actions'
 
@@ -37,7 +38,9 @@ class DataSourceCard extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         popup_action:'new',
-        selected_row:{name:null,id:-1}
+        selected_row:{name:null,id:-1},
+        delete_content:{title:"",msg:""},
+        open_delete:false
     }
 
     /** Description.
@@ -67,10 +70,25 @@ class DataSourceCard extends React.PureComponent {
         this.setState(newState);
         this.props.onOpenPopup(true);
     }
+    handleDeleteCancel=() => {
+        const newState = {...this.state};
+        newState.open_delete = false;
+        this.setState(newState);
+    }
+    handleDeleteProceed=() => {
+        this.props.onManageDataSource(this.props.global.backend_instance,this.state.selected_row.name,false);
+        this.handleDeleteCancel();
+    }
     /** Description.
     * @param ``: */
     handleDeleteClick=() => {
+        const delete_title = 'Delete "'+this.state.selected_row.name+'"  Data Source?';
+        const delete_msg = 'Are you sure to delete the Data Source "'+
+            this.state.selected_row.name+'" ? This action is permanent and can not be undone.';
+        
         const newState = {...this.state};
+        newState.delete_content = {title:delete_title,msg:delete_msg};
+        newState.open_delete = true;
         this.setState(newState);
     }
     /** Description.
@@ -78,7 +96,7 @@ class DataSourceCard extends React.PureComponent {
     * @returns */
     handlePopUpLeave=() => {
         this.props.onGetDataSource(this.props.global.backend_instance)
-        this.props.onOpenPopup(false)
+        this.props.onOpenPopup(false);
     }
 
     /** Description.
@@ -103,6 +121,13 @@ class DataSourceCard extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+
+        const delete_popup = <DeletePopup open={this.state.open_delete}
+            content={this.state.delete_content}
+            nameOk={"DELETE"} nameCancel={"CANCEL"}
+            onOkClick={this.handleDeleteProceed}
+            onCancelClick={this.handleDeleteCancel}/>
+
         let popup = null;
         if (this.props.popups.open_ds) {
             // Hack: Seems redundant but this IF is needed
@@ -114,19 +139,19 @@ class DataSourceCard extends React.PureComponent {
                 selected_row={this.state.selected_row}
                 onClose={this.handlePopUpLeave}/>
         }
-
         const card_contents=[
             <DataTable
                 headers={["Name","IP Address","Protocol"]}
                 ncols_to_actions={2}
-                content_rows={this.props.datasource.ds_content}
+                content_rows={this.props.datasource.ds_content.filter(row=>row.active)}
                 selected_row={this.state.selected_row}
                 buildContentRow={this.buildContentRow}
                 onRowClick={this.handleRowClick}
                 onNewClick={this.handleNewClick}
                 onEditClick={this.handleEditClick}
                 onDeleteClick={this.handleDeleteClick}/>,
-                popup
+            popup,
+            delete_popup
             ]; 
 
         const jsx_component = (
@@ -134,11 +159,6 @@ class DataSourceCard extends React.PureComponent {
                 title='Data Sources' contents={card_contents}/>
         );
         return(jsx_component);
-    };
-
-    componentDidMount() {
-        this.props.onGetDataSource(this.props.global.backend_instance)
-        this.props.onGetProtocols(this.props.global.backend_instance)
     };
     
 }
@@ -154,7 +174,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onOpenPopup:(open)=>dispatch(popupsActions.openDataSourcePopup(open)),
     onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
-    onGetProtocols:(api)=>dispatch(datasourceActions.getAvailProtocols(api))
+    onManageDataSource:(api,ds_name,status)=>dispatch(datasourceActions.manageActiveData(api,ds_name,status)),
 });
 
 // Make this component visible on import

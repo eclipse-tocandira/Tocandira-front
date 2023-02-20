@@ -23,6 +23,7 @@ import { getDataPointAddress } from '../Protocols/Protocols';
 import * as popupsActions from '../../store/popups/actions';
 import * as datapointActions from '../../store/datapoint/actions';
 import DataPointPopup from '../Popups/DataPointPopup';
+import DeletePopup from '../../component/Popups/DeletePopup';
 
 // #######################################
 
@@ -38,7 +39,9 @@ class DataPointCard extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         popup_action:'new',
-        selected_row:{name:null,id:-1}
+        selected_row:{name:null,id:-1},
+        delete_content:{title:"",msg:""},
+        open_delete:false
     }
 
     /** Description.
@@ -69,10 +72,25 @@ class DataPointCard extends React.PureComponent {
         this.setState(newState);
         this.props.onOpenPopup(true);
     }
+   handleDeleteCancel=() => {
+        const newState = {...this.state};
+        newState.open_delete = false;
+        this.setState(newState);
+    }
+    handleDeleteProceed=() => {
+        this.props.onManageDataPoint(this.props.global.backend_instance,this.state.selected_row.name,false);
+        this.handleDeleteCancel();
+    }
     /** Description.
     * @param ``: */
     handleDeleteClick=() => {
+        const delete_title = 'Delete "'+this.state.selected_row.name+'"  Data Point?';
+        const delete_msg = 'Are you sure to delete the Data Point "'+
+            this.state.selected_row.name+'" ? This action is permanent and can not be undone.';
+
         const newState = {...this.state};
+        newState.delete_content = {title:delete_title,msg:delete_msg};
+        newState.open_delete = true;
         this.setState(newState);
     }
     /** Description.
@@ -105,6 +123,13 @@ class DataPointCard extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+
+        const delete_popup = <DeletePopup open={this.state.open_delete}
+            content={this.state.delete_content}
+            nameOk={"DELETE"} nameCancel={"CANCEL"}
+            onOkClick={this.handleDeleteProceed}
+            onCancelClick={this.handleDeleteCancel}/>
+
         let popup = null;
         if (this.props.popups.open_dp) {
             // Hack: Seems redundant but this IF is needed
@@ -122,14 +147,15 @@ class DataPointCard extends React.PureComponent {
             <DataTable
                 headers={["Name","Description","Address","Data Souce"]}
                 ncols_to_actions={2}
-                content_rows={this.props.datapoint.dp_content}
+                content_rows={this.props.datapoint.dp_content.filter(row=>row.active)}
                 selected_row={this.state.selected_row}
                 buildContentRow={this.buildContentRow}
                 onRowClick={this.handleRowClick}
                 onNewClick={this.handleNewClick}
                 onEditClick={this.handleEditClick}
                 onDeleteClick={this.handleDeleteClick}/>,
-                popup
+            popup,
+            delete_popup
             ];
 
         const jsx_component = (
@@ -139,10 +165,6 @@ class DataPointCard extends React.PureComponent {
         return(jsx_component);
     };
 
-    componentDidMount() {
-        this.props.onGetDataPoint(this.props.global.backend_instance)
-    };
-    
 }
 
 /** Map the Redux state to some component props */
@@ -156,6 +178,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onOpenPopup:(open)=>dispatch(popupsActions.openDataPointPopup(open)),
     onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
+    onManageDataPoint:(api,ds_name,status)=>dispatch(datapointActions.manageActiveData(api,ds_name,status)),
 });
 
 // Make this component visible on import
