@@ -71,36 +71,28 @@ class Main extends React.PureComponent {
             
                 <Stack  direction='column' justifyContent='space-between'>
 
-                    <Stack  direction='column' spacing='2rem' margin='0 1rem'>
+                    <Stack  direction='column' spacing='2rem' margin='3rem 1rem'>
                         <Typography variant='h3'>&nbsp;</Typography>
 
                         <Button variant='contained' fullWidth={false}
-                        size='large'
-                        color='primary'>
+                            size='large' color='primary'>
                             APPLY
                         </Button>
 
                         <Button variant='contained' fullWidth={false}
-                        size='large'
-                        color='inherit'>
+                            size='large' color='inherit'>
                             RESET
                         </Button>
 
                         <Button variant='contained' fullWidth={false}
-                        size='large'
-                        onClick={this.handleClickVerify}
-                        color='success'>
-                            VEFIRY
+                            size='large' color='success' onClick={this.handleClickVerify}>
+                            VERIFY
                         </Button>
                     </Stack>
 
-                    <Button variant='contained'
-                        sx={{ alignSelf:'center', marginBottom:'1rem'}}
-                        size='large'
-                        color='inherit'
-                        fullWidth={false}
-                        onClick={this.handleLogoutSubmission}>
-                            LOGOUT
+                    <Button variant='contained' fullWidth={false} sx={{ alignSelf:'center', marginBottom:'1rem'}}
+                        size='large' color='inherit' onClick={this.handleLogoutSubmission}>
+                        LOGOUT
                     </Button>
 
                 </Stack>
