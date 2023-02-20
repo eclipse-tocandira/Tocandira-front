@@ -19,6 +19,7 @@ import * as authActions from '../../store/auth/actions';
 import * as globalActions from '../../store/global/actions';
 import * as popupsActions from '../../store/popups/actions';
 import * as datapointActions from '../../store/datapoint/actions';
+import * as datasourceActions from '../../store/datasource/actions';
 import CollectorCard from '../../component/CollectorCard/CollectorCard';
 import DataSourceCard from '../../component/DataSourceCard/DataSourceCard';
 import DataPointCard from '../../component/DataPointCard/DataPointCard';
@@ -54,7 +55,7 @@ class Main extends React.PureComponent {
     * @returns */
     handlePopUpLeave=() => {
         this.props.onGetDataPoint(this.props.global.backend_instance);
-        this.props.onVerify(false)
+        this.props.onVerify(false);
     }
 
     /** Defines the component visualization.
@@ -119,6 +120,12 @@ class Main extends React.PureComponent {
         return(jsx_component);
     };
 
+    componentDidMount() {
+        this.props.onGetDataSource(this.props.global.backend_instance)
+        this.props.onGetDataPoint(this.props.global.backend_instance)
+        this.props.onGetProtocols(this.props.global.backend_instance)
+    };
+
 }
 
 /** Map the Redux state to some component props */
@@ -137,6 +144,8 @@ const reduxDispatchToProps = (dispatch) =>({
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
     onUpdateDataPending: ()=>dispatch(datapointActions.updateDataPending()),
     onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
+    onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
+    onGetProtocols:(api)=>dispatch(datasourceActions.getAvailProtocols(api))
 });
 
 // Make this component visible on import
