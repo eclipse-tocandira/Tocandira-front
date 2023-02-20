@@ -49,6 +49,13 @@ class Main extends React.PureComponent {
         this.props.onUpdateDataPending()
         this.props.onVerify(true)
     }
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handlePopUpLeave=() => {
+        this.props.onGetDataPoint(this.props.global.backend_instance);
+        this.props.onVerify(false)
+    }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
@@ -60,7 +67,7 @@ class Main extends React.PureComponent {
         //       check and logout the user when it becomes invalid.
         const jsx_component = (
             <div className='Main' onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
-                <VerifyPopup open={this.props.popups.open_verify}/>
+                <VerifyPopup open={this.props.popups.open_verify} onClose={this.handlePopUpLeave}/>
 
                 <Button variant='contained'
                     sx={{margin:'1rem', alignSelf:'flex-end'}}
@@ -132,6 +139,7 @@ const reduxDispatchToProps = (dispatch) =>({
     onCheckToken: (api_instance)=>dispatch(authActions.validate(api_instance)),
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
     onUpdateDataPending: ()=>dispatch(datapointActions.updateDataPending()),
+    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
 });
 
 // Make this component visible on import
