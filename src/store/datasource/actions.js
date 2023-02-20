@@ -9,6 +9,7 @@ import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
 import { emitNetworkErrorAlert, emitAlert } from '../popups/actions';
+import * as datapointActions from '../datapoint/actions'
 
 // #######################################
 
@@ -37,6 +38,7 @@ export const getAvailProtocols=(api_instance) => (dispatch) => {
     .then( (res) => {
         dispatch(saveProtocols(res.data))
         dispatch(getDefaults(api_instance,res.data.menuItems))
+        dispatch(datapointActions.getDefaults(api_instance,res.data.menuItems))
     } )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
