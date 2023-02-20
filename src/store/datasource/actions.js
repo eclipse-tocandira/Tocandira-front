@@ -34,7 +34,10 @@ const saveProtocols=(protocols) => ({type:actionTypes.GET_AVAIL_PROTOCOLS, proto
 /** The request done prior to `saveProtocols` function */
 export const getAvailProtocols=(api_instance) => (dispatch) => {
     api_instance.get('/protocol_defaults')
-    .then( (res) => dispatch(saveProtocols(res.data)) )
+    .then( (res) => {
+        dispatch(saveProtocols(res.data))
+        dispatch(getDefaults(api_instance,res.data.menuItems))
+    } )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
                 dispatch(emitNetworkErrorAlert());
