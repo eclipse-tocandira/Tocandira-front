@@ -47,7 +47,7 @@ class DataSourcePopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleCancelClick=() => {
-        this.props.onCancelClick()
+        this.props.onClose()
     }
 
     /** Description.

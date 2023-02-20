@@ -112,7 +112,7 @@ class DataSourceCard extends React.PureComponent {
                 open={this.props.popups.open_ds}
                 is_new={this.state.popup_action==='new'}
                 selected_row={this.state.selected_row}
-                onCancelClick={this.handlePopUpLeave}/>
+                onClose={this.handlePopUpLeave}/>
         }
 
         const card_contents=[
