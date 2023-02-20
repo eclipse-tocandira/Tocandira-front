@@ -125,7 +125,7 @@ export const putData=(api_instance, dp_info) => (dispatch) => {
 
 /** */
 export const deleteData=(api_instance, dp_name) => (dispatch) => {
-    api_instance.delete('/datapoint/', dp_name)
+    api_instance.delete('/datapoint/'+dp_name)
     .then( (res) => {
         if(res.data[dp_name]){
             dispatch(emitAlert('DataPoint "'+dp_name+'" deleted!','success'));
