@@ -37,6 +37,7 @@ class DataPointCard extends React.PureComponent {
     
     /** Defines the component state variables */
     state = {
+        popup_action:'new',
         selected_row:{name:null,id:-1}
     }
 
@@ -55,15 +56,18 @@ class DataPointCard extends React.PureComponent {
     /** Description.
     * @param ``: */
     handleNewClick=() => {
-        this.props.onOpenPopup(true);
         const newState = {...this.state};
+        newState.popup_action = 'new';
         this.setState(newState);
+        this.props.onOpenPopup(true);
     }
     /** Description.
     * @param ``: */
     handleEditClick=() => {
         const newState = {...this.state};
+        newState.popup_action = 'edit';
         this.setState(newState);
+        this.props.onOpenPopup(true);
     }
     /** Description.
     * @param ``: */
@@ -101,6 +105,18 @@ class DataPointCard extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+        let popup = null;
+        if (this.props.popups.open_dp) {
+            // Hack: Seems redundant but this IF is needed
+            //       to reset the DataSourcePopup component
+            //       at each open. Making state management easier.
+            popup = <DataPointPopup 
+                open={this.props.popups.open_dp}
+                is_new={this.state.popup_action==='new'}
+                selected_row={this.state.selected_row}
+                onClose={this.handlePopUpLeave}/>
+        }
+
         // console.info(this.props.datapoint.dp_content)
         const card_contents=[
             <DataTable
@@ -113,9 +129,7 @@ class DataPointCard extends React.PureComponent {
                 onNewClick={this.handleNewClick}
                 onEditClick={this.handleEditClick}
                 onDeleteClick={this.handleDeleteClick}/>,
-            <DataPointPopup 
-                open={this.props.popups.open_dp}
-                onCancelClick={this.handlePopUpLeave}/>
+                popup
             ];
 
         const jsx_component = (

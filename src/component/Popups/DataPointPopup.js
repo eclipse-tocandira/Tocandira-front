@@ -11,7 +11,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
-import {Collapse, Stack } from '@mui/material'
+import {Collapse, Stack, TextField } from '@mui/material'
 
 // Local Imports
 import FormPopup from  './FormPopup'
@@ -33,7 +33,6 @@ class DataPointPopup extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         ds_selected:"",
-        need_defaults_update:true,
         info_dp:{}
     };
     
@@ -50,6 +49,13 @@ class DataPointPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleSaveClick=() => {
+        const dsrow = this.props.datasource.ds_content.find(ele=>ele.name===this.state.ds_selected)
+        const info2save = this.state.info_dp[dsrow.protocol.name];
+        if (this.props.is_new) {
+            this.props.onNewSave(this.props.global.backend_instance, info2save);
+        } else {
+            this.props.onEditSave(this.props.global.backend_instance, info2save);
+        }
         this.handleCancelClick()
     }
 
@@ -57,12 +63,24 @@ class DataPointPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleCancelClick=() => {
-        const newState = {...this.state};
-        newState.ds_selected = "";
-        this.setState(newState);
-        this.props.onCancelClick()
+        this.props.onClose()
     }
-    
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleFixDataPoint=() => {
+        const newState = {...this.state};
+        const row = this.props.datapoint.dp_content.find(row=>row.name===this.props.selected_row.name);
+        if (row) {
+            const prot_name = row.access.name;
+            newState.ds_selected = row.datasource_name;
+            newState.info_dp = {...this.state.info_dp};
+            newState.info_dp[prot_name] = row;
+        }
+        this.setState(newState);
+    }
+
     /** Description.
     * @param ``: 
     * @returns */
@@ -74,7 +92,8 @@ class DataPointPopup extends React.PureComponent {
         const dp_defaults = this.props.datapoint.dp_defaults[prot_name];
         const prot_class = ImplementedProtocols.find(ele=>ele.name===prot_name).class;
         const info = prot_class.parseDataPointDefault2Values(dp_defaults);
-
+        info.datasource_name = ds_name;
+        
         newState.ds_selected = ds_name;
         newState.info_dp = {...this.state.info_dp};
         newState.info_dp[prot_name] = info;
@@ -126,6 +145,10 @@ class DataPointPopup extends React.PureComponent {
         const defaults = this.props.datapoint.dp_defaults[ele.name]
         const values = this.state.info_dp[ele.name]
         const events = ele.class.getDataPointEvents(this,ele.name)
+        if(!this.props.is_new) {
+            // This hack prevents the edit of Name field when editing
+            events.onNameChange = null;
+        }
         let dp_form = null;
         if(defaults && values){
             dp_form = ele.class.dataPointFields(events,values,defaults)
@@ -140,6 +163,19 @@ class DataPointPopup extends React.PureComponent {
         const ds_select_options = this.props.datasource.ds_content.map(element => element.name);
         const specific_elements = content_array.map(this.buildContents);
         
+        let select_component = null;
+        if (this.props.is_new){
+            select_component = <SimpleSelect
+                label={"DataSource"}
+                default_value={""}
+                list={ds_select_options}
+                value={this.state.ds_selected}
+                onChange={this.handleDataSourceChange}/>
+        } else {
+            select_component = <TextField variant="outlined" label="DataSource" type='text' disabled
+                fullWidth value={this.state.ds_selected}/>
+        }
+
         const jsx_component = (
             <FormPopup
                 open={this.props.open}
@@ -148,12 +184,7 @@ class DataPointPopup extends React.PureComponent {
                 onOkClick={this.handleSaveClick}
                 onCancelClick={this.handleCancelClick}>
                 <Stack direction="column" spacing='1rem' flexGrow='1' alignItems="stretch">
-                    <SimpleSelect
-                        label={"DataSource"}
-                        default_value={""}
-                        list={ds_select_options}
-                        value={this.state.ds_selected}
-                        onChange={this.handleDataSourceChange}/>
+                    {select_component}
                     {specific_elements}
                 </Stack>
             </FormPopup>
@@ -161,12 +192,9 @@ class DataPointPopup extends React.PureComponent {
         return(jsx_component);
     };
 
-    componentDidUpdate() {
-        if(this.state.need_defaults_update) {
-            if (this.props.datasource.protocol_avail.length!==0) {
-                this.props.onGetDefaults(this.props.global.backend_instance,this.props.datasource.protocol_avail)
-                this.handleDefaultsChange(false)
-            }
+    componentDidMount=() => {
+        if(!this.props.is_new){
+            this.handleFixDataPoint()
         }
     }
     
@@ -181,7 +209,8 @@ const reduxStateToProps = (state) =>({
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
-    onGetDefaults:(api,prot_list)=>dispatch(datapointActions.getDefaults(api,prot_list)),
+    onNewSave:(api,info)=>dispatch(datapointActions.pushData(api,info)),
+    onEditSave:(api,info)=>dispatch(datapointActions.putData(api,info)),
 });
 
 // Make this component visible on import
