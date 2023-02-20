@@ -8,7 +8,7 @@
 import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
-import { emitNetworkErrorAlert } from '../popups/actions';
+import { emitNetworkErrorAlert, emitAlert } from '../popups/actions';
 
 // #######################################
 
@@ -65,4 +65,48 @@ export const getDefaults=(api_instance, prot_list) => (dispatch) => {
         )
     });
     
+};
+
+/** */
+export const pushData=(api_instance, ds_info) => (dispatch) => {
+
+    // Add dummy parameters not mapped on interface
+    ds_info['timeout'] = 5000;
+    ds_info['cycletime'] = 5000;
+    
+    api_instance.post('/datasource', ds_info)
+    .then( (res) => {
+        dispatch(getData(api_instance));
+        dispatch(emitAlert('DataSource "'+res.data.name+'" created!','success'));
+    } )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert());
+            }else{
+            // dispatch(invalidEntry(req.response.data.detail));
+        }
+        }
+    )    
+};
+
+/** */
+export const putData=(api_instance, ds_info) => (dispatch) => {
+
+    // Add dummy parameters not mapped on interface
+    ds_info['timeout'] = 5000;
+    ds_info['cycletime'] = 5000;
+    
+    api_instance.put('/datasource', ds_info)
+    .then( (res) => {
+        dispatch(getData(api_instance));
+        dispatch(emitAlert('DataSource "'+res.data.name+'" updated!','success'));
+    } )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert());
+            }else{
+            // dispatch(invalidEntry(req.response.data.detail));
+        }
+        }
+    )    
 };
