@@ -8,7 +8,7 @@
 import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
-import { emitNetworkErrorAlert, openVerifyPopup} from '../popups/actions';
+import { emitNetworkErrorAlert, emitAlert} from '../popups/actions';
 
 // #######################################
 
@@ -87,4 +87,38 @@ export const putDataComfirm=(api_instance, dplist) => (dispatch) => {
             }
         )
     })
+};
+
+/** */
+export const pushData=(api_instance, dp_info) => (dispatch) => {
+    api_instance.post('/datapoint', dp_info)
+    .then( (res) => {
+        dispatch(getData(api_instance));
+        dispatch(emitAlert('DataPoint "'+res.data.name+'" created!','success'));
+    } )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert());
+            }else{
+            // dispatch(invalidEntry(req.response.data.detail));
+        }
+        }
+    )    
+};
+
+/** */
+export const putData=(api_instance, dp_info) => (dispatch) => {
+    api_instance.put('/datapoint', dp_info)
+    .then( (res) => {
+        dispatch(getData(api_instance));
+        dispatch(emitAlert('DataPoint "'+res.data.name+'" updated!','success'));
+    } )
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert());
+            }else{
+            // dispatch(invalidEntry(req.response.data.detail));
+        }
+        }
+    )    
 };
