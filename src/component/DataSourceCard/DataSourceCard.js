@@ -77,7 +77,10 @@ class DataSourceCard extends React.PureComponent {
     }
     handleDeleteProceed=() => {
         this.props.onDeleteDataSource(this.props.global.backend_instance,this.state.selected_row.name);
-        this.handleDeleteCancel();
+        const newState = {...this.state};
+        newState.open_delete = false;
+        newState.selected_row = {name:null,id:-1};
+        this.setState(newState);
     }
     /** Description.
     * @param ``: */
@@ -95,7 +98,6 @@ class DataSourceCard extends React.PureComponent {
     * @param ``: 
     * @returns */
     handlePopUpLeave=() => {
-        this.props.onGetDataSource(this.props.global.backend_instance)
         this.props.onOpenPopup(false);
     }
 

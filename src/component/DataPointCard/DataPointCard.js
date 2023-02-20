@@ -79,7 +79,10 @@ class DataPointCard extends React.PureComponent {
     }
     handleDeleteProceed=() => {
         this.props.onDeleteDataPoint(this.props.global.backend_instance,this.state.selected_row.name);
-        this.handleDeleteCancel();
+        const newState = {...this.state};
+        newState.open_delete = false;
+        newState.selected_row = {name:null,id:-1};
+        this.setState(newState);
     }
     /** Description.
     * @param ``: */
@@ -97,7 +100,6 @@ class DataPointCard extends React.PureComponent {
     * @param ``: 
     * @returns */
     handlePopUpLeave=() => {
-        this.props.onGetDataPoint(this.props.global.backend_instance);
         this.props.onOpenPopup(false);
     }
 
@@ -178,7 +180,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onOpenPopup:(open)=>dispatch(popupsActions.openDataPointPopup(open)),
     onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
-    onDeleteDataPoint:(api,ds_name)=>dispatch(datapointActions.deleteData(api,ds_name)),
+    onDeleteDataPoint:(api,dp_name)=>dispatch(datapointActions.deleteData(api,dp_name)),
 });
 
 // Make this component visible on import
