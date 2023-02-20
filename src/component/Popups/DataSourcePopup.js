@@ -40,6 +40,13 @@ class DataSourcePopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleSaveClick=() => {
+        const prot_name = this.state.protocol_selected;
+        const info2save = this.state.info_ds[prot_name];
+        if (this.props.is_new) {
+            this.props.onNewSave(this.props.global.backend_instance, info2save);
+        } else {
+            this.props.onEditSave(this.props.global.backend_instance, info2save);
+        }
         this.handleCancelClick()
     }
 
@@ -211,6 +218,8 @@ const reduxStateToProps = (state) =>({
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
+    onNewSave:(api,info)=>dispatch(datasourceActions.pushData(api,info)),
+    onEditSave:(api,info)=>dispatch(datasourceActions.putData(api,info)),
 });
 
 // Make this component visible on import
