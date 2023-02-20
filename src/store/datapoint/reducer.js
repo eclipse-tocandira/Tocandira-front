@@ -27,13 +27,15 @@ const reducer = (state=initialState, action) => {
             newState.dp_content = [...action.dplist];
             break
         case actionTypes.UPDATE_DPDATA_PENDING:
-            newState.list_verify = state.dp_content.map(
+            const dp_pending = state.dp_content.filter(row=>row.pending)
+            const dp_formated_list = dp_pending.map(
                 (row)=>({
                     name:row.name,
                     address:getDataPointAddress(row,row.access.name),
                     status: null, response: null
                 })
             );
+            newState.dp_verify = dp_formated_list;
             break
         case actionTypes.VERIFY_DPDATA_PENDING:
             newState.dp_verify.map((row) => {
