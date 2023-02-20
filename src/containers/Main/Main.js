@@ -91,17 +91,25 @@ class Main extends React.PureComponent {
                         </Button>
                     </Stack>
 
-                    <Button variant='contained' fullWidth={false} sx={{ alignSelf:'center', marginBottom:'1rem'}}
-                        size='large' color='inherit' onClick={this.handleLogoutSubmission}>
+                </Stack>
+
+            <Stack direction='column' flexGrow='1' alignItems='stretch'>
+                <Stack display='flex' flexDirection='row' alignItems='center'>
+
+                    <Typography variant='h3' align='left' color='white' margin='1rem 0 1rem 0'>
+                            Main Configurations 
+                    </Typography>
+
+                    <Button variant='contained'
+                        color='inherit' 
+                        onClick={this.handleLogoutSubmission}
+                        sx={{
+                            marginLeft: '50rem'
+                        }}>
                         LOGOUT
                     </Button>
 
                 </Stack>
-
-            <Stack direction='column' flexGrow='1' alignItems='stretch'>
-                <Typography variant='h3' align='left' color='white' margin='1rem 0 1rem 0'>
-                        Main Configurations 
-                </Typography>
 
                 <Card className='MainCard' sx={{borderRadius:"1rem 0 0 0",backgroundColor:"#eee"}}>
                     <CardContent>
