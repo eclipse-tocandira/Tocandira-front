@@ -79,7 +79,7 @@ class DataTable extends React.PureComponent {
 
         let show_rows=[];
         const st_pag = this.state.pagination;
-        if(st_pag.rows_per_page<this.props.content_rows.length){
+        if(st_pag.rows_per_page<this.props.content_rows.length  && this.props.with_pagination){
             const ini = st_pag.page*st_pag.rows_per_page;
             const end = (st_pag.page+1)*st_pag.rows_per_page;
             show_rows = this.props.content_rows.slice(ini, end);
