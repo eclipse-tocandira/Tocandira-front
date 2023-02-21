@@ -71,22 +71,23 @@ class Main extends React.PureComponent {
             <div className='Main' onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
                 <VerifyPopup open={this.props.popups.open_verify} onClose={this.handlePopUpLeave}/>
             
-                <Stack  direction='column' justifyContent='space-between'>
-
-                    <Stack  direction='column' spacing='2rem' margin='3rem 1rem'>
+                <Stack  direction='column' justifyContent='space-between' marginX={'0.5rem'}>
+                    <Stack  direction='column' spacing='2rem' marginTop='3rem'>
                         <Typography variant='h3'>&nbsp;</Typography>
-
-                        <Button variant='contained' fullWidth={false}
+                        <Button variant='contained'
                             size='large' color='success' onClick={this.handleClickVerify}>
                             VERIFY
                         </Button>
+                        <Button variant='contained'
+                            size='large' color='primary' onClick={null}>
+                            UPLOAD
+                        </Button>
                     </Stack>
 
-                    <Button variant='contained' fullWidth={false} sx={{ alignSelf:'center', marginBottom:'1rem'}}
+                    <Button variant='contained' sx={{ marginBottom:'1rem'}}
                         size='large' color='inherit' onClick={this.handleLogoutSubmission}>
                         LOGOUT
                     </Button>
-
                 </Stack>
 
             <Stack direction='column' flexGrow='1' alignItems='stretch'>
