@@ -61,11 +61,11 @@ class FormPopup extends React.PureComponent {
                         {this.props.title}
                     </DialogTitle>
                     <DialogContent>
-                        <FormControl sx={{margin:'0.5rem'}} fullWidth>
+                        <FormControl sx={{marginTop:'0.5rem'}} fullWidth>
                             {this.props.children}
                         </FormControl>
                     </DialogContent>
-                    <DialogActions sx={{margin:'0.5rem'}}>
+                    <DialogActions>
                         <Button variant='text' size='medium' color='primary'
                             onClick={this.props.onOkClick}>
                             {this.props.nameOk}
