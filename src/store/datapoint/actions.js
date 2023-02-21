@@ -57,7 +57,7 @@ export const postDataVerify=(api_instance, dpname) => (dispatch) => {
     .then( (res) => dispatch(saveDataVerify(res.data, dpname)) )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
-                // dispatch(invalidConnection());
+                dispatch(emitNetworkErrorAlert());
             }else{
                 // dispatch(invalidEntry(req.response.data.detail));
             }
@@ -104,7 +104,7 @@ export const putDataPointConfirm=(api_instance, dplist) => (dispatch) => {
         })
         .catch( (req) => {
                 if(req.code===AxiosError.ERR_NETWORK){
-                    // dispatch(invalidConnection());
+                    dispatch(emitNetworkErrorAlert());
                 }else{
                     // dispatch(invalidEntry(req.response.data.detail));
                 }

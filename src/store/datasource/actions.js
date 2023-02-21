@@ -174,7 +174,7 @@ export const putDataSourceConfirm=(api_instance, dslist) => (dispatch) => {
         })
         .catch( (req) => {
                 if(req.code===AxiosError.ERR_NETWORK){
-                    // dispatch(invalidConnection());
+                    dispatch(emitNetworkErrorAlert());
                 }else{
                     // dispatch(invalidEntry(req.response.data.detail));
                 }
