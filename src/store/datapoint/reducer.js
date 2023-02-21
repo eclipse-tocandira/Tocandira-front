@@ -30,19 +30,20 @@ const reducer = (state=initialState, action) => {
             const dp_pending = state.dp_content.filter(row=>row.pending && row.active)
             const dp_formated_list = dp_pending.map(
                 (row)=>({
-                    name:row.name,
-                    address:getDataPointAddress(row,row.access.name),
-                    status: null, response: null
+                    name: row.name,
+                    address: getDataPointAddress(row,row.access.name),
+                    status: null, 
+                    response: null
                 })
             );
             newState.dp_verify = dp_formated_list;
             break
         case actionTypes.VERIFY_DPDATA_PENDING:
             newState.dp_verify.map((row) => {
-            if (row.name === action.dpname){
-                row.status = action.dplist.status
-                row.response = action.dplist.response
-                }
+                if (row.name === action.dpname){
+                    row.status = action.dplist.status
+                    row.response = action.dplist.response
+                    }
             })
             break
         case actionTypes.GET_DP_DEFAULTS:

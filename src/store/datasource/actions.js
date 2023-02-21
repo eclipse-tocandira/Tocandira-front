@@ -161,3 +161,24 @@ export const manageActiveData=(api_instance, ds_name, status) => (dispatch) => {
         }
     )    
 };
+
+/** Request to the backend, where the pending attribute value of
+* a list of data sources is validated
+* @param `api_instance`: Value containing the authentication for the backend
+* @param `dslist`: list of source points */
+export const putDataSourceConfirm=(api_instance, dslist) => (dispatch) => {
+    dslist.forEach((row) => {
+        api_instance.put('/datasource/' + row + '/confirm')
+        .then( (res) => {
+            dispatch(getData(api_instance))
+        })
+        .catch( (req) => {
+                if(req.code===AxiosError.ERR_NETWORK){
+                    // dispatch(invalidConnection());
+                }else{
+                    // dispatch(invalidEntry(req.response.data.detail));
+                }
+            }
+        )
+    })
+};
