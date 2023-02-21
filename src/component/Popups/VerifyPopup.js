@@ -19,16 +19,14 @@ import CancelIcon from '@mui/icons-material/Cancel';
 // Local Imports
 import FormPopup from  './FormPopup';
 import DataTable from '../DataTable/DataTable';
-import * as popupsActions from '../../store/popups/actions';
 import * as datapointActions from '../../store/datapoint/actions';
+import * as datasourcetActions from '../../store/datasource/actions';
 import TextCell from '../DataTable/TextCell';
-import { getDataPointAddress } from '../Protocols/Protocols';
-// import {ImplementedProtocols} from '../Protocols/Protocols';
 
 //import './DataSourcePopup.css';
 // #######################################
 
-/** Description
+/** Class that checks if the created data points are valid
 * @property `props.`:
 * @method `props.`: */
 class VerifyPopup extends React.PureComponent {
@@ -42,25 +40,30 @@ class VerifyPopup extends React.PureComponent {
     // /** Context Definition*/
     // static contextType ;
 
-    /** Description.
-    * @param ``: 
-    * @returns */
+    /** Changes the pending status to true of the new data points and their data sources.*/
     handleSaveClick=() => {
-        const status_true = this.props.datapoint.dp_verify.filter((el) => el.status )
+        const status_true = this.props.datapoint.dp_verify.filter((el) => el.status );
+        const row_dp = status_true.map(
+            row => this.props.datapoint.dp_content.find(ele=>ele.name===row.name)
+        )
+        const row_ds = row_dp.map(
+            row => row.datasource_name
+        )
+        const row_ds_without_repeat = [...new Set(row_ds)];
+        this.props.onPutDataSourceConfirm(this.props.global.backend_instance, row_ds_without_repeat);
         this.props.onPutDataPointConfirm(this.props.global.backend_instance, status_true);
         this.handleCancelClick();
     };
 
-    /** Description.
-    * @param ``: 
-    * @returns */
+    /** Close card VerifyPopup.*/
     handleCancelClick=() => {
         this.props.onClose();
     };
 
-    /** Description.
-    * @param ``: 
-    * @returns */
+    /** Card line values VerifyPopup.
+    * @param `row`: Date point for verification
+    * @returns `content`: Line containing the name, address, 
+    * an icon representing the status and response of a Data Source */
      buildContentRow=(row, index) => {
         let response = null
         let icon = null
@@ -87,9 +90,7 @@ class VerifyPopup extends React.PureComponent {
         return(content);
     };
 
-    /** Description.
-    * @param ``: 
-    * @returns */
+    /** Communicates with the backend to verify the Data Point.*/
     handleCheckClick=() => {
         this.props.datapoint.dp_verify.map((row) => {
             this.props.onPostDataPointVerify(this.props.global.backend_instance, row.name);
@@ -137,13 +138,15 @@ class VerifyPopup extends React.PureComponent {
 /** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
     global: state.global,
-    datapoint: state.datapoint
+    datapoint: state.datapoint,
+    datasource: state.datasource
 });
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
-    onPostDataPointVerify:(api, name_protocol)=>dispatch(datapointActions.postDataVerify(api, name_protocol)),
-    onPutDataPointConfirm:(api, name_protocol)=>dispatch(datapointActions.putDataComfirm(api, name_protocol)),
+    onPostDataPointVerify:(api, dp_name)=>dispatch(datapointActions.postDataVerify(api, dp_name)),
+    onPutDataPointConfirm:(api, dp_list)=>dispatch(datapointActions.putDataPointConfirm(api, dp_list)),
+    onPutDataSourceConfirm:(api, ds_list)=>dispatch(datasourcetActions.putDataSourceConfirm(api, ds_list)),
 });
 
 // Make this component visible on import
