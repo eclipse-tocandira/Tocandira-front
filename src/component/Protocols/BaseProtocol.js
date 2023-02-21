@@ -11,6 +11,28 @@
 
 class BaseProtocol {
 
+    /** Check for a valid IP address inserted.
+    * @param `` : 
+    * @returns */
+    static isValidIp=(ip_str) => {
+        // Split IP in numbers
+        const subips = ip_str.split('.');
+        // Get the invalid parts only
+        const invalidSubips = subips.filter( ele=>{
+            let valid = false;
+            // Check for number
+            valid = /^\d+$/.test(ele);
+            if (valid) {
+                const ele_int = parseInt(ele);
+                // Check for IP number range
+                valid = ele_int>=0 && ele_int<=255;
+            }
+            return(!valid)
+        })
+        // Check if invalid parts are present
+        return((invalidSubips.length===0) && (subips.length===4))
+    }
+
     /** Description.
     * @param ``: 
     * @returns */

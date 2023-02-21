@@ -15,8 +15,9 @@ import {Collapse, Stack, TextField } from '@mui/material'
 
 // Local Imports
 import FormPopup from  './FormPopup'
-import {ImplementedProtocols} from '../Protocols/Protocols'
+import {ImplementedProtocols, getDataPointAddress} from '../Protocols/Protocols'
 import SimpleSelect from '../SimpleSelect/SimpleSelect';
+import CustomAlert from '../CustomAlert/CustomAlert';
 import * as datapointActions from '../../store/datapoint/actions'
 //import './DataPointPopup.css';
 
@@ -33,9 +34,39 @@ class DataPointPopup extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         ds_selected:"",
-        info_dp:{}
+        info_dp:{},
+        validation:{
+            address:true,
+            name:true,
+        }
     };
     
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleClearErrors=() => {
+        const newState = {...this.state};
+        newState.validation = {...this.state.validation};
+        newState.validation.address = true;
+        newState.validation.name = true;
+        this.setState(newState);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleErrorMessage=() => {
+        let msg = "Invalid "
+        if (!this.state.validation.address){ msg += "Address " }
+        if (!this.state.validation.name){
+            if (!this.state.validation.ip){ msg += "and " }
+            msg += "Name " 
+        }
+        msg += "detected."
+        return(msg)
+    }
+
+
     /** Description.
     * @param ``: 
     * @returns */
@@ -51,12 +82,24 @@ class DataPointPopup extends React.PureComponent {
     handleSaveClick=() => {
         const dsrow = this.props.datasource.ds_content.find(ele=>ele.name===this.state.ds_selected)
         const info2save = this.state.info_dp[dsrow.protocol.name];
-        if (this.props.is_new) {
-            this.props.onNewSave(this.props.global.backend_instance, info2save);
-        } else {
-            this.props.onEditSave(this.props.global.backend_instance, info2save);
+
+        const address_verify = getDataPointAddress(info2save,dsrow.protocol.name)!=="";
+        const name_verify = info2save.name!=="";
+        
+        const newState = {...this.state};
+        newState.validation = {...this.state.validation};
+        newState.validation.address = address_verify;
+        newState.validation.name = name_verify;
+        this.setState(newState);
+
+        if (address_verify && name_verify) {
+            if (this.props.is_new) {
+                this.props.onNewSave(this.props.global.backend_instance, info2save);
+            } else {
+                this.props.onEditSave(this.props.global.backend_instance, info2save);
+            }
+            this.handleCancelClick()
         }
-        this.handleCancelClick()
     }
 
     /** Description.
@@ -176,6 +219,11 @@ class DataPointPopup extends React.PureComponent {
                 fullWidth value={this.state.ds_selected}/>
         }
 
+        const valid_data = this.state.validation.address && this.state.validation.name;
+        const err_msg = this.handleErrorMessage();
+        const alert = <CustomAlert type='error' elevate
+            reset={this.handleClearErrors} msg={err_msg}/>
+
         const jsx_component = (
             <FormPopup
                 open={this.props.open}
@@ -186,6 +234,7 @@ class DataPointPopup extends React.PureComponent {
                 <Stack direction="column" spacing='1rem' flexGrow='1' alignItems="stretch">
                     {select_component}
                     {specific_elements}
+                    <Collapse in={!valid_data}>{alert}</Collapse>
                 </Stack>
             </FormPopup>
         );

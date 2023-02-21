@@ -17,6 +17,7 @@ import { Stack, InputAdornment, TextField, Button, Box } from '@mui/material';
 
 // Local Imports
 import TitledCard from '../TitledCard/TitledCard'
+import BaseProtocol from '../Protocols/BaseProtocol';
 import * as collectorActions from '../../store/collector/actions'
 
 // #######################################
@@ -76,22 +77,7 @@ class CollectorCard extends React.PureComponent {
     * @param event: The event that called this handler*/
      handleVadidateIP=(event) => {
         const newState = {...this.state};
-        // Split IP in numbers
-        const subips = event.target.value.split('.');
-        // Get the invalid parts only
-        const invalidSubips = subips.filter((ele,index) => {
-            let valid = false;
-            // Check for number
-            valid = /^\d+$/.test(ele);
-            if (valid) {
-                const ele_int = parseInt(ele);
-                // Check for IP number range
-                valid = ele_int>=0 && ele_int<=255;
-            }
-            return(!valid)
-        })
-        // Check if invalid parts are present
-        newState.valid_ip = (invalidSubips.length===0) && (subips.length===4)
+        newState.valid_ip = BaseProtocol.isValidIp(event.target.value)
         this.setState(newState);
     }
     
