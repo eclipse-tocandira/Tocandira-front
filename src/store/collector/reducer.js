@@ -38,6 +38,15 @@ const reducer = (state=initialState, action) => {
         case actionTypes.INVALID_ENTRY:
             newState.validation = {data_error: true, help_text:action.msg}
             break
+        case actionTypes.SET_IP_PARAM:
+            newState.ip = action.ip;
+            break
+        case actionTypes.SET_PORT_PARAM:
+            newState.port = action.port;
+            break
+        case actionTypes.SET_INTERVAL_PARAM:
+            newState.interval = action.interval;
+            break
         default:
             // console.debug('[reducers/auth]',action)
             break
