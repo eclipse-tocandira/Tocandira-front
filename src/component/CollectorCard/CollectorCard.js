@@ -13,7 +13,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Stack, InputAdornment, TextField } from '@mui/material';
+import { Stack, InputAdornment, TextField, Button, Box } from '@mui/material';
 
 // Local Imports
 import TitledCard from '../TitledCard/TitledCard'
@@ -28,9 +28,6 @@ class CollectorCard extends React.PureComponent {
     
     /** Defines the component state variables */
     state = {
-        ip:'127.0.0.1',
-        port:4800,
-        interval:12,
         valid_ip: true,
     }
 
@@ -40,50 +37,39 @@ class CollectorCard extends React.PureComponent {
     
     /** Watch for the enter key, call ip validation if found
      * @param event: The event that called this handler*/
-     handleEnterPress=(event)=>{
+    handleEnterPress=(event)=>{
         if(event.key==='Enter'){
-            this.handlePropsUpdateWithCheck(event);
+            this.handleVadidateIP(event);
         }
     }
     /** Description.
     * @param ``: */
-     handleCollectorIP=(event) => {
-        const newState = {...this.state};
-        newState.ip = event.target.value;
-        this.setState(newState);
+    handleSaveClick=() => {
+        this.props.onPropsSave(this.props.global.backend_instance,{
+            ip:this.props.collector.ip,
+            port:this.props.collector.port,
+            update_period:this.props.collector.interval,
+            timeout:this.props.collector.interval
+        })
     }
     /** Description.
     * @param ``: */
-    handleCollectorInterval=(event) => {
-        const newState = {...this.state};
-        let num = parseInt(event.target.value);
-        if (isNaN(num)){num=0};
-        newState.interval = num;
-        this.setState(newState);
+    handleCollectorIP=(event) => {
+        this.props.onSetIp(event.target.value)
     }
     /** Description.
     * @param ``: */
     handleCollectorPort=(event) => {
-        const newState = {...this.state};
         let num = parseInt(event.target.value);
         if (isNaN(num)){num=0};
-        newState.port = num;
-        this.setState(newState);
+        this.props.onSetPort(num);
     }
     /** Description.
-    * @param ``: 
-    * @returns */
-    handlePropsUpdateWithCheck=(event) => {
-        this.handleVadidateIP(event)
-        this.handlePropsUpdate()
-    }
-    /** Description.
-    * @param ``: 
-    * @returns */
-    handlePropsUpdate=() => {
-        if (this.state.valid_ip) {
-            this.props.onPropsUpdate(this.state.ip,this.state.port,this.state.interval)
-        }
+    * @param ``: */
+    handleCollectorInterval=(event) => {
+        let num = parseInt(event.target.value);
+        if (isNaN(num)){num=0};
+        this.props.onSetInterval(num);
     }
 
     /** Check for a valid IP address inserted.
@@ -120,17 +106,17 @@ class CollectorCard extends React.PureComponent {
                 type='text'
                 size='medium'
                 fullWidth={true}
-                value={this.state.ip}
+                value={this.props.collector.ip}
                 error={!this.state.valid_ip}
                 onChange={this.handleCollectorIP}
                 onKeyPress={this.handleEnterPress}
-                onBlur={this.handlePropsUpdateWithCheck}/>
+                onBlur={this.handleVadidateIP}/>
             <TextField variant="standard"
                 label="Port"
                 type='tel'
                 size='medium'
                 fullWidth={true}
-                value={this.state.port}
+                value={this.props.collector.port}
                 onChange={this.handleCollectorPort}
                 onKeyPress={this.handlePropsUpdate}
                 onBlur={this.handlePropsUpdate}/>
@@ -141,10 +127,17 @@ class CollectorCard extends React.PureComponent {
             size='medium'
             InputProps={{ endAdornment: <InputAdornment position="end">seconds</InputAdornment> }}
             fullWidth={true}
-            value={this.state.interval}
+            value={this.props.collector.interval}
             onChange={this.handleCollectorInterval}
             onKeyPress={this.handlePropsUpdate}
             onBlur={this.handlePropsUpdate}/>,
+            
+        <Box justifyContent='flex-end' display='flex'>
+        <Button variant='contained' fullWidth={false} size='small' color='primary'
+            onClick={this.handleSaveClick} disabled={!this.state.valid_ip}> 
+            SAVE 
+        </Button>
+        </Box>
         ];
 
         const jsx_component = (
@@ -152,15 +145,6 @@ class CollectorCard extends React.PureComponent {
                 title='Data Aquisition' contents={card_contents}/>
         );
         return(jsx_component);
-    };
-
-    componentDidMount() {
-        this.props.onGetProps(this.props.global.backend_instance)
-        const newState = {...this.state};
-        newState.ip = this.props.collector.ip;
-        newState.port = this.props.collector.port;
-        newState.interval = this.props.collector.interval;
-        this.setState(newState);
     };
     
 }
@@ -174,7 +158,10 @@ const reduxStateToProps = (state) =>({
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onPropsUpdate:(ip,port,int)=>{dispatch(collectorActions.setParams(ip,port,int))},
-    onGetProps:(api)=>{dispatch(collectorActions.getParams(api))}
+    onPropsSave:(api,info)=>{dispatch(collectorActions.putParams(api,info))},
+    onSetIp:(ip)=>{dispatch(collectorActions.setIp(ip))},
+    onSetPort:(port)=>{dispatch(collectorActions.setPort(port))},
+    onSetInterval:(int)=>{dispatch(collectorActions.setInterval(int))},
 });
 
 // Make this component visible on import

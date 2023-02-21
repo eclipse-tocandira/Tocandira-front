@@ -20,6 +20,7 @@ import * as globalActions from '../../store/global/actions';
 import * as popupsActions from '../../store/popups/actions';
 import * as datapointActions from '../../store/datapoint/actions';
 import * as datasourceActions from '../../store/datasource/actions';
+import * as collectorActions from '../../store/collector/actions';
 import CollectorCard from '../../component/CollectorCard/CollectorCard';
 import DataSourceCard from '../../component/DataSourceCard/DataSourceCard';
 import DataPointCard from '../../component/DataPointCard/DataPointCard';
@@ -76,16 +77,6 @@ class Main extends React.PureComponent {
                         <Typography variant='h3'>&nbsp;</Typography>
 
                         <Button variant='contained' fullWidth={false}
-                            size='large' color='primary'>
-                            APPLY
-                        </Button>
-
-                        <Button variant='contained' fullWidth={false}
-                            size='large' color='inherit'>
-                            RESET
-                        </Button>
-
-                        <Button variant='contained' fullWidth={false}
                             size='large' color='success' onClick={this.handleClickVerify}>
                             VERIFY
                         </Button>
@@ -124,6 +115,7 @@ class Main extends React.PureComponent {
         this.props.onGetDataSource(this.props.global.backend_instance)
         this.props.onGetDataPoint(this.props.global.backend_instance)
         this.props.onGetProtocols(this.props.global.backend_instance)
+        this.props.onGetCollectorProps(this.props.global.backend_instance)
     };
 
 }
@@ -145,7 +137,8 @@ const reduxDispatchToProps = (dispatch) =>({
     onUpdateDataPending: ()=>dispatch(datapointActions.updateDataPending()),
     onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
     onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
-    onGetProtocols:(api)=>dispatch(datasourceActions.getAvailProtocols(api))
+    onGetProtocols:(api)=>dispatch(datasourceActions.getAvailProtocols(api)),
+    onGetCollectorProps:(api)=>{dispatch(collectorActions.getParams(api))},
 });
 
 // Make this component visible on import
