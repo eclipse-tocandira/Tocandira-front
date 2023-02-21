@@ -120,6 +120,7 @@ export const deleteData=(api_instance, ds_name) => (dispatch) => {
         if(res.data[ds_name]){
             dispatch(emitAlert('DataSource "'+ds_name+'" deleted!','success'));
             dispatch(getData(api_instance))
+            dispatch(datapointActions.getData(api_instance))
         } else {
             dispatch(emitAlert('Unable to delete DataSource "'+ds_name+'"','error'))
         }
