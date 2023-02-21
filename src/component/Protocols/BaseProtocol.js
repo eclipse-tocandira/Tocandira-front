@@ -24,9 +24,14 @@ class BaseProtocol {
     /** Description.
     * @param ``: 
     * @returns */
-    static setDSBaseProp=(context,p_name,property,event) => {
+    static setDSBaseProp=(context,p_name,property,only_num,event) => {
         const newState = this.getDSBaseState(context,p_name);
-        newState.info_ds[p_name][property] = event.target.value;
+        let value = event.target.value;
+        if (only_num){
+            value = parseInt(event.target.value);
+            if (isNaN(value)){value=0};
+        }
+        newState.info_ds[p_name][property] = value;
         context.setState(newState);
     }
 
@@ -42,9 +47,14 @@ class BaseProtocol {
     /** Description.
     * @param ``: 
     * @returns */
-    static setDSProtocolProp=(context,p_name,property,event) => {
+    static setDSProtocolProp=(context,p_name,property,only_num,event) => {
         const newState = this.getDSProtocolState(context,p_name);
-        newState.info_ds[p_name].protocol.data[property] = event.target.value;
+        let value = event.target.value;
+        if (only_num){
+            value = parseInt(event.target.value);
+            if (isNaN(value)){value=0};
+        }
+        newState.info_ds[p_name].protocol.data[property] = value;
         context.setState(newState);
     }
 
@@ -61,8 +71,13 @@ class BaseProtocol {
     /** Description.
     * @param ``: 
     * @returns */
-    static setDPBaseProp=(context,p_name,property,event) => {
+    static setDPBaseProp=(context,p_name,property,only_num,event) => {
         const newState = this.getDPBaseState(context,p_name);
+        let value = event.target.value;
+        if (only_num){
+            value = parseInt(event.target.value);
+            if (isNaN(value)){value=0};
+        }
         newState.info_dp[p_name][property] = event.target.value;
         context.setState(newState);
     }
@@ -79,9 +94,14 @@ class BaseProtocol {
     /** Description.
     * @param ``: 
     * @returns */
-    static setDPProtocolProp=(context,p_name,property,event) => {
+    static setDPProtocolProp=(context,p_name,property,only_num,event) => {
         const newState = this.getDPProtocolState(context,p_name);
-        newState.info_dp[p_name].access.data[property] = event.target.value;
+        let value = event.target.value;
+        if (only_num){
+            value = parseInt(event.target.value);
+            if (isNaN(value)){value=0};
+        }
+        newState.info_dp[p_name].access.data[property] = value;
         context.setState(newState);
     }
     

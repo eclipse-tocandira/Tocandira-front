@@ -22,21 +22,21 @@ class Modbus extends BaseProtocol {
     * @param ``: 
     * @returns */
     static getDataSourceEvents=(context,p_name) => ({
-        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name'),
-        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip'),
-        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port'),
-        onSlaveIdChange: this.setDSProtocolProp.bind(context,context,p_name,'slave_id'),
+        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name',false),
+        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip',false),
+        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port',true),
+        onSlaveIdChange: this.setDSProtocolProp.bind(context,context,p_name,'slave_id',true),
     })
 
     /** Description.
     * @param ``: 
     * @returns */
     static getDataPointEvents=(context,p_name) => ({
-        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name'),
-        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description'),
-        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type'),
-        onFunctionCodeChange: this.setDPProtocolProp.bind(context,context,p_name,'func_code'),
-        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'address'),
+        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name',false),
+        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description',false),
+        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type',false),
+        onFunctionCodeChange: this.setDPProtocolProp.bind(context,context,p_name,'func_code',false),
+        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'address',true),
     })
 
     static parseDataSourceDefault2Values=(defaults) => ({

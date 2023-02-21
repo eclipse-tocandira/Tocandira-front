@@ -23,22 +23,22 @@ class Siemens extends BaseProtocol {
     * @param ``: 
     * @returns */
     static getDataSourceEvents=(context,p_name) => ({
-        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name'),
-        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip'),
-        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port'),
-        onRackChange: this.setDSProtocolProp.bind(context,context,p_name,'rack'),
-        onSlotChange: this.setDSProtocolProp.bind(context,context,p_name,'slot'),
-        onPlcChange: this.setDSProtocolProp.bind(context,context,p_name,'plc'),
+        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name',false),
+        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip',false),
+        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port',true),
+        onRackChange: this.setDSProtocolProp.bind(context,context,p_name,'rack',true),
+        onSlotChange: this.setDSProtocolProp.bind(context,context,p_name,'slot',true),
+        onPlcChange: this.setDSProtocolProp.bind(context,context,p_name,'plc',false),
     })
 
     /** Description.
     * @param ``: 
     * @returns */
     static getDataPointEvents=(context,p_name) => ({
-        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name'),
-        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description'),
-        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type'),
-        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'address'),
+        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name',false),
+        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description',false),
+        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type',false),
+        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'address',false),
     })
 
     static parseDataSourceDefault2Values=(defaults) => ({

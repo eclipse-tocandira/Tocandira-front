@@ -22,22 +22,22 @@ class Rockwell extends BaseProtocol {
     * @param ``: 
     * @returns */
     static getDataSourceEvents=(context,p_name) => ({
-        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name'),
-        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip'),
-        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port'),
-        onSlotChange: this.setDSProtocolProp.bind(context,context,p_name,'slot'),
-        onConnectionChange: this.setDSProtocolProp.bind(context,context,p_name,'connection'),
-        onPathChange: this.setDSProtocolProp.bind(context,context,p_name,'path'),
+        onNameChange: this.setDSBaseProp.bind(context,context,p_name,'name',false),
+        onIpChange: this.setDSBaseProp.bind(context,context,p_name,'plc_ip',false),
+        onPortChange: this.setDSBaseProp.bind(context,context,p_name,'plc_port',true),
+        onSlotChange: this.setDSProtocolProp.bind(context,context,p_name,'slot',true),
+        onConnectionChange: this.setDSProtocolProp.bind(context,context,p_name,'connection',false),
+        onPathChange: this.setDSProtocolProp.bind(context,context,p_name,'path',false),
     })
 
     /** Description.
     * @param ``: 
     * @returns */
     static getDataPointEvents=(context,p_name) => ({
-        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name'),
-        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description'),
-        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type'),
-        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'tag_name'),
+        onNameChange: this.setDPBaseProp.bind(context,context,p_name,'name',false),
+        onDescriptionChange: this.setDPBaseProp.bind(context,context,p_name,'description',false),
+        onNumTypeChange: this.setDPBaseProp.bind(context,context,p_name,'num_type',false),
+        onAddressChange: this.setDPProtocolProp.bind(context,context,p_name,'tag_name',false),
     })
 
     static parseDataSourceDefault2Values=(defaults) => ({
