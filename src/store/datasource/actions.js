@@ -169,7 +169,7 @@ export const manageActiveData=(api_instance, ds_name, status) => (dispatch) => {
 export const putDataSourceConfirm=(api_instance, dslist) => (dispatch) => {
     dslist.forEach((row) => {
         api_instance.put('/datasource/' + row + '/confirm')
-        .then( (res) => {
+        .then( () => {
             dispatch(getData(api_instance))
         })
         .catch( (req) => {

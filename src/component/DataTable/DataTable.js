@@ -98,7 +98,7 @@ class DataTable extends React.PureComponent {
                     onDeleteClick={this.props.onDeleteClick}/>
             </TableCell>
             );
-        };
+        }
 
         let pagination = null;
         if (this.props.with_pagination) {
@@ -111,12 +111,12 @@ class DataTable extends React.PureComponent {
                 onRowsPerPageChange={this.handleChangeRowsPerPage}
             />
             );
-        };
+        }
 
         let checkbox = null;
         if (this.props.with_checkbox) {
             checkbox = <CheckCell/>
-        };
+        }
 
         const jsx_component = (
             <TableContainer>
@@ -138,7 +138,7 @@ class DataTable extends React.PureComponent {
             </TableContainer>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

@@ -99,7 +99,7 @@ export const getDefaults=(api_instance, prot_list) => (dispatch) => {
 export const putDataPointConfirm=(api_instance, dplist) => (dispatch) => {
     dplist.forEach((row) => {
         api_instance.put('/datapoint/' + row.name + '/confirm')
-        .then( (res) => {
+        .then( () => {
             dispatch(getData(api_instance))
         })
         .catch( (req) => {
@@ -207,7 +207,7 @@ export const manageActiveData=(api_instance, dp_name, status) => (dispatch) => {
 /** Request to the backend */
 export const exportData=(api_instance) => (dispatch) => {
     api_instance.post('/export')
-    .then( (res) => {
+    .then( () => {
         dispatch(emitAlert('DataPoints Uploaded!','success'));
     } )
     .catch( (req) => {

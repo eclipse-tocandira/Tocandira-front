@@ -30,7 +30,17 @@ class DataPointPopup extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
+        open: PropTypes.bool,
+        is_new: PropTypes.bool,
+        selected_row: PropTypes.object,
+        global: PropTypes.object,
+        datasource: PropTypes.object,
+        datapoint: PropTypes.object,
+        onClose: PropTypes.func,
+        onNewSave: PropTypes.func,
+        onEditSave: PropTypes.func,
     };
+
     /** Defines the component state variables */
     state = {
         ds_selected:"",
@@ -248,7 +258,7 @@ class DataPointPopup extends React.PureComponent {
             </FormPopup>
         );
         return(jsx_component);
-    };
+    }
 
     componentDidMount=() => {
         if(!this.props.is_new){

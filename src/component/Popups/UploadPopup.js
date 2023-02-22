@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DataTable from '../DataTable/DataTable';
 import { Dialog, DialogContentText, DialogTitle, DialogActions,
-    Button, DialogContent, TableCell, TableRow } from '@mui/material';
+    Button, DialogContent, TableRow } from '@mui/material';
 
 // Local Imports
 import TextCell from '../DataTable/TextCell';
@@ -29,6 +29,11 @@ class UploadPopup extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
+        open: PropTypes.bool,
+        global: PropTypes.object,
+        datapoint: PropTypes.object,
+        onClose: PropTypes.func,
+        onUpload: PropTypes.func,
     };
     /** Defines the component state variables */
     state = {
@@ -101,7 +106,7 @@ class UploadPopup extends React.PureComponent {
             </Dialog>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

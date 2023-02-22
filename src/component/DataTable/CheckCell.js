@@ -33,7 +33,7 @@ class CheckCell extends React.PureComponent {
             </TableCell>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

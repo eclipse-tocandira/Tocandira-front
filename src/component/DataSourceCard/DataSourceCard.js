@@ -33,6 +33,12 @@ class DataSourceCard extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
+        onOpenPopup: PropTypes.func,
+        onGetDataSource: PropTypes.func,
+        onDeleteDataSource: PropTypes.func,
+        global: PropTypes.object,
+        popups: PropTypes.object,
+        datasource: PropTypes.object,
     };
 
     /** Defines the component state variables */
@@ -142,7 +148,7 @@ class DataSourceCard extends React.PureComponent {
                 onClose={this.handlePopUpLeave}/>
         }
         const card_contents=[
-            <DataTable
+            <DataTable key='0'
                 headers={["Name","IP Address","Protocol"]}
                 ncols_to_actions={2}
                 content_rows={this.props.datasource.ds_content.filter(row=>row.active)}
@@ -161,7 +167,7 @@ class DataSourceCard extends React.PureComponent {
                 title='Data Sources' contents={card_contents}/>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

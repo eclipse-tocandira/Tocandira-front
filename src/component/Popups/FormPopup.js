@@ -26,7 +26,7 @@ function downAnimationFunction (props, ref) {
 //       but the behaviour and the solution can be found in:
 //       https://github.com/mui/material-ui/issues/9116
     return <Slide direction='down' ref={ref} {...props} />;
-};
+}
 // This constant also needs to be outside the class component
 const down_animation = React.forwardRef(downAnimationFunction);
 
@@ -37,13 +37,14 @@ class FormPopup extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
-        open:PropTypes.bool,
-        title:PropTypes.string,
-        cardWidth:PropTypes.string,
-        nameOk:PropTypes.string,
-        nameCancel:PropTypes.string,
-        onOkClick:PropTypes.func,
-        onCancelClick:PropTypes.func,
+        open: PropTypes.bool,
+        title: PropTypes.string,
+        cardWidth: PropTypes.string,
+        nameOk: PropTypes.string,
+        nameCancel: PropTypes.string,
+        children: PropTypes.object,
+        onOkClick: PropTypes.func,
+        onCancelClick: PropTypes.func,
     };
 
     static defaultProps = {
@@ -78,7 +79,7 @@ class FormPopup extends React.PureComponent {
                 </Dialog>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

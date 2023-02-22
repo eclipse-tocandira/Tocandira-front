@@ -56,7 +56,7 @@ class CardActionItems extends React.PureComponent {
             </Stack>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

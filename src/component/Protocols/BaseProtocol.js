@@ -51,7 +51,7 @@ class BaseProtocol {
         let value = event.target.value;
         if (only_num){
             value = parseInt(event.target.value);
-            if (isNaN(value)){value=0};
+            if (isNaN(value)){value=0}
         }
         newState.info_ds[p_name][property] = value;
         context.setState(newState);
@@ -74,7 +74,7 @@ class BaseProtocol {
         let value = event.target.value;
         if (only_num){
             value = parseInt(event.target.value);
-            if (isNaN(value)){value=0};
+            if (isNaN(value)){value=0}
         }
         newState.info_ds[p_name].protocol.data[property] = value;
         context.setState(newState);
@@ -98,7 +98,7 @@ class BaseProtocol {
         let value = event.target.value;
         if (only_num){
             value = parseInt(event.target.value);
-            if (isNaN(value)){value=0};
+            if (isNaN(value)){value=0}
         }
         newState.info_dp[p_name][property] = event.target.value;
         context.setState(newState);
@@ -121,7 +121,7 @@ class BaseProtocol {
         let value = event.target.value;
         if (only_num){
             value = parseInt(event.target.value);
-            if (isNaN(value)){value=0};
+            if (isNaN(value)){value=0}
         }
         newState.info_dp[p_name].access.data[property] = value;
         context.setState(newState);

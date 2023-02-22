@@ -32,7 +32,7 @@ class TextCell extends React.PureComponent {
             </TableCell>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

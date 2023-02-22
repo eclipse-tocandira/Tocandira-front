@@ -34,6 +34,12 @@ class DataPointCard extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
+        onOpenPopup: PropTypes.func,
+        onDeleteDataPoint: PropTypes.func,
+        onGetDataPoint: PropTypes.func,
+        global: PropTypes.object,
+        popups: PropTypes.object,
+        datapoint: PropTypes.object,
     };
     
     /** Defines the component state variables */
@@ -146,7 +152,7 @@ class DataPointCard extends React.PureComponent {
 
         // console.info(this.props.datapoint.dp_content)
         const card_contents=[
-            <DataTable
+            <DataTable key='0'
                 headers={["Name","Description","Address","Data Souce"]}
                 ncols_to_actions={2}
                 content_rows={this.props.datapoint.dp_content.filter(row=>row.active)}
@@ -165,7 +171,7 @@ class DataPointCard extends React.PureComponent {
                 title='Data Points' contents={card_contents}/>
         );
         return(jsx_component);
-    };
+    }
 
 }
 

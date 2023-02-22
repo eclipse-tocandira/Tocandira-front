@@ -11,6 +11,7 @@
 
 // Imports from modules;
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withSnackbar} from 'notistack';
 import {Route, Routes, Navigate} from 'react-router-dom';
@@ -28,6 +29,14 @@ import * as popupsActions from './store/popups/actions'
 * @property `props.auth`: Redux access to auth store */
 class AppRoutes extends React.PureComponent {
 
+    /** Defines the component property types */
+    static propTypes = {
+        auth: PropTypes.object,
+        popups: PropTypes.object,
+        closeSnackbar: PropTypes.func,
+        enqueueSnackbar: PropTypes.func,
+        onRemoveAlert: PropTypes.func,
+    };
     /** Defines the component state variables */
     state = {
         displayed:[]
@@ -67,7 +76,7 @@ class AppRoutes extends React.PureComponent {
             </Routes>
         );
         return(appRoutes);
-    };
+    }
 
     /** Description. */
     buildNotification=({key, message, options = {}, dismissed = false}) => {
@@ -80,7 +89,7 @@ class AppRoutes extends React.PureComponent {
         // do nothing if snackbar is already displayed
         if (this.state.displayed.includes(key)){
             return;
-        };
+        }
 
         // Property added from `withSnackbar` wrapper
         this.props.enqueueSnackbar(message, { key, ...options,
