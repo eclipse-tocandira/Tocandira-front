@@ -11,7 +11,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 // import PropTypes from 'prop-types';
-import { Button, Stack, TableCell, TableRow } from '@mui/material';
+import { Button, Stack, TableRow } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -92,9 +92,9 @@ class VerifyPopup extends React.PureComponent {
 
     /** Communicates with the backend to verify the Data Point.*/
     handleCheckClick=() => {
-        this.props.datapoint.dp_verify.map((row) => {
-            this.props.onPostDataPointVerify(this.props.global.backend_instance, row.name);
-        })
+        this.props.datapoint.dp_verify.map(row => 
+            this.props.onPostDataPointVerify(this.props.global.backend_instance, row.name)
+        )
     };
     
     /** Defines the component visualization.
