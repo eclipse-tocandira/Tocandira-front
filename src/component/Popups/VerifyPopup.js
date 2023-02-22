@@ -64,7 +64,7 @@ class VerifyPopup extends React.PureComponent {
     * @param `row`: Date point for verification
     * @returns `content`: Line containing the name, address, 
     * an icon representing the status and response of a Data Source */
-     buildContentRow=(row, index) => {
+    buildContentRow=(row, index) => {
         let response = null
         let icon = null
 

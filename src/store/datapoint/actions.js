@@ -203,3 +203,19 @@ export const manageActiveData=(api_instance, dp_name, status) => (dispatch) => {
         }
     )    
 };
+
+/** Request to the backend */
+export const exportData=(api_instance) => (dispatch) => {
+    api_instance.post('/export')
+    .then( (res) => {
+        dispatch(emitAlert('DataPoints Uploaded!','success'));
+    } )
+    .catch( (req) => {
+        if(req.code===AxiosError.ERR_NETWORK){
+            dispatch(emitNetworkErrorAlert());
+        }else{
+            dispatch(emitAlert(req.response.data.detail,'error'));
+        }
+        }
+    )    
+};
