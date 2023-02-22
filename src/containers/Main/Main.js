@@ -12,7 +12,7 @@
 // Imports from modules;
 import React from 'react';
 import { connect } from 'react-redux';
-import { Stack, Button, Card, CardContent, Typography, CardActions } from '@mui/material';
+import { Stack, Button, Card, CardContent, Typography, Badge } from '@mui/material';
 // Local Imports
 import './Main.css';
 import * as authActions from '../../store/auth/actions';
@@ -62,6 +62,10 @@ class Main extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+        const dp_list = this.props.datapoint.dp_content.filter(row=>row.active);
+        const dp_pending_num = dp_list.filter(row=>row.pending).length;
+        const dp_confirmed_num = dp_list.length-dp_pending_num;
+
 
         // NOTE: The onClick event in Main <div> will be executed
         //       after any Click on configuration screen by "bubbling",
@@ -74,17 +78,19 @@ class Main extends React.PureComponent {
                 <Stack  direction='column' justifyContent='space-between' marginX={'0.5rem'}>
                     <Stack  direction='column' spacing='2rem' marginTop='3rem'>
                         <Typography variant='h3'>&nbsp;</Typography>
-                        <Button variant='contained'
+                        <Badge color='warning' badgeContent={dp_pending_num}>
+                        <Button variant='contained' fullWidth
                             size='large' color='success' onClick={this.handleClickVerify}>
                             VERIFY
                         </Button>
-                        <Button variant='contained'
+                        </Badge>
+                        <Button variant='contained' fullWidth disabled={dp_confirmed_num===0}
                             size='large' color='primary' onClick={null}>
                             UPLOAD
                         </Button>
                     </Stack>
 
-                    <Button variant='contained' sx={{ marginBottom:'1rem'}}
+                    <Button variant='contained' sx={{ marginBottom:'1rem'}} fullWidth
                         size='large' color='inherit' onClick={this.handleLogoutSubmission}>
                         LOGOUT
                     </Button>
