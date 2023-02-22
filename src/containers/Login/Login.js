@@ -15,12 +15,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { Button, Card, Typography, CardContent,
-    TextField, Grid, CardMedia, Collapse } from '@mui/material'
+    TextField, Grid, CardMedia } from '@mui/material'
 // Local Imports
 import './Login.css';
 import * as authActions from '../../store/auth/actions'
+import * as globalActions from '../../store/global/actions'
 import * as routeNames from '../../routeNames'
-import CustomAlert from '../../component/CustomAlert/CustomAlert'
 
 // #######################################
 
@@ -80,12 +80,7 @@ class Login extends React.PureComponent {
 
     /** Defines the component visualization.
     * @returns JSX syntax element */ 
-    render(){
-
-        // Prepare alert component to show a message to the user
-        const alert = <CustomAlert type='error' elevate
-            reset={this.props.onClearError}
-            msg={this.props.auth.validation.help_text}/>
+    render(){          
 
         // Check if the user has a stored token
         let authorized = null;
@@ -119,7 +114,7 @@ class Login extends React.PureComponent {
                                 <Grid item marginTop='-1rem'> <Typography variant='subtitle1'
                                     align='left'
                                     color='text.secondary'>
-                                        Historian Configuration Tool
+                                        Tocandira Configuration Tool
                                     </Typography>
                                 </Grid>
                                 {/* Username prompt */}
@@ -143,7 +138,8 @@ class Login extends React.PureComponent {
                                     value={this.state.login.password}
                                     error={this.props.auth.validation.data_error}
                                     onChange={this.handlePasswordInput}
-                                    onKeyPress={this.handleEnterPress}>
+                                    onKeyPress={this.handleEnterPress}
+                                    helperText={this.props.auth.validation.help_text}>
                                     </TextField>
                                 </Grid>
                                 {/* Login Button */}
@@ -159,10 +155,6 @@ class Login extends React.PureComponent {
                         </CardContent>
                     </Card>
                 </Grid>
-                {/* Descriptive Error Indicator */}
-                <Grid item>
-                    <Collapse in={this.props.auth.validation.error}>{alert}</Collapse>
-                </Grid>
             </Grid>
             </div>
         );
@@ -175,6 +167,14 @@ class Login extends React.PureComponent {
             this.focalElement.focus()
         }
     };
+
+    /** Component lifecycle DELETION begining */
+    componentWillUnmount() {
+        if (this.props.auth.token_valid){
+            this.props.onTokenValid(this.props.auth.token, this.props.auth.token_type)
+        }
+    };
+    
     
 }
 
@@ -187,7 +187,8 @@ const reduxStateToProps = (state) =>({
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onLoginSubmit: (api_instance,usrdata)=>dispatch(authActions.login(api_instance,usrdata)),
-    onClearError: ()=>dispatch(authActions.clearInvalid())
+    onClearError: ()=>dispatch(authActions.clearInvalid()),
+    onTokenValid: (token,token_type)=>dispatch(globalActions.setAuthToken(token,token_type)),
 });
 
 // Make this component visible on import

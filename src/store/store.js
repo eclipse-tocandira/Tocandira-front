@@ -13,14 +13,20 @@ import thunk from 'redux-thunk';
 // Local Imports
 import globalReducer from './global/reducer';
 import authReducer from './auth/reducer';
-
+import popupsReducer from './popups/reducer';
+import collectorReducer from './collector/reducer';
+import datasourceReducer from './datasource/reducer';
+import datapointReducer from './datapoint/reducer';
 // #######################################
 
 // Join all Reducers
 const rootReducer = combineReducers({
     global: globalReducer,
     auth: authReducer,
-    // api: apiReducer
+    popups: popupsReducer,
+    collector: collectorReducer,
+    datasource: datasourceReducer,
+    datapoint: datapointReducer,
 });
 
 // Configure the Redux Storage

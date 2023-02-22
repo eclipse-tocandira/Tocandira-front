@@ -16,6 +16,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 // Local Imports
 import AppRoutes from './AppRoutes';
 import * as globalActions from './store/global/actions'
@@ -42,7 +43,11 @@ readConfig().then(conf=> {
         <React.StrictMode>
             <Provider store={store}>
                 <BrowserRouter basename={conf.root}>
-                    <AppRoutes />
+                    <SnackbarProvider maxSnack={3} autoHideDuration={2000} 
+                        TransitionProps={{direction:'left'}}
+                        anchorOrigin={{vertical:'top',horizontal:'right'}}>
+                        <AppRoutes />
+                    </SnackbarProvider>
                 </BrowserRouter>
             </Provider>
         </React.StrictMode>
