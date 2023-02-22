@@ -34,6 +34,13 @@ class CollectorCard extends React.PureComponent {
 
     /** Defines the component property types */
     static propTypes = {
+        onPropsSave: PropTypes.func,
+        onSetIp: PropTypes.func,
+        onSetPort: PropTypes.func,
+        onSetInterval: PropTypes.func,
+        global: PropTypes.object,
+        collector: PropTypes.object,
+
     };
     
     /** Watch for the enter key, call ip validation if found
@@ -62,14 +69,14 @@ class CollectorCard extends React.PureComponent {
     * @param ``: */
     handleCollectorPort=(event) => {
         let num = parseInt(event.target.value);
-        if (isNaN(num)){num=0};
+        if (isNaN(num)){num=0}
         this.props.onSetPort(num);
     }
     /** Description.
     * @param ``: */
     handleCollectorInterval=(event) => {
         let num = parseInt(event.target.value);
-        if (isNaN(num)){num=0};
+        if (isNaN(num)){num=0}
         this.props.onSetInterval(num);
     }
 
@@ -86,7 +93,7 @@ class CollectorCard extends React.PureComponent {
     render(){
 
         const card_contents = [
-        <Stack direction='row' spacing='1rem'>
+        <Stack direction='row' spacing='1rem' key='0'>
             <TextField variant="standard"
                 label="Collector IP"
                 type='text'
@@ -107,7 +114,7 @@ class CollectorCard extends React.PureComponent {
                 onKeyPress={this.handlePropsUpdate}
                 onBlur={this.handlePropsUpdate}/>
         </Stack>,
-        <TextField variant="standard"
+        <TextField variant="standard"  key='1'
             label="Save Interval"
             type='tel'
             size='medium'
@@ -118,7 +125,7 @@ class CollectorCard extends React.PureComponent {
             onKeyPress={this.handlePropsUpdate}
             onBlur={this.handlePropsUpdate}/>,
             
-        <Box justifyContent='flex-end' display='flex'>
+        <Box justifyContent='flex-end' display='flex'  key='2'>
         <Button variant='contained' fullWidth={false} size='small' color='primary'
             onClick={this.handleSaveClick} disabled={!this.state.valid_ip}> 
             SAVE 
@@ -131,7 +138,7 @@ class CollectorCard extends React.PureComponent {
                 title='Data Aquisition' contents={card_contents}/>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

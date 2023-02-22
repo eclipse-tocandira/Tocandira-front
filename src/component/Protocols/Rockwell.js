@@ -6,6 +6,7 @@
 */
 
 // Imports from modules
+import React from 'react';
 import { TextField, Stack } from "@mui/material";
 
 // Local Imports

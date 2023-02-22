@@ -7,6 +7,7 @@
  * - react-router-dom 
 */
 
+import React from 'react';
 // Imports from modules
 import { useLocation, useNavigate, useParams, } from "react-router-dom";
 

@@ -30,7 +30,8 @@ class CustomAlert extends React.PureComponent {
         type: PropTypes.string,
         elevate: PropTypes.bool,
         title: PropTypes.string,
-        msg: PropTypes.string
+        msg: PropTypes.string,
+        reset: PropTypes.func,
     };
     
     /** Defines the component visualization.
@@ -60,7 +61,7 @@ class CustomAlert extends React.PureComponent {
         }
 
         return(jsx_component);
-    };
+    }
     
 }
 

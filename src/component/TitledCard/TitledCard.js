@@ -53,7 +53,7 @@ class TitledCard extends React.PureComponent {
             </Card>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

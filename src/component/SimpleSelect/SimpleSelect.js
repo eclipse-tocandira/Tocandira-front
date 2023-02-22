@@ -70,7 +70,7 @@ class SimpleSelect extends React.PureComponent {
             </FormControl>
         );
         return(jsx_component);
-    };
+    }
     
 }
 

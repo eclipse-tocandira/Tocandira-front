@@ -11,6 +11,7 @@
 
 // Imports from modules;
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Stack, Button, Card, CardContent, Typography, Badge } from '@mui/material';
 // Local Imports
@@ -35,6 +36,23 @@ import UploadPopup from '../../component/Popups/UploadPopup';
 * @method `props.onLogoutSubmit`: Redux function for auth stote `logout` action.*/
 class Main extends React.PureComponent {
 
+    /** Defines the component property types */
+    static propTypes = {
+        auth: PropTypes.object,
+        global: PropTypes.object,
+        popups: PropTypes.object,
+        datapoint: PropTypes.object,
+        onLogoutSubmit: PropTypes.func,
+        onTokenInvalid: PropTypes.func,
+        onCheckToken: PropTypes.func,
+        onVerify: PropTypes.func,
+        onUpload: PropTypes.func,
+        onUpdateDataPending: PropTypes.func,
+        onGetDataPoint: PropTypes.func,
+        onGetDataSource: PropTypes.func,
+        onGetProtocols: PropTypes.func,
+        onGetCollectorProps: PropTypes.func,
+    }
     /** Defines the component state variables */
     state = {
     }
@@ -124,14 +142,14 @@ class Main extends React.PureComponent {
             </div>
         );
         return(jsx_component);
-    };
+    }
 
     componentDidMount() {
         this.props.onGetDataSource(this.props.global.backend_instance)
         this.props.onGetDataPoint(this.props.global.backend_instance)
         this.props.onGetProtocols(this.props.global.backend_instance)
         this.props.onGetCollectorProps(this.props.global.backend_instance)
-    };
+    }
 
 }
 

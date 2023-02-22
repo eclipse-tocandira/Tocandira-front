@@ -4,13 +4,11 @@
  * Copyright (c) 2017 Aimirim STI.
  * 
  * Dependencies are:
- * - react 
- * - react-redux 
+ * - react
 */
 
 // Imports from modules;
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dialog, DialogContentText, DialogTitle, DialogActions,
     Button, DialogContent } from '@mui/material';
@@ -25,6 +23,12 @@ class DeletePopup extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
+        open: PropTypes.bool,
+        content: PropTypes.object,
+        nameOk: PropTypes.string,
+        nameCancel: PropTypes.string,
+        onOkClick: PropTypes.func,
+        onCancelClick: PropTypes.func
     };
     /** Defines the component state variables */
     state = {
@@ -58,17 +62,9 @@ class DeletePopup extends React.PureComponent {
             </Dialog>
         );
         return(jsx_component);
-    };
+    }
     
 }
 
-/** Map the Redux state to some component props */
-const reduxStateToProps = (state) =>({
-});
-
-/** Map the Redux actions dispatch to some component props */
-const reduxDispatchToProps = (dispatch) =>({
-});
-
 // Make this component visible on import
-export default connect(reduxStateToProps,reduxDispatchToProps)(DeletePopup);
+export default DeletePopup;

@@ -4,8 +4,6 @@
  * Copyright (c) 2017 Aimirim STI.
 */
 
-// Imports from modules
-import {AxiosError} from 'axios';
 // Local Imports
 import * as actionTypes from './actionTypes';
 

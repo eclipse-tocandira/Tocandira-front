@@ -39,7 +39,7 @@ class ProtectedRoute extends React.PureComponent {
         }
         
         return(jsx_component);
-    };
+    }
     
 }
 

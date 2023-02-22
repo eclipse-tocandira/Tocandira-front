@@ -22,13 +22,14 @@ const initialState = {
 
 /** Global reducer definition */
 const reducer = (state=initialState, action) => {
+    let apiURL;
     // Duplicate the state to change the Pointer
     const newState = {...state};
     // Check and select correct action
     switch ( action.type ) {
         case actionTypes.SET_CONF:
             newState.baseURL = action.conf.root;
-            const apiURL = action.conf.api_protocol +action.conf.api_ip +action.conf.api_root;
+            apiURL = action.conf.api_protocol +action.conf.api_ip +action.conf.api_root;
             newState.backend_instance = axios.create({baseURL: apiURL});
             break
         case actionTypes.SET_AUTH:

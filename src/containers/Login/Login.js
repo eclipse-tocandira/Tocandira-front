@@ -12,6 +12,7 @@
 
 // Imports from modules
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { Button, Card, Typography, CardContent,
@@ -32,6 +33,14 @@ import * as routeNames from '../../routeNames'
  * @method `props.handlePasswordInput`: Save password entry in state as typed. */
 class Login extends React.PureComponent {
     
+    /** Defines the component property types */
+    static propTypes = {
+        auth: PropTypes.object,
+        global: PropTypes.object,
+        onLoginSubmit: PropTypes.func,
+        onClearError: PropTypes.func,
+        onTokenValid: PropTypes.func,
+    }
     /** Defines the component state variables */
     state = {
         login:{
@@ -159,21 +168,21 @@ class Login extends React.PureComponent {
             </div>
         );
         return(jsx_component);
-    };
+    }
 
     /** Component lifecycle CREATION ending */
     componentDidMount() {
         if (this.focalElement!==undefined){
             this.focalElement.focus()
         }
-    };
+    }
 
     /** Component lifecycle DELETION begining */
     componentWillUnmount() {
         if (this.props.auth.token_valid){
             this.props.onTokenValid(this.props.auth.token, this.props.auth.token_type)
         }
-    };
+    }
     
     
 }

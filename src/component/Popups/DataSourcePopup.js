@@ -31,6 +31,14 @@ class DataSourcePopup extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
+        is_new: PropTypes.bool,
+        selected_row: PropTypes.object,
+        open: PropTypes.bool,
+        onClose: PropTypes.func,
+        onNewSave: PropTypes.func,
+        onEditSave: PropTypes.func,
+        global: PropTypes.object,
+        datasource: PropTypes.object,
     };
     /** Defines the component state variables */
     state = {
@@ -257,7 +265,7 @@ class DataSourcePopup extends React.PureComponent {
             </FormPopup>
         );
         return(jsx_component);
-    };
+    }
 
     componentDidMount=() => {
         if(!this.props.is_new){

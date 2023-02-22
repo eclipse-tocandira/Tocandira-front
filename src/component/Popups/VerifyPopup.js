@@ -10,7 +10,7 @@
 // Imports from modules;
 import React from 'react';
 import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Button, Stack, TableRow } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -33,6 +33,14 @@ class VerifyPopup extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
+        open: PropTypes.bool,
+        global: PropTypes.object,
+        datapoint: PropTypes.object,
+        datasource: PropTypes.object,
+        onClose: PropTypes.func,
+        onPostDataPointVerify: PropTypes.func,
+        onPutDataPointConfirm: PropTypes.func,
+        onPutDataSourceConfirm: PropTypes.func,
     };
     /** Defines the component state variables */
     state = {
@@ -75,7 +83,7 @@ class VerifyPopup extends React.PureComponent {
             response = row.response
         } else {
             icon = <CancelIcon color='error' />
-        };
+        }
 
         const content = (
         <TableRow
@@ -131,7 +139,7 @@ class VerifyPopup extends React.PureComponent {
             </FormPopup>
         );
         return(jsx_component);
-    };
+    }
 
 }
 

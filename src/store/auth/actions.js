@@ -46,7 +46,7 @@ const saveValidCheck=() => ({type:actionTypes.VALIDATE});
 /** Redux action to validate the current token */
 export const validate=(api_instance) => (dispatch) => {
     api_instance.get('/validate')
-    .then( (res) => dispatch(saveValidCheck()) )
+    .then( () => dispatch(saveValidCheck()) )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
                 dispatch(emitNetworkErrorAlert())
