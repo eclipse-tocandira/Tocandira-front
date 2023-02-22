@@ -39,6 +39,7 @@ class DataSourcePopup extends React.PureComponent {
         validation:{
             ip:true,
             name:true,
+            unique:true,
         }
     };
     
@@ -50,6 +51,7 @@ class DataSourcePopup extends React.PureComponent {
         newState.validation = {...this.state.validation};
         newState.validation.ip = true;
         newState.validation.name = true;
+        newState.validation.unique = true;
         this.setState(newState);
     }
 
@@ -57,11 +59,16 @@ class DataSourcePopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleErrorMessage=() => {
-        let msg = "Invalid "
-        if (!this.state.validation.ip){ msg += "IP " }
-        if (!this.state.validation.name){
-            if (!this.state.validation.ip){ msg += "and " }
-            msg += "Name " 
+        let msg = "";
+        if (!this.state.validation.unique) {
+            msg = "Duplicated Name "
+        } else {
+            msg = "Invalid "
+            if (!this.state.validation.ip){ msg += "IP " }
+            if (!this.state.validation.name){
+                if (!this.state.validation.ip){ msg += "and " }
+                msg += "Name " 
+            }
         }
         msg += "detected."
         return(msg)
@@ -76,8 +83,9 @@ class DataSourcePopup extends React.PureComponent {
 
         const ip_verify = BaseProtocol.isValidIp(info2save.plc_ip);
         const name_verify = info2save.name!=="";
+        const name_equal = this.props.datasource.ds_content.find(ele=>ele.name===info2save.name)
 
-        if (ip_verify && name_verify) {
+        if (ip_verify && name_verify && !name_equal) {
             if (this.props.is_new) {
                 this.props.onNewSave(this.props.global.backend_instance, info2save);
             } else {
@@ -89,6 +97,7 @@ class DataSourcePopup extends React.PureComponent {
         newState.validation = {...this.state.validation};
         newState.validation.ip = ip_verify;
         newState.validation.name = name_verify;
+        newState.validation.unique = !name_equal;
         this.setState(newState);
     }
 
@@ -228,7 +237,7 @@ class DataSourcePopup extends React.PureComponent {
                 fullWidth value={this.state.protocol_selected}/>
         }
 
-        const valid_data = this.state.validation.ip && this.state.validation.name;
+        const valid_data = this.state.validation.ip && this.state.validation.name && this.state.validation.unique;
         const err_msg = this.handleErrorMessage();
         const alert = <CustomAlert type='error' elevate
             reset={this.handleClearErrors} msg={err_msg}/>

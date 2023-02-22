@@ -38,6 +38,7 @@ class DataPointPopup extends React.PureComponent {
         validation:{
             address:true,
             name:true,
+            unique:true,
         }
     };
     
@@ -49,6 +50,7 @@ class DataPointPopup extends React.PureComponent {
         newState.validation = {...this.state.validation};
         newState.validation.address = true;
         newState.validation.name = true;
+        newState.validation.unique = true;
         this.setState(newState);
     }
 
@@ -56,11 +58,16 @@ class DataPointPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleErrorMessage=() => {
-        let msg = "Invalid "
-        if (!this.state.validation.address){ msg += "Address " }
-        if (!this.state.validation.name){
-            if (!this.state.validation.ip){ msg += "and " }
-            msg += "Name " 
+        let msg = "";
+        if (!this.state.validation.unique) {
+            msg = "Duplicated Name "
+        } else {
+            msg = "Missing "
+            if (!this.state.validation.address){ msg += "Address " }
+            if (!this.state.validation.name){
+                if (!this.state.validation.ip){ msg += "and " }
+                msg += "Name " 
+            }
         }
         msg += "detected."
         return(msg)
@@ -85,14 +92,16 @@ class DataPointPopup extends React.PureComponent {
 
         const address_verify = getDataPointAddress(info2save,dsrow.protocol.name)!=="";
         const name_verify = info2save.name!=="";
+        const name_equal = this.props.datapoint.dp_content.find(ele=>ele.name===info2save.name)
         
         const newState = {...this.state};
         newState.validation = {...this.state.validation};
         newState.validation.address = address_verify;
         newState.validation.name = name_verify;
+        newState.validation.unique = !name_equal;
         this.setState(newState);
 
-        if (address_verify && name_verify) {
+        if (address_verify && name_verify && !name_equal) {
             if (this.props.is_new) {
                 this.props.onNewSave(this.props.global.backend_instance, info2save);
             } else {
@@ -219,7 +228,7 @@ class DataPointPopup extends React.PureComponent {
                 fullWidth value={this.state.ds_selected}/>
         }
 
-        const valid_data = this.state.validation.address && this.state.validation.name;
+        const valid_data = this.state.validation.address && this.state.validation.name && this.state.validation.unique;
         const err_msg = this.handleErrorMessage();
         const alert = <CustomAlert type='error' elevate
             reset={this.handleClearErrors} msg={err_msg}/>
