@@ -21,6 +21,9 @@ export const openDataPointPopup=(status) => ({type:actionTypes.OPEN_DATAPOINT, o
 export const openVerifyPopup=(status) => ({type:actionTypes.OPEN_VERIFY, open:status});
 
 /** Redux action to  */
+export const openUploadPopup=(status) => ({type:actionTypes.OPEN_UPLOAD, open:status});
+
+/** Redux action to  */
 export const emitAlert = (text,type,options={}) => {
     const key = new Date().getTime() + Math.random();
     const payload = { message:text, key: key, options:{ variant: type, ...options }}

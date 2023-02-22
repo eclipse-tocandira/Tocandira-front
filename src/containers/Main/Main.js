@@ -25,6 +25,7 @@ import CollectorCard from '../../component/CollectorCard/CollectorCard';
 import DataSourceCard from '../../component/DataSourceCard/DataSourceCard';
 import DataPointCard from '../../component/DataPointCard/DataPointCard';
 import VerifyPopup from '../../component/Popups/VerifyPopup';
+import UploadPopup from '../../component/Popups/UploadPopup';
 
 // #######################################
 
@@ -44,7 +45,12 @@ class Main extends React.PureComponent {
         this.props.onTokenInvalid()
         this.props.onLogoutSubmit()
     }
-
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleClickUpload=() => {
+        this.props.onUpload(true)
+    }
     /** Description.
     * @param ``: */
     handleClickVerify=() => {
@@ -57,6 +63,7 @@ class Main extends React.PureComponent {
     handlePopUpLeave=() => {
         this.props.onGetDataPoint(this.props.global.backend_instance);
         this.props.onVerify(false);
+        this.props.onUpload(false);
     }
 
     /** Defines the component visualization.
@@ -74,6 +81,7 @@ class Main extends React.PureComponent {
         const jsx_component = (
             <div className='Main' onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
                 <VerifyPopup open={this.props.popups.open_verify} onClose={this.handlePopUpLeave}/>
+                <UploadPopup open={this.props.popups.open_upload} onClose={this.handlePopUpLeave}/>
             
                 <Stack  direction='column' justifyContent='space-between' marginX={'0.5rem'}>
                     <Stack  direction='column' spacing='2rem' marginTop='3rem'>
@@ -85,7 +93,7 @@ class Main extends React.PureComponent {
                         </Button>
                         </Badge>
                         <Button variant='contained' fullWidth disabled={dp_confirmed_num===0}
-                            size='large' color='primary' onClick={null}>
+                            size='large' color='primary' onClick={this.handleClickUpload}>
                             UPLOAD
                         </Button>
                     </Stack>
@@ -141,6 +149,7 @@ const reduxDispatchToProps = (dispatch) =>({
     onTokenInvalid: ()=>dispatch(globalActions.clearAuthToken()),
     onCheckToken: (api_instance)=>dispatch(authActions.validate(api_instance)),
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
+    onUpload: (status)=>dispatch(popupsActions.openUploadPopup(status)),
     onUpdateDataPending: ()=>dispatch(datapointActions.updateDataPending()),
     onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
     onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
