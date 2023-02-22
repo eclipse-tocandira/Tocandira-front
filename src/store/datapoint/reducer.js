@@ -39,7 +39,7 @@ const reducer = (state=initialState, action) => {
             newState.dp_verify = dp_formated_list;
             break
         case actionTypes.VERIFY_DPDATA_PENDING:
-            newState.dp_verify.map((row) => {
+            newState.dp_verify.forEach((row) => {
                 if (row.name === action.dpname){
                     row.status = action.dplist.status
                     row.response = action.dplist.response
