@@ -105,7 +105,7 @@ class Login extends React.PureComponent {
             <Grid container className='Login_grid' direction="column" spacing={'1rem'} > 
                 {/* Aimirim Logo */}
                 <Grid item>
-                    <CardMedia component="img" image={process.env.PUBLIC_URL+'/aimirim_Qsmall.png'} alt="Company Logo"/>
+                    <CardMedia component="img" image={'./static/aimirim_Qsmall.png'} alt="Company Logo"/>
                 </Grid>
 
                 <Grid item>

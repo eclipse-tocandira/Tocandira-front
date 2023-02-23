@@ -9,7 +9,7 @@
 // #######################################
 
 export default async function readConfig() {
-    const data = await fetch(process.env.PUBLIC_URL+'/config.json', {
+    const data = await fetch('./static/config.json', {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
