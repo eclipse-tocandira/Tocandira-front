@@ -72,10 +72,10 @@ class DataPointPopup extends React.PureComponent {
         if (!this.state.validation.unique) {
             msg = "Duplicated Name "
         } else {
-            msg = "Missing "
+            msg = "Invalid "
             if (!this.state.validation.address){ msg += "Address " }
             if (!this.state.validation.name){
-                if (!this.state.validation.ip){ msg += "and " }
+                if (!this.state.validation.address){ msg += "and " }
                 msg += "Name " 
             }
         }
@@ -101,7 +101,7 @@ class DataPointPopup extends React.PureComponent {
         const info2save = this.state.info_dp[dsrow.protocol.name];
 
         const address_verify = getDataPointAddress(info2save,dsrow.protocol.name)!=="";
-        const name_verify = info2save.name!=="";
+        const name_verify = /^[a-zA-z_]+[a-zA-z0-9]*$/.test(info2save.name);
         const name_equal = this.props.datapoint.dp_content.find(ele=>ele.name===info2save.name)
         
         const newState = {...this.state};
