@@ -93,13 +93,14 @@ class DataSourcePopup extends React.PureComponent {
         const name_verify = info2save.name!=="";
         const name_equal = this.props.datasource.ds_content.find(ele=>ele.name===info2save.name)
 
-        if (ip_verify && name_verify && !name_equal) {
-            if (this.props.is_new) {
+        if (this.props.is_new) {
+            if (ip_verify && name_verify && !name_equal) {
                 this.props.onNewSave(this.props.global.backend_instance, info2save);
-            } else {
+            }
+        } else {
+            if (ip_verify && name_verify){
                 this.props.onEditSave(this.props.global.backend_instance, info2save);
             }
-            this.handleCancelClick()
         }
         const newState = {...this.state};
         newState.validation = {...this.state.validation};
@@ -107,6 +108,7 @@ class DataSourcePopup extends React.PureComponent {
         newState.validation.name = name_verify;
         newState.validation.unique = !name_equal;
         this.setState(newState);
+        this.handleCancelClick()
     }
 
     /** Description.
@@ -231,9 +233,10 @@ class DataSourcePopup extends React.PureComponent {
     * @returns JSX syntax element */ 
     render(){
         const content_array = ImplementedProtocols.map(this.buildSpecificProtocolFields)
-
+        let valid_data = null;
         let select_component = null;
         if (this.props.is_new){
+            valid_data = this.state.validation.ip && this.state.validation.name && this.state.validation.unique;
             select_component = <SimpleSelect
                 label={"Protocol"}
                 default_value={this.props.datasource.protocol_default}
@@ -241,11 +244,11 @@ class DataSourcePopup extends React.PureComponent {
                 value={this.state.protocol_selected}
                 onChange={this.handleSelectChange}/>
         } else {
+            valid_data = this.state.validation.ip && this.state.validation.name;
             select_component = <TextField variant="outlined" label="Protocol" type='text' disabled
                 fullWidth value={this.state.protocol_selected}/>
         }
 
-        const valid_data = this.state.validation.ip && this.state.validation.name && this.state.validation.unique;
         const err_msg = this.handleErrorMessage();
         const alert = <CustomAlert type='error' elevate
             reset={this.handleClearErrors} msg={err_msg}/>

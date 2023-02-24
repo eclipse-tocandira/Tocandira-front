@@ -111,14 +111,16 @@ class DataPointPopup extends React.PureComponent {
         newState.validation.unique = !name_equal;
         this.setState(newState);
 
-        if (address_verify && name_verify && !name_equal) {
-            if (this.props.is_new) {
+        if (this.props.is_new) {
+            if (address_verify && name_verify && !name_equal) {
                 this.props.onNewSave(this.props.global.backend_instance, info2save);
-            } else {
+            }
+        } else {
+            if (address_verify && name_verify) {
                 this.props.onEditSave(this.props.global.backend_instance, info2save);
             }
-            this.handleCancelClick()
         }
+        this.handleCancelClick()
     }
 
     /** Description.
@@ -224,9 +226,10 @@ class DataPointPopup extends React.PureComponent {
         const content_array = ImplementedProtocols.map(this.buildSpecificProtocolFields);
         const ds_select_options = this.props.datasource.ds_content.map(element => element.name);
         const specific_elements = content_array.map(this.buildContents);
-        
+        let valid_data = null;
         let select_component = null;
         if (this.props.is_new){
+            valid_data = this.state.validation.address && this.state.validation.name && this.state.validation.unique;
             select_component = <SimpleSelect
                 label={"DataSource"}
                 default_value={""}
@@ -234,11 +237,11 @@ class DataPointPopup extends React.PureComponent {
                 value={this.state.ds_selected}
                 onChange={this.handleDataSourceChange}/>
         } else {
+            valid_data = this.state.validation.address && this.state.validation.name;
             select_component = <TextField variant="outlined" label="DataSource" type='text' disabled
                 fullWidth value={this.state.ds_selected}/>
         }
 
-        const valid_data = this.state.validation.address && this.state.validation.name && this.state.validation.unique;
         const err_msg = this.handleErrorMessage();
         const alert = <CustomAlert type='error' elevate
             reset={this.handleClearErrors} msg={err_msg}/>
