@@ -114,13 +114,14 @@ class DataPointPopup extends React.PureComponent {
         if (this.props.is_new) {
             if (address_verify && name_verify && !name_equal) {
                 this.props.onNewSave(this.props.global.backend_instance, info2save);
+                this.handleCancelClick();
             }
         } else {
             if (address_verify && name_verify) {
                 this.props.onEditSave(this.props.global.backend_instance, info2save);
+                this.handleCancelClick();
             }
         }
-        this.handleCancelClick()
     }
 
     /** Description.

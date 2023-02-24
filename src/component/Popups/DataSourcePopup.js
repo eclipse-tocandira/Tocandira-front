@@ -93,22 +93,24 @@ class DataSourcePopup extends React.PureComponent {
         const name_verify = info2save.name!=="";
         const name_equal = this.props.datasource.ds_content.find(ele=>ele.name===info2save.name)
 
-        if (this.props.is_new) {
-            if (ip_verify && name_verify && !name_equal) {
-                this.props.onNewSave(this.props.global.backend_instance, info2save);
-            }
-        } else {
-            if (ip_verify && name_verify){
-                this.props.onEditSave(this.props.global.backend_instance, info2save);
-            }
-        }
         const newState = {...this.state};
         newState.validation = {...this.state.validation};
         newState.validation.ip = ip_verify;
         newState.validation.name = name_verify;
         newState.validation.unique = !name_equal;
         this.setState(newState);
-        this.handleCancelClick()
+
+        if (this.props.is_new) {
+            if (ip_verify && name_verify && !name_equal) {
+                this.props.onNewSave(this.props.global.backend_instance, info2save);
+                this.handleCancelClick();
+            }
+        } else {
+            if (ip_verify && name_verify){
+                this.props.onEditSave(this.props.global.backend_instance, info2save);
+                this.handleCancelClick();
+            }
+        }
     }
 
     /** Description.
