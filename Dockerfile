@@ -5,9 +5,11 @@ USER root
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 
-COPY . /app
-
+COPY package-lock.json /app/package-lock.json
+COPY package.json /app/package.json
 RUN npm ci
+
+COPY . /app
 RUN npm run build
 
 # Production environment
