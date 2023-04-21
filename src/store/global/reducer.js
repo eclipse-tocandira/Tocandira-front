@@ -29,8 +29,7 @@ const reducer = (state=initialState, action) => {
     switch ( action.type ) {
         case actionTypes.SET_CONF:
             newState.baseURL = action.conf.root;
-            apiURL = action.conf.api_protocol +action.conf.api_ip +action.conf.api_root;
-            newState.backend_instance = axios.create({baseURL: apiURL});
+            newState.backend_instance = axios.create({baseURL: action.conf.api_url});
             break
         case actionTypes.SET_AUTH:
             newState.backend_instance.defaults.headers.common = {...state.backend_instance.defaults.headers.common};

@@ -1,6 +1,4 @@
 {
-    "api_protocol":"http://",
-    "api_ip": "localhost:8000",
-    "api_root": "",
+    "api_url":"http://localhost:8000",
     "root": ""
 }
