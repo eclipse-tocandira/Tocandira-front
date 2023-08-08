@@ -2,6 +2,11 @@
 # Copyright (c) 2017 Aimirim STI.
 set -e
 
+trap stop SIGTERM SIGINT SIGQUIT SIGHUP
+stop() {
+    nginx -s stop
+}
+
 # Check for backend address
 if [ -z "${BACKEND_URL}" ]; then
     echo "ERROR: Could not find the variable 'BACKEND_URL'. Please set the Backend Adress."
@@ -20,4 +25,6 @@ sed -i 's@BACKEND_URL@'"$BACKEND_URL"'@g' $build_path/config.json
 sed -i 's@ROOT_PATH@'"$ROOT_PATH"'@g' $build_path/config.json
 
 # Go to nginx 
-nginx -g 'daemon off;'
+nginx -g 'daemon off;' &
+Pid=$!
+wait "$Pid"
