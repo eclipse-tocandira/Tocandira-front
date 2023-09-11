@@ -1,5 +1,5 @@
 /** This module holds the view of the React
- * component `Login`
+ * component `PassCheck`
  * 
  * Copyright (c) 2017 Aimirim STI.
  * 
@@ -18,35 +18,30 @@ import { Navigate } from 'react-router-dom';
 import { Button, Card, Typography, CardContent,
     TextField, Grid, CardMedia } from '@mui/material'
 // Local Imports
-import './Login.css';
+import './PassCheck.css';
 import * as authActions from '../../store/auth/actions'
-import * as globalActions from '../../store/global/actions'
 import * as routeNames from '../../routeNames'
 
 // #######################################
 
-/** The login screen and the App entrypoint.
+/** The PassCheck screen and the App entrypoint.
  * @param props.auth: Redux access to auth store.
  * @param props.global: Redux access to global store.
- * @method `props.onLoginSubmit`: Redux function for auth store `login` action.
  * @method `props.handleUsernameInput`: Save username entry in state as typed.
  * @method `props.handlePasswordInput`: Save password entry in state as typed. */
-class Login extends React.PureComponent {
+class PassCheck extends React.PureComponent {
     
     /** Defines the component property types */
     static propTypes = {
         auth: PropTypes.object,
         global: PropTypes.object,
-        onLoginSubmit: PropTypes.func,
-        onClearError: PropTypes.func,
-        onTokenValid: PropTypes.func,
     }
     /** Defines the component state variables */
     state = {
-        login:{
-            username:"",
-            password:""
-        }
+        login_change:{
+            name:null,
+            new_password:"",
+        },
     }
 
     /** Set an element to be the intial focus of the screen
@@ -57,34 +52,31 @@ class Login extends React.PureComponent {
 
     /** Save the username to component state as typed 
      * @param event: The event that called this handler */
-    handleUsernameInput=(event) => {
+    handleUsername=() => {
         const newState = {...this.state};
-        newState.login = {...this.state.login};
-        newState.login.username = event.target.value;
+        newState.login_change.name = this.props.auth.name;
         this.setState(newState);
     }
     /** Save the password to component state as typed 
      * @param event: The event that called this handler */
     handlePasswordInput=(event) => {
         const newState = {...this.state};
-        newState.login = {...this.state.login};
-        newState.login.password = event.target.value;
+        newState.login_change = {...this.state.login_change};
+        newState.login_change.new_password = event.target.value;
         this.setState(newState);
     }
     /** Watch for the enter key, call login submission if caught
      * @param event: The event that called this handler*/
     handleEnterPress=(event)=>{
         if(event.key==='Enter'){
-            this.handleLoginSubmit();
+            this.handlePasswordChange()
         }
     }
-    /** Submit the username and passord information to login */
-    handleLoginSubmit=()=>{
-        // NOTE: This hides the errors prior to a new login request.
-        //       It is important so the user can see that it recieved
-        //       a new error and not the same as before.
-        this.props.onClearError();
-        this.props.onLoginSubmit(this.props.global.backend_instance, this.state.login);
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handlePasswordChange=() => {
+        this.props.onPassChange(this.props.global.backend_instance,this.state.login_change)
     }
 
     /** Defines the component visualization.
@@ -93,20 +85,16 @@ class Login extends React.PureComponent {
 
         // Check if the user has a stored token
         let authorized = null;
-        if (this.props.auth.token_valid){
-            // Check for password change and redirects the user
-            if(this.props.auth.change_password===false){
-                authorized = <Navigate to={routeNames.MAIN}/>
-            } else {
-                authorized = <Navigate to={routeNames.LOGIN_CHECK}/>
-            }
+        if (this.props.auth.token_valid & this.props.auth.change_password===false){
+            // Send him to the main page
+            authorized = <Navigate to={routeNames.MAIN}/>
         }
-
+        
         // Build the component to return
         const jsx_component = (
-            <div className='Login' key={'LoginScreen'}>
+            <div className='PassCheck' key={'PassScreen'}>
             {authorized}
-            <Grid container className='Login_grid' direction="column" spacing={'1rem'} > 
+            <Grid container className='PassCheck_grid' direction="column" spacing={'1rem'} > 
                 {/* Aimirim Logo */}
                 <Grid item>
                     <CardMedia component="img" image={'./Aimirim.svg'} alt="Company Logo"/>
@@ -120,49 +108,45 @@ class Login extends React.PureComponent {
                                 <Grid item> <Typography variant='h5'
                                     align='left'
                                     color='text.secondary'>
-                                        Login 
+                                        First Login
                                     </Typography>
                                 </Grid>
                                 {/* Card subtitle */}
                                 <Grid item marginTop='-1rem'> <Typography variant='subtitle1'
                                     align='left'
                                     color='text.secondary'>
-                                        Tocandira Configuration Tool
+                                        Please enter a new password
                                     </Typography>
-                                </Grid>
-                                {/* Username prompt */}
-                                <Grid item> <TextField variant="outlined"
-                                    label="Username"
-                                    type='text'
-                                    fullWidth={true}
-                                    value={this.state.login.username}
-                                    error={this.props.auth.validation.data_error}
-                                    onChange={this.handleUsernameInput}
-                                    onKeyPress={this.handleEnterPress}
-                                    inputRef={this.focusThisElement}>
-                                    </TextField>
                                 </Grid>
                                 {/* Password prompt */}
                                 <Grid item> <TextField variant="outlined"
-                                    label="Password"
+                                    label="New Password"
                                     type="password"
-                                    autoComplete="current-password"
                                     fullWidth={true}
-                                    value={this.state.login.password}
-                                    error={this.props.auth.validation.data_error}
+                                    value={this.state.login_change.new_password}
+                                    inputRef={this.focusThisElement}
                                     onChange={this.handlePasswordInput}
-                                    onKeyPress={this.handleEnterPress}
-                                    helperText={this.props.auth.validation.help_text}>
+                                    onKeyPress={this.handleEnterPress}>
                                     </TextField>
                                 </Grid>
-                                {/* Login Button */}
-                                <Grid item marginTop='1rem'> <Button variant="contained"
-                                    color='primary'
-                                    size='medium'
-                                    fullWidth={true}
-                                    onClick={this.handleLoginSubmit}>
-                                        LOGIN
-                                    </Button>
+                                {/* Skip and Change Buttons */}
+                                <Grid container padding='1rem 0 0 1rem' spacing='1rem' direction="row">
+                                    <Grid item xs={6}> <Button variant='text'
+                                        fullWidth={true}
+                                        color='primary'
+                                        size='medium'
+                                        onClick={this.props.onPassChangeSkip}>
+                                            SKIP
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={6} > <Button variant="contained"
+                                        fullWidth={true}
+                                        color='primary'
+                                        size='medium'
+                                        onClick={this.handlePasswordChange}>
+                                            CHANGE
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </CardContent>
@@ -179,15 +163,10 @@ class Login extends React.PureComponent {
         if (this.focalElement!==undefined){
             this.focalElement.focus()
         }
-    }
-
-    /** Component lifecycle DELETION begining */
-    componentWillUnmount() {
-        if (this.props.auth.token_valid){
-            this.props.onTokenValid(this.props.auth.token, this.props.auth.token_type)
+        if (this.state.login_change.name===null){
+            this.handleUsername()
         }
     }
-    
     
 }
 
@@ -199,10 +178,9 @@ const reduxStateToProps = (state) =>({
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
-    onLoginSubmit: (api_instance,usrdata)=>dispatch(authActions.login(api_instance,usrdata)),
-    onClearError: ()=>dispatch(authActions.clearInvalid()),
-    onTokenValid: (token,token_type)=>dispatch(globalActions.setAuthToken(token,token_type)),
+    onPassChange: (api_instance,new_pass)=>dispatch(authActions.changePassword(api_instance,new_pass)),
+    onPassChangeSkip: ()=>dispatch(authActions.bypassPasswordChange()),
 });
 
 // Make this component visible on import
-export default connect(reduxStateToProps,reduxDispatchToProps)(Login);
+export default connect(reduxStateToProps,reduxDispatchToProps)(PassCheck);

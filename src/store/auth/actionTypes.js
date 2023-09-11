@@ -8,6 +8,7 @@
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const BYPASS_PASS_CHANGE = 'BYPASS_PASS_CHANGE';
 export const INVALID_ENTRY = 'INVALID_ENTRY';
 export const VALIDATE = 'VALIDATE';
 export const CLEAR_INVALID = 'CLEAR_INVALID';

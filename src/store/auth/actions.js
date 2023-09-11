@@ -14,13 +14,13 @@ import { emitNetworkErrorAlert, emitAlert } from '../popups/actions';
 // #######################################
 
 /** Redux action to login the user */
-const saveLogin=(token,type) => ({type:actionTypes.LOGIN, token:token, token_type:type});
+const saveLogin=(usr) => ({type:actionTypes.LOGIN, usr:usr});
 
 /** The request done prior to `saveLogin` function */
 export const login=(api_instance,logindata) => (dispatch) => {
     api_instance.post('/login',qs.stringify(logindata),
         {headers: { 'content-type': 'application/x-www-form-urlencoded' }})
-    .then( (res) => dispatch(saveLogin(res.data.access_token, res.data.token_type)) )
+    .then( (res) => dispatch(saveLogin(res.data)) )
     .catch( (req) => {
             if(req.code===AxiosError.ERR_NETWORK){
                 dispatch(emitNetworkErrorAlert())
@@ -40,6 +40,9 @@ export const clearInvalid=() => ({type:actionTypes.CLEAR_INVALID});
 /** Redux action to logout the user */
 export const logout=() => ({type:actionTypes.LOGOUT});
 
+/** Redux action to set an error of invalid entries */
+export const bypassPasswordChange=() => ({type:actionTypes.BYPASS_PASS_CHANGE});
+
 /** Redux action to save the validation result */
 const saveValidCheck=() => ({type:actionTypes.VALIDATE});
 
@@ -52,6 +55,22 @@ export const validate=(api_instance) => (dispatch) => {
                 dispatch(emitNetworkErrorAlert())
             }else{
                 dispatch(emitAlert('User Authentication Expired','info'))
+            }
+            dispatch(logout());
+        }
+    )
+};
+
+/** Redux action to change the user's password */
+export const changePassword=(api_instance,new_pass) => (dispatch) => {
+    api_instance.put('/user/password',new_pass)
+    .then( () => {
+        dispatch(logout());
+        dispatch(emitAlert('Password Changed! Please login again','info'));
+    })
+    .catch( (req) => {
+            if(req.code===AxiosError.ERR_NETWORK){
+                dispatch(emitNetworkErrorAlert())
             }
             dispatch(logout());
         }

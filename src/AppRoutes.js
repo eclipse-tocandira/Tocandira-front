@@ -20,6 +20,7 @@ import ProtectedRoute from './component/ProtectedRoute/ProtectedRoute';
 import withRouter from './withRouter';
 import Login from './containers/Login/Login';
 import Main from './containers/Main/Main';
+import PassCheck from './containers/PassCheck/PassCheck';
 import * as routeNames from './routeNames'
 import * as popupsActions from './store/popups/actions'
 
@@ -71,6 +72,7 @@ class AppRoutes extends React.PureComponent {
                 <Route path={'/'} element={<Navigate to={routeNames.LOGIN}/>}/>
                 <Route path={routeNames.LOGIN} element={<Login/>}/>
                 <Route element={ <ProtectedRoute auth={this.props.auth.token_valid} redirect={'/'}/> }>
+                    <Route path={routeNames.LOGIN_CHECK} element={<PassCheck/>}/>
                     <Route path={routeNames.MAIN} element={<Main/>}/>
                 </Route>
             </Routes>
