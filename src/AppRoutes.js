@@ -74,6 +74,7 @@ class AppRoutes extends React.PureComponent {
                 <Route element={ <ProtectedRoute auth={this.props.auth.token_valid} redirect={'/'}/> }>
                     <Route path={routeNames.LOGIN_CHECK} element={<PassCheck/>}/>
                     <Route path={routeNames.MAIN} element={<Main/>}/>
+                    <Route path={routeNames.COLLECTOR} element={<Collector/>}/>
                 </Route>
             </Routes>
         );

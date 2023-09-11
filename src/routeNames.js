@@ -9,3 +9,4 @@
 export const LOGIN = '/login';
 export const LOGIN_CHECK = '/logincheck';
 export const MAIN = '/home';
+export const COLLECTOR = '/collector';
