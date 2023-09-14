@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Local Imports
 import FormPopup from  './FormPopup'
-import SimpleSelect from '../SimpleSelect/SimpleSelect';
 import * as popupsActions from '../../store/popups/actions';
 import * as collectorActions from '../../store/collector/actions';
 import { InputAdornment, Stack, TextField } from '@mui/material';
