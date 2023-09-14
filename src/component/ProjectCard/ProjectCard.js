@@ -10,9 +10,10 @@
 // Imports from modules;
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Stack, Typography } from '@mui/material';
+import { Card, Stack, Tooltip, Typography } from '@mui/material';
 // Local Imports
 import './ProjectCard.css';
+import SimpleIconMenu from '../SimpleIconMenu/SimpleIconMenu';
 import ProjectThumbnail from '../ProjectThumbnail/ProjectThumbnail';
 
 // #######################################
@@ -26,6 +27,7 @@ class ProjectCard extends React.PureComponent {
     static propTypes = {
         name:PropTypes.string,
         active:PropTypes.bool,
+        address:PropTypes.string,
         cardprops:PropTypes.object,
         menuoptions:PropTypes.array,
         goTo:PropTypes.func,
@@ -38,10 +40,13 @@ class ProjectCard extends React.PureComponent {
     * @returns JSX syntax element */
     render(){
         const jsx_component = (
-            <Card className='StatusCard' sx={{backgroundColor:'transparent', borderRadius:'0 0 0 0'}} elevation='0'>
-                <ProjectThumbnail active={this.props.active} goTo={this.props.goTo}/>
+            <Card className='StatusCard' sx={{backgroundColor:'transparent', borderRadius:'0 0 0 0'}} elevation={0}>
+                <ProjectThumbnail active={this.props.active} goTo={this.props.goTo} menuoptions={this.props.menuoptions}/>
                     <Stack direction='row' spacing='0.5rem' alignItems='center' justifyContent='space-between' paddingTop='0.5rem'>
                         <Typography variant='subtitle2'>{this.props.name}</Typography>
+                        <Tooltip title="IP Address" followCursor disableInteractive>
+                            <Typography variant='caption' color='text.secondary'>{this.props.address}</Typography>
+                        </Tooltip>
                     </Stack>
             </Card>
         );
