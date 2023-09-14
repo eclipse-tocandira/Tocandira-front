@@ -74,8 +74,8 @@ class Main extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.props.onGetDataSource(this.props.global.backend_instance,this.props.collector.selected.id);
-        this.props.onGetDataPoint(this.props.global.backend_instance,this.props.collector.selected.id);
+        this.props.onGetDataSource(this.props.global.backend_instance);
+        this.props.onGetDataPoint(this.props.global.backend_instance);
         this.props.onGetProtocols(this.props.global.backend_instance);
     }
 
@@ -93,8 +93,8 @@ const reduxDispatchToProps = (dispatch) =>({
     onCheckToken: (api)=>dispatch(authActions.validate(api)),
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
     onUpload: (status)=>dispatch(popupsActions.openUploadPopup(status)),
-    onGetDataPoint:(api,id)=>dispatch(datapointActions.getData(api,id)),
-    onGetDataSource:(api,id)=>dispatch(datasourceActions.getData(api,id)),
+    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
+    onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
     onGetProtocols:(api)=>dispatch(datasourceActions.getAvailProtocols(api)),
 });
 

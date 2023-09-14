@@ -20,6 +20,7 @@ import BaseProtocol from '../Protocols/BaseProtocol';
 import SimpleSelect from '../SimpleSelect/SimpleSelect';
 import CustomAlert from '../CustomAlert/CustomAlert';
 import * as datasourceActions from '../../store/datasource/actions'
+import * as datapointActions from '../../store/datapoint/actions'
 //import './DataSourcePopup.css';
 
 // #######################################
@@ -109,6 +110,7 @@ class DataSourcePopup extends React.PureComponent {
         } else {
             if (ip_verify && name_verify){
                 this.props.onEditSave(this.props.global.backend_instance, info2save);
+                this.props.onGetDataPoint(this.props.global.backend_instance);
                 this.handleCancelClick();
             }
         }
@@ -292,6 +294,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onNewSave:(api,info)=>dispatch(datasourceActions.pushData(api,info)),
     onEditSave:(api,info)=>dispatch(datasourceActions.putData(api,info)),
+    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
 });
 
 // Make this component visible on import

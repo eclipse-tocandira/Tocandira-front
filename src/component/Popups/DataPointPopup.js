@@ -119,6 +119,7 @@ class DataPointPopup extends React.PureComponent {
         } else {
             if (address_verify && name_verify) {
                 this.props.onEditSave(this.props.global.backend_instance, info2save);
+                this.props.onGetDataPoint(this.props.global.backend_instance);
                 this.handleCancelClick();
             }
         }
@@ -290,6 +291,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onNewSave:(api,info)=>dispatch(datapointActions.pushData(api,info)),
     onEditSave:(api,info)=>dispatch(datapointActions.putData(api,info)),
+    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
 });
 
 // Make this component visible on import
