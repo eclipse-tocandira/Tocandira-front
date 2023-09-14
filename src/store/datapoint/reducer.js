@@ -33,7 +33,8 @@ const reducer = (state=initialState, action) => {
                     name: row.name,
                     address: getDataPointAddress(row,row.access.name),
                     status: null, 
-                    response: null
+                    response: null,
+                    message: ""
                 })
             );
             newState.dp_verify = dp_formated_list;
@@ -43,6 +44,7 @@ const reducer = (state=initialState, action) => {
                 if (row.name === action.dpname){
                     row.status = action.dplist.status
                     row.response = action.dplist.response
+                    row.message = action.dplist.message
                     }
             })
             break
