@@ -16,6 +16,9 @@ export const openDataSourcePopup=(status) => ({type:actionTypes.OPEN_DATASOURCE,
 export const openDataPointPopup=(status) => ({type:actionTypes.OPEN_DATAPOINT, open:status});
 
 /** Redux action to  */
+export const openCollectorPopup=(status) => ({type:actionTypes.OPEN_COLLECTOR, open:status});
+
+/** Redux action to  */
 export const openVerifyPopup=(status) => ({type:actionTypes.OPEN_VERIFY, open:status});
 
 /** Redux action to  */

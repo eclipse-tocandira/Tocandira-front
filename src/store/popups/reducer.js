@@ -13,6 +13,7 @@ import * as actionTypes from './actionTypes'
 const initialState = {
     open_ds:false,
     open_dp:false,
+    open_col:false,
     open_verify:false,
     open_upload:false,
     notifications: [],
@@ -29,6 +30,9 @@ const reducer = (state=initialState, action) => {
             break
         case actionTypes.OPEN_DATAPOINT:
             newState.open_dp = action.open;
+            break
+        case actionTypes.OPEN_COLLECTOR:
+            newState.open_col = action.open;
             break
         case actionTypes.OPEN_VERIFY:
             newState.open_verify = action.open;
