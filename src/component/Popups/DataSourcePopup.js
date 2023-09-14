@@ -88,6 +88,7 @@ class DataSourcePopup extends React.PureComponent {
     handleSaveClick=() => {
         const prot_name = this.state.protocol_selected;
         const info2save = this.state.info_ds[prot_name];
+        info2save.collector_id = this.props.collector.selected.id;
 
         const ip_verify = BaseProtocol.isValidIp(info2save.plc_ip);
         const name_verify = info2save.name!=="";
@@ -283,7 +284,8 @@ class DataSourcePopup extends React.PureComponent {
 /** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
     global: state.global,
-    datasource: state.datasource
+    datasource: state.datasource,
+    collector: state.collector
 });
 
 /** Map the Redux actions dispatch to some component props */

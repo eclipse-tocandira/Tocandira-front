@@ -18,8 +18,7 @@ import { Stack } from '@mui/material';
 import * as authActions from '../../store/auth/actions';
 import * as datapointActions from '../../store/datapoint/actions';
 import * as datasourceActions from '../../store/datasource/actions';
-import * as collectorActions from '../../store/collector/actions';
-import CollectorCard from '../../component/CollectorCard/CollectorCard';
+import * as popupsActions from '../../store/popups/actions';
 import DataSourceCard from '../../component/DataSourceCard/DataSourceCard';
 import DataPointCard from '../../component/DataPointCard/DataPointCard';
 import VerifyPopup from '../../component/Popups/VerifyPopup';
@@ -35,18 +34,12 @@ class Main extends React.PureComponent {
 
     /** Defines the component property types */
     static propTypes = {
-        auth: PropTypes.object,
         global: PropTypes.object,
         popups: PropTypes.object,
-        onCheckToken: PropTypes.func,
-        onGetDataPoint: PropTypes.func,
-        onGetDataSource: PropTypes.func,
-        onGetProtocols: PropTypes.func,
-        onGetCollectorProps: PropTypes.func,
+        onCheckToken: PropTypes.func
     }
     /** Defines the component state variables */
     state = {
-        name:"TT09",
     }
     /** Description.
     * @param ``: 
@@ -69,13 +62,10 @@ class Main extends React.PureComponent {
             <div onClick={this.props.onCheckToken.bind(this,this.props.global.backend_instance)}>
                 <VerifyPopup open={this.props.popups.open_verify} onClose={this.handlePopUpLeave}/>
                 <UploadPopup open={this.props.popups.open_upload} onClose={this.handlePopUpLeave}/>
-                <Frame actions={true} back={true} title={"Collector - "+this.state.name}>
+                <Frame actions={true} back={true} title={this.props.collector.selected.name}>
                     <Stack spacing='3rem' direction='column'>
-                        <Stack direction='row' spacing='3rem'>
-                            <CollectorCard/>
-                            <DataSourceCard/>
-                        </Stack>
-                    <DataPointCard/>
+                        <DataSourceCard/>
+                        <DataPointCard/>
                     </Stack>
                 </Frame>
             </div>
@@ -84,10 +74,9 @@ class Main extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.props.onGetDataSource(this.props.global.backend_instance)
-        this.props.onGetDataPoint(this.props.global.backend_instance)
-        this.props.onGetProtocols(this.props.global.backend_instance)
-        this.props.onGetCollectorProps(this.props.global.backend_instance)
+        this.props.onGetDataSource(this.props.global.backend_instance,this.props.collector.selected.id);
+        this.props.onGetDataPoint(this.props.global.backend_instance,this.props.collector.selected.id);
+        this.props.onGetProtocols(this.props.global.backend_instance);
     }
 
 }
@@ -96,15 +85,17 @@ class Main extends React.PureComponent {
 const reduxStateToProps = (state) =>({
     global: state.global,
     popups: state.popups,
+    collector: state.collector,
 });
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
-    onCheckToken: (api_instance)=>dispatch(authActions.validate(api_instance)),
-    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
-    onGetDataSource:(api)=>dispatch(datasourceActions.getData(api)),
+    onCheckToken: (api)=>dispatch(authActions.validate(api)),
+    onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
+    onUpload: (status)=>dispatch(popupsActions.openUploadPopup(status)),
+    onGetDataPoint:(api,id)=>dispatch(datapointActions.getData(api,id)),
+    onGetDataSource:(api,id)=>dispatch(datasourceActions.getData(api,id)),
     onGetProtocols:(api)=>dispatch(datasourceActions.getAvailProtocols(api)),
-    onGetCollectorProps:(api)=>{dispatch(collectorActions.getParams(api))},
 });
 
 // Make this component visible on import

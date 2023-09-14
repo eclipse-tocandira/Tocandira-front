@@ -128,6 +128,19 @@ class DataPointCard extends React.PureComponent {
         return(content);
     }
 
+    /** Description.
+    * @param ``: 
+    * @returns */
+    filterData=(row) => {
+        const ds_name = row.datasource_name
+        const ds = this.props.datasource.ds_content.filter(row=>row.name===ds_name)[0]
+        if (ds) {
+            return(row.active && ds.collector_id===this.props.collector.selected.id)
+        } else {
+            return(false)
+        }
+    }
+
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
@@ -155,7 +168,7 @@ class DataPointCard extends React.PureComponent {
             <DataTable key='0'
                 headers={["Name","Description","Address","Data Souce"]}
                 ncols_to_actions={2}
-                content_rows={this.props.datapoint.dp_content.filter(row=>row.active)}
+                content_rows={this.props.datapoint.dp_content.filter(this.filterData)}
                 selected_row={this.state.selected_row}
                 buildContentRow={this.buildContentRow}
                 onRowClick={this.handleRowClick}
@@ -179,7 +192,9 @@ class DataPointCard extends React.PureComponent {
 const reduxStateToProps = (state) =>({
     global: state.global,
     popups: state.popups,
-    datapoint: state.datapoint
+    datapoint: state.datapoint,
+    datasource: state.datasource,
+    collector: state.collector,
 });
 
 /** Map the Redux actions dispatch to some component props */

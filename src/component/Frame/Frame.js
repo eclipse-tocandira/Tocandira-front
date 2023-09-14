@@ -23,6 +23,7 @@ import * as authActions from '../../store/auth/actions';
 import * as globalActions from '../../store/global/actions';
 import * as popupsActions from '../../store/popups/actions';
 import * as datapointActions from '../../store/datapoint/actions';
+import * as collectorActions from '../../store/collector/actions';
 import * as routeNames from '../../routeNames';
 // #######################################
 
@@ -55,34 +56,55 @@ class Frame extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleBack=() => {
+        this.props.onSelectCollector(null);
         const newState = {...this.state};
-        newState.redirect = <Navigate to={routeNames.MAIN}/>
+        newState.redirect = <Navigate to={routeNames.MAIN}/>;
         this.setState(newState);
     }
 
     /** Description.
     * @param ``: */
     handleLogoutSubmission=() => {
-        this.props.onTokenInvalid()
-        this.props.onLogoutSubmit()
+        this.props.onTokenInvalid();
+        this.props.onLogoutSubmit();
     }
     /** Description.
     * @param ``: 
     * @returns */
     handleClickUpload=() => {
-        this.props.onUpload(true)
+        this.props.onUpload(true);
     }
     /** Description.
     * @param ``: */
     handleClickVerify=() => {
-        this.props.onUpdateDataPending()
-        this.props.onVerify(true)
+        this.props.onUpdateDataPending(this.props.datapoint.dp_content.filter(this.filterDataPending));
+        this.props.onVerify(true);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    filterData=(row) => {
+        const ds_name = row.datasource_name;
+        const ds = this.props.datasource.ds_content.filter(row=>row.name===ds_name)[0];
+        if (ds) {
+            return(row.active && ds.collector_id===this.props.collector.selected.id)
+        } else {
+            return(false)
+        }
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    filterDataPending=(row) => {
+        return(row.pending && this.filterData(row))
     }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
-        const dp_list = this.props.datapoint.dp_content.filter(row=>row.active);
+        const dp_list = this.props.datapoint.dp_content.filter(this.filterData);
         const dp_pending_num = dp_list.filter(row=>row.pending).length;
         const dp_confirmed_num = dp_list.length-dp_pending_num;
         let actions = [];
@@ -97,13 +119,13 @@ class Frame extends React.PureComponent {
         }
 
         if (this.props.actions) {
-            actions = [<Badge color='warning' badgeContent={dp_pending_num}>
+            actions = [<Badge color='warning' badgeContent={dp_pending_num} key={1}>
                 <Button variant='contained' fullWidth
                     size='large' color='success' onClick={this.handleClickVerify}>
                     VERIFY
                 </Button>
                 </Badge>,
-                <Button variant='contained' fullWidth disabled={dp_confirmed_num===0}
+                <Button variant='contained' fullWidth disabled={dp_confirmed_num===0} key={2}
                     size='large' color='primary' onClick={this.handleClickUpload}>
                     UPLOAD
                 </Button>
@@ -145,6 +167,8 @@ class Frame extends React.PureComponent {
 /** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
     datapoint: state.datapoint,
+    datasource: state.datasource,
+    collector: state.collector,
 });
 
 /** Map the Redux actions dispatch to some component props */
@@ -153,7 +177,8 @@ const reduxDispatchToProps = (dispatch) =>({
     onTokenInvalid: ()=>dispatch(globalActions.clearAuthToken()),
     onVerify: (status)=>dispatch(popupsActions.openVerifyPopup(status)),
     onUpload: (status)=>dispatch(popupsActions.openUploadPopup(status)),
-    onUpdateDataPending: ()=>dispatch(datapointActions.updateDataPending()),
+    onUpdateDataPending: (dp_list)=>dispatch(datapointActions.updateDataPending(dp_list)),
+    onSelectCollector: (id)=>dispatch(collectorActions.selectCollector(id)),
 });
 
 // Make this component visible on import

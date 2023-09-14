@@ -19,7 +19,6 @@ const initialState = {
 
 /** Auth reducer definition */
 const reducer = (state=initialState, action) => {
-    let dp_pending;
     let dp_formated_list;
     // Duplicate the state to change the Pointer
     const newState = {...state};
@@ -29,8 +28,7 @@ const reducer = (state=initialState, action) => {
             newState.dp_content = [...action.dplist];
             break
         case actionTypes.UPDATE_DPDATA_PENDING:
-            dp_pending = state.dp_content.filter(row=>row.pending && row.active)
-            dp_formated_list = dp_pending.map(
+            dp_formated_list = action.dp_list.map(
                 (row)=>({
                     name: row.name,
                     address: getDataPointAddress(row,row.access.name),

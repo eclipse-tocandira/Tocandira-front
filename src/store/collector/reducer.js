@@ -11,14 +11,19 @@ import * as actionTypes from './actionTypes'
 
 /** Initial state of the auth redux */
 const initialState = {
-    ip:'127.0.0.1',
-    port:4800,
-    interval:12,
+    default: {},
+    selected: {},
     validation:{
         data_error:false,
         help_text:""
-    }
+    },
+    list:[]
 };
+
+/** Description.
+* @param ``: 
+* @returns */
+const selectCollector=(id,list) => list.filter((el)=>el.id===id)[0]
 
 /** Auth reducer definition */
 const reducer = (state=initialState, action) => {
@@ -26,26 +31,27 @@ const reducer = (state=initialState, action) => {
     const newState = {...state};
     // Check and select correct action
     switch ( action.type ) {
-        case actionTypes.SET_PARAMS:
-            newState.ip = action.ip;
-            newState.port = action.port;
-            newState.interval = action.interval;
-            newState.validation = {data_error: false, help_text:""}
-            break
         case actionTypes.CLEAR_INVALID:
             newState.validation = {data_error: false, help_text:""}
             break
         case actionTypes.INVALID_ENTRY:
             newState.validation = {data_error: true, help_text:action.msg}
             break
-        case actionTypes.SET_IP_PARAM:
-            newState.ip = action.ip;
+        case actionTypes.SAVE_LIST:
+            newState.list = [];
+            for (const col of action.col_list) {
+                if (col.hasOwnProperty('status')){
+                    newState.list.push({...col});
+                } else {
+                    newState.list.push({...col,status:{}});
+                }
+            }
             break
-        case actionTypes.SET_PORT_PARAM:
-            newState.port = action.port;
+        case actionTypes.SELECT_ID:
+            newState.selected = {...selectCollector(action.id,state.list)};
             break
-        case actionTypes.SET_INTERVAL_PARAM:
-            newState.interval = action.interval;
+        case actionTypes.SAVE_DEFAULT_COLLECTOR:
+            newState.default = {...action.defcol};
             break
         default:
             // console.debug('[reducers/auth]',action)

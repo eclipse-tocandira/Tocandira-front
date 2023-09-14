@@ -147,7 +147,8 @@ class VerifyPopup extends React.PureComponent {
 const reduxStateToProps = (state) =>({
     global: state.global,
     datapoint: state.datapoint,
-    datasource: state.datasource
+    datasource: state.datasource,
+    collector: state.collector,
 });
 
 /** Map the Redux actions dispatch to some component props */
