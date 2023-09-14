@@ -20,6 +20,7 @@ import ProtectedRoute from './component/ProtectedRoute/ProtectedRoute';
 import withRouter from './withRouter';
 import Login from './containers/Login/Login';
 import Main from './containers/Main/Main';
+import Collector from './containers/Collector/Collector';
 import PassCheck from './containers/PassCheck/PassCheck';
 import * as routeNames from './routeNames'
 import * as popupsActions from './store/popups/actions'
