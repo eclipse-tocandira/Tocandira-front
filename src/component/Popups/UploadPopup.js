@@ -61,7 +61,7 @@ class UploadPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleOkClick=() => {
-        this.props.onUpload(this.props.global.backend_instance);
+        this.props.onUpload(this.props.global.backend_instance,this.props.collector.selected.id);
         this.handleCancelClick();
     }
 
@@ -114,11 +114,12 @@ class UploadPopup extends React.PureComponent {
 const reduxStateToProps = (state) =>({
     global: state.global,
     datapoint: state.datapoint,
+    collector: state.collector,
 });
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
-    onUpload: (api)=>dispatch(datapointActions.exportData(api))
+    onUpload: (api,id)=>dispatch(datapointActions.exportData(api,id))
 });
 
 // Make this component visible on import

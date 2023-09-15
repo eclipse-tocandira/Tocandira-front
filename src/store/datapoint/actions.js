@@ -205,8 +205,8 @@ export const manageActiveData=(api_instance, dp_name, status) => (dispatch) => {
 };
 
 /** Request to the backend */
-export const exportData=(api_instance) => (dispatch) => {
-    api_instance.post('/export')
+export const exportData=(api_instance,id) => (dispatch) => {
+    api_instance.post('/export/collector/'+id)
     .then( () => {
         dispatch(emitAlert('DataPoints Uploaded!','success'));
     } )
