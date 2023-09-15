@@ -23,7 +23,7 @@ const saveData=(dplist) => ({type:actionTypes.GET_DPDATA, dplist:dplist});
 * name and address values
 * @returns `actionTypes.UPDATE_DPDATA_PENDING`: Update the dp_verify variable with
 values of names and addresses of dependent data points */
-export const updateDataPending=() => ({type:actionTypes.UPDATE_DPDATA_PENDING});
+export const updateDataPending=(dp_list) => ({type:actionTypes.UPDATE_DPDATA_PENDING,dp_list:dp_list});
 
 /** Redux action to update dp_verify status and response values
 * @param `dplist`: List with status, message and response values
@@ -205,8 +205,8 @@ export const manageActiveData=(api_instance, dp_name, status) => (dispatch) => {
 };
 
 /** Request to the backend */
-export const exportData=(api_instance) => (dispatch) => {
-    api_instance.post('/export')
+export const exportData=(api_instance,id) => (dispatch) => {
+    api_instance.post('/export/collector/'+id)
     .then( () => {
         dispatch(emitAlert('DataPoints Uploaded!','success'));
     } )

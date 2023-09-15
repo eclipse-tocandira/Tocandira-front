@@ -11,7 +11,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Stack, TableRow } from '@mui/material';
+import { Button, Stack, TableRow, Tooltip } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -82,14 +82,13 @@ class VerifyPopup extends React.PureComponent {
             icon = <CheckCircleIcon color='success' />
             response = row.response
         } else {
-            icon = <CancelIcon color='error' />
+            icon = <Tooltip title={row.message} disableInteractive placement="right">
+                <CancelIcon color='error' />
+            </Tooltip>
         }
 
         const content = (
-        <TableRow
-            tabIndex={-1}
-            key={index}
-        >
+        <TableRow tabIndex={-1} key={index} >
             {[row.name, row.address, icon, response].map(
                 (text, index) => <TextCell text={text} key={index}/>
             )}
@@ -147,7 +146,8 @@ class VerifyPopup extends React.PureComponent {
 const reduxStateToProps = (state) =>({
     global: state.global,
     datapoint: state.datapoint,
-    datasource: state.datasource
+    datasource: state.datasource,
+    collector: state.collector,
 });
 
 /** Map the Redux actions dispatch to some component props */

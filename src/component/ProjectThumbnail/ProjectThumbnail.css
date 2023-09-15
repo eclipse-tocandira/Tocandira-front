@@ -1,0 +1,19 @@
+.ThumbnailCard {
+    position: relative;
+    display: flex;
+    /* height: 5rem; */
+    width: 15rem;
+    background: #fff;
+}
+.Thumbnail {
+    display: flex;
+    /* background: #eee; */
+}
+
+.StatusBar {
+    position: absolute;
+    width: 0.5rem;
+    height: 100%;
+    top: 0;
+    left: 0;
+}

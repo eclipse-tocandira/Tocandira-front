@@ -119,6 +119,7 @@ class DataPointPopup extends React.PureComponent {
         } else {
             if (address_verify && name_verify) {
                 this.props.onEditSave(this.props.global.backend_instance, info2save);
+                this.props.onGetDataPoint(this.props.global.backend_instance);
                 this.handleCancelClick();
             }
         }
@@ -220,12 +221,18 @@ class DataPointPopup extends React.PureComponent {
         }
         return({name:ele.name, fields:dp_form})
     }
+    /** Description.
+    * @param ``: 
+    * @returns */
+    filterData=(row) => {
+        return(row.active && row.collector_id===this.props.collector.selected.id)
+    }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */ 
     render(){
         const content_array = ImplementedProtocols.map(this.buildSpecificProtocolFields);
-        const ds_select_options = this.props.datasource.ds_content.map(element => element.name);
+        const ds_select_options = this.props.datasource.ds_content.filter(this.filterData).map(element => element.name);
         const specific_elements = content_array.map(this.buildContents);
         let valid_data = null;
         let select_component = null;
@@ -277,12 +284,14 @@ const reduxStateToProps = (state) =>({
     global: state.global,
     datasource: state.datasource,
     datapoint: state.datapoint,
+    collector: state.collector,
 });
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onNewSave:(api,info)=>dispatch(datapointActions.pushData(api,info)),
     onEditSave:(api,info)=>dispatch(datapointActions.putData(api,info)),
+    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
 });
 
 // Make this component visible on import

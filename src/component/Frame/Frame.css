@@ -1,0 +1,13 @@
+.Frame {
+    display: flex;
+    flex-direction: row;
+    min-height : 100vh;
+    margin: -8px ;
+    justify-content: space-between;
+    background-color: #323F6F;
+}
+
+.MainCard {
+    flex: 1 1 auto;
+    padding: 2rem 0 0 2rem;
+}

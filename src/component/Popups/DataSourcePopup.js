@@ -20,6 +20,7 @@ import BaseProtocol from '../Protocols/BaseProtocol';
 import SimpleSelect from '../SimpleSelect/SimpleSelect';
 import CustomAlert from '../CustomAlert/CustomAlert';
 import * as datasourceActions from '../../store/datasource/actions'
+import * as datapointActions from '../../store/datapoint/actions'
 //import './DataSourcePopup.css';
 
 // #######################################
@@ -88,6 +89,7 @@ class DataSourcePopup extends React.PureComponent {
     handleSaveClick=() => {
         const prot_name = this.state.protocol_selected;
         const info2save = this.state.info_ds[prot_name];
+        info2save.collector_id = this.props.collector.selected.id;
 
         const ip_verify = BaseProtocol.isValidIp(info2save.plc_ip);
         const name_verify = info2save.name!=="";
@@ -108,6 +110,7 @@ class DataSourcePopup extends React.PureComponent {
         } else {
             if (ip_verify && name_verify){
                 this.props.onEditSave(this.props.global.backend_instance, info2save);
+                this.props.onGetDataPoint(this.props.global.backend_instance);
                 this.handleCancelClick();
             }
         }
@@ -283,13 +286,15 @@ class DataSourcePopup extends React.PureComponent {
 /** Map the Redux state to some component props */
 const reduxStateToProps = (state) =>({
     global: state.global,
-    datasource: state.datasource
+    datasource: state.datasource,
+    collector: state.collector
 });
 
 /** Map the Redux actions dispatch to some component props */
 const reduxDispatchToProps = (dispatch) =>({
     onNewSave:(api,info)=>dispatch(datasourceActions.pushData(api,info)),
     onEditSave:(api,info)=>dispatch(datasourceActions.putData(api,info)),
+    onGetDataPoint:(api)=>dispatch(datapointActions.getData(api)),
 });
 
 // Make this component visible on import

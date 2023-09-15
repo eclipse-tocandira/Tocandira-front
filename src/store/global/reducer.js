@@ -22,7 +22,6 @@ const initialState = {
 
 /** Global reducer definition */
 const reducer = (state=initialState, action) => {
-    let apiURL;
     // Duplicate the state to change the Pointer
     const newState = {...state};
     // Check and select correct action

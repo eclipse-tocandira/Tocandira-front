@@ -100,6 +100,10 @@ class Modbus extends BaseProtocol {
     static dataPointFields=(events,values,defaults) => {
         const comp_list = 
         <Stack direction="column" spacing='1rem'>
+            <TextField variant="outlined" label="Protocol" type='text' disabled
+                size="small" fullWidth value={values.access.name}
+                sx={{marginBottom:'1rem'}}>
+            </TextField>
             <TextField variant="outlined" label="Name" type='text' required
                 fullWidth
                 InputLabelProps={{ shrink: true }}
