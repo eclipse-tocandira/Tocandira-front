@@ -12,11 +12,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Collapse, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 // Local Imports
 import FormPopup from  './FormPopup'
 import * as popupsActions from '../../store/popups/actions';
 import * as collectorActions from '../../store/collector/actions';
-import { InputAdornment, Stack, TextField } from '@mui/material';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import CustomAlert from '../CustomAlert/CustomAlert';
 //import './CollectorPopup.css';
 
 // #######################################
@@ -32,6 +34,7 @@ class CollectorPopup extends React.PureComponent {
     };
     /** Defines the component state variables */
     state = {
+        pass_error:false
     };
     // /** Context Definition*/
     // static contextType ;
@@ -40,12 +43,23 @@ class CollectorPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleSaveClick=() => {
-        if (this.props.collector.selected.id){
-            this.props.onUpdate(this.props.global.backend_instance,{...this.state})
-        } else {
-            this.props.onSave(this.props.global.backend_instance,{...this.props.collector.default, ...this.state})
+        let pass_error=false;
+        if(this.state.ssh_pass==='' && !this.state.pass_lock){
+            pass_error=true;
+        }else{
+            if (this.props.collector.selected.id){
+                this.props.onUpdate(this.props.global.backend_instance,{...this.state})
+            } else {
+                this.props.onSave(this.props.global.backend_instance,{...this.props.collector.default, ...this.state})
+            }
         }
-        this.handleCancelClick()
+        const newState = {...this.state};
+        newState.pass_error = pass_error;
+        this.setState(newState);
+        
+        if(!pass_error){
+            this.handleCancelClick()
+        }
     }
 
     /** Description.
@@ -61,6 +75,10 @@ class CollectorPopup extends React.PureComponent {
     * @returns */
     getValuesToEdit=() => {
         const newState = {...this.props.collector.selected};
+        newState.pass_lock=true;
+        newState.pass_error=false;
+        newState.ssh_pass='';
+        newState.ssh_pass_placeholder='********';
         this.setState(newState);
     }
     /** Description.
@@ -68,8 +86,12 @@ class CollectorPopup extends React.PureComponent {
     * @returns */
     getValuesDefault=() => {
         const newState = {
+            pass_lock: false,
+            pass_error:false,
+            ssh_pass:'',
             ssh_port: this.props.collector.default.ssh_port,
             opcua_port: this.props.collector.default.opcua_port,
+            prj_path: this.props.collector.default.prj_path,
             health_port: this.props.collector.default.health_port,
             update_period: this.props.collector.default.update_period,
         };
@@ -119,6 +141,24 @@ class CollectorPopup extends React.PureComponent {
     /** Description.
     * @param ``: 
     * @returns */
+    handleResetPassword=(event) => {
+        const newState = {...this.state};
+        newState.pass_lock = false;
+        newState.ssh_pass = '';
+        newState.ssh_pass_placeholder = '';
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handlePrjPathChange=(event) => {
+        const newState = {...this.state};
+        newState.prj_path = event.target.value;
+        this.setState(newState);
+    }
+    /** Description.
+    * @param ``: 
+    * @returns */
     handleOpcuaPortChange=(event) => {
         const newState = {...this.state};
         newState.opcua_port = event.target.value;
@@ -141,11 +181,22 @@ class CollectorPopup extends React.PureComponent {
         this.setState(newState);
     }
 
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleClearPassError=() => {
+        const newState = {...this.state};
+        newState.pass_error = false;
+        this.setState(newState);
+    }
 
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+        const alert = <CustomAlert type='error' elevate
+            reset={this.handleClearPassError} msg={"Invalid Password. It can not be Blank."}/>
+        
         let new_col=true;
         if (this.props.collector.selected.id) { new_col=false; }
         const jsx_component = (
@@ -184,11 +235,18 @@ class CollectorPopup extends React.PureComponent {
                             onChange={this.handleSSHUserChange}>
                         </TextField>
                         <TextField variant="outlined" label="SSH Password" type='password' required
-                            fullWidth InputLabelProps={{ shrink: true }}
+                            fullWidth InputLabelProps={{ shrink: true }} disabled={this.state.pass_lock}
                             value={this.state.ssh_pass}
+                            placeholder={this.state.ssh_pass_placeholder}
+                            InputProps={{ endAdornment: <IconButton onClick={this.handleResetPassword} color='primary' sx={{marginRight:'-0.8rem'}}><LockResetIcon fontSize='large'/></IconButton>}}
                             onChange={this.handleSSHPasswordChange}>
                         </TextField>
                     </Stack>
+                    <TextField variant="outlined" label="Default Gateway Path on Collector" type='text' required
+                        fullWidth InputLabelProps={{ shrink: true }}
+                        value={this.state.prj_path}
+                        placeholder={this.props.collector.default.prj_path}
+                        onChange={this.handlePrjPathChange}/>
                     <Stack direction="row" spacing="1rem">
                         <TextField variant="outlined" label="SSH Port" type='tel' required
                             InputLabelProps={{ shrink: true }}
@@ -209,6 +267,7 @@ class CollectorPopup extends React.PureComponent {
                             onChange={this.handleHealthPortChange}>
                         </TextField>
                     </Stack>
+                    <Collapse in={this.state.pass_error}>{alert}</Collapse>
                 </Stack>
             </FormPopup>
         );
