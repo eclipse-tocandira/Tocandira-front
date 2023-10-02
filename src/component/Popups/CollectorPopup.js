@@ -12,7 +12,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Collapse, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
+import { Button, Collapse, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 // Local Imports
 import FormPopup from  './FormPopup'
 import * as popupsActions from '../../store/popups/actions';
@@ -35,7 +35,7 @@ class CollectorPopup extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         pass_error:false,
-        ssh_usr:'',
+        ssh_user:'',
         ssh_pass:'',
     }
     // /** Context Definition*/
@@ -236,13 +236,14 @@ class CollectorPopup extends React.PureComponent {
                             fullWidth InputLabelProps={{ shrink: true }} disabled={this.state.pass_lock}
                             value={this.state.ssh_pass}
                             placeholder={this.state.ssh_pass_placeholder}
-                            InputProps={{ endAdornment: <IconButton onClick={this.handleResetPassword} color='primary' sx={{marginRight:'-0.8rem'}}><LockResetIcon fontSize='large'/></IconButton>}}
+                            InputProps={(new_col)?null:{ endAdornment: <IconButton onClick={this.handleResetPassword} color='primary' sx={{marginRight:'-0.8rem'}}><LockResetIcon fontSize='large'/></IconButton>}}
                             onChange={this.handleSSHPasswordChange}>
                         </TextField>
                     </Stack>
                     <TextField variant="outlined" label="Default Gateway Path on Collector" type='text' required
                         fullWidth InputLabelProps={{ shrink: true }}
                         value={this.state.prj_path}
+                        InputProps={{ startAdornment: <InputAdornment position="start"><Button style={{textTransform: 'none', padding:'0.2rem'}} disabled variant='outlined'>ssh://</Button></InputAdornment>}}
                         placeholder={this.props.collector.default.prj_path}
                         onChange={this.handlePrjPathChange}/>
                     <Stack direction="row" spacing="1rem">
