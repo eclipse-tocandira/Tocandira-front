@@ -34,8 +34,10 @@ class CollectorPopup extends React.PureComponent {
     };
     /** Defines the component state variables */
     state = {
-        pass_error:false
-    };
+        pass_error:false,
+        ssh_usr:'',
+        ssh_pass:'',
+    }
     // /** Context Definition*/
     // static contextType ;
 
@@ -76,8 +78,6 @@ class CollectorPopup extends React.PureComponent {
     getValuesToEdit=() => {
         const newState = {...this.props.collector.selected};
         newState.pass_lock=true;
-        newState.pass_error=false;
-        newState.ssh_pass='';
         newState.ssh_pass_placeholder='********';
         this.setState(newState);
     }
@@ -85,10 +85,8 @@ class CollectorPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     getValuesDefault=() => {
-        const newState = {
+        const newState = {...this.state,
             pass_lock: false,
-            pass_error:false,
-            ssh_pass:'',
             ssh_port: this.props.collector.default.ssh_port,
             opcua_port: this.props.collector.default.opcua_port,
             prj_path: this.props.collector.default.prj_path,
