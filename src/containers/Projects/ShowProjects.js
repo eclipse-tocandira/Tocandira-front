@@ -19,7 +19,6 @@ import ProjectCard from '../../component/ProjectCard/ProjectCard';
 import * as routeNames from '../../routeNames';
 import * as collectorActions from '../../store/collector/actions'
 import * as popupsActions from '../../store/popups/actions'
-import CollectorPopup from '../../component/Popups/CollectorPopup';
 
 // #######################################
 

@@ -13,7 +13,6 @@ import PropTypes from 'prop-types';
 import { Card, Stack, Tooltip, Typography } from '@mui/material';
 // Local Imports
 import './ProjectCard.css';
-import SimpleIconMenu from '../SimpleIconMenu/SimpleIconMenu';
 import ProjectThumbnail from '../ProjectThumbnail/ProjectThumbnail';
 
 // #######################################
