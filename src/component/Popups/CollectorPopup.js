@@ -240,7 +240,7 @@ class CollectorPopup extends React.PureComponent {
                             onChange={this.handleSSHPasswordChange}>
                         </TextField>
                     </Stack>
-                    <TextField variant="outlined" label="Default Gateway Path on Collector" type='text' required
+                    <TextField variant="outlined" label="Gateway Path on Collector" type='text' required
                         fullWidth InputLabelProps={{ shrink: true }}
                         value={this.state.prj_path}
                         InputProps={{ startAdornment: <InputAdornment position="start"><Button style={{textTransform: 'none', padding:'0.2rem'}} disabled variant='outlined'>ssh://</Button></InputAdornment>}}
