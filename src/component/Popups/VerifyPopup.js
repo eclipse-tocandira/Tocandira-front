@@ -114,9 +114,8 @@ class VerifyPopup extends React.PureComponent {
 
                     <DataTable
                         headers={header}
-                        with_checkbox={false}
                         content_rows={this.props.datapoint.dp_verify}
-                        selected_row={this.state.selected_row}
+                        with_checkbox={false}
                         with_action_items={false}
                         with_pagination={false}
                     />
