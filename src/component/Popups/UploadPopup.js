@@ -10,14 +10,12 @@
 
 // Imports from modules;
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import DataTable from '../DataTable/DataTable';
+import { connect } from 'react-redux';
 import { Dialog, DialogContentText, DialogTitle, DialogActions,
-    Button, DialogContent, TableRow } from '@mui/material';
-
+    Button, DialogContent } from '@mui/material';
 // Local Imports
-import TextCell from '../DataTable/TextCell';
+import DataTable from '../DataTable/DataTable';
 import * as datapointActions from '../../store/datapoint/actions';
 import { getDataPointAddress } from '../Protocols/Protocols';
 // #######################################
@@ -40,22 +38,6 @@ class UploadPopup extends React.PureComponent {
     };
     // /** Context Definition*/
     // static contextType ;
-    
-
-    /** Card line values VerifyPopup.
-    * @param `row`: Date point for verification
-    * @returns `content`: Line containing the name, address, 
-    * an icon representing the status and response of a Data Source */
-    buildContentRow=(row, index) => {
-        const content = (
-        <TableRow tabIndex={-1} key={index}>
-            {[row.name, row.datasource_name, getDataPointAddress(row,row.access.name)].map(
-                (text, index) => <TextCell text={text} key={index}/>
-            )}
-        </TableRow>
-        )
-        return(content);
-    };
 
     /** Description.
     * @param ``: 
@@ -63,6 +45,19 @@ class UploadPopup extends React.PureComponent {
     handleOkClick=() => {
         this.props.onUpload(this.props.global.backend_instance,this.props.collector.selected.id);
         this.handleCancelClick();
+    }
+
+    /** Description.
+        * @param ``:
+        * @returns */
+    filterData=(row) => {
+        const ds_name = row.datasource_name
+        const ds = this.props.datasource.ds_content.filter(row=>row.name===ds_name)[0]
+        if (ds) {
+            return(row.active && !row.pending && ds.collector_id===this.props.collector.selected.id)
+        } else {
+            return(false)
+        }
     }
 
     /** Description.
@@ -75,7 +70,14 @@ class UploadPopup extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
-        const show_rows = this.props.datapoint.dp_content.filter(row=>row.active && !row.pending)
+
+        const header = [
+            {field: 'name',headerName:"Name",flex:0.5},
+            {field: 'datasource_name',headerName:"Data Souce",flex:0.5},
+            {field: 'address',headerName:"Address",flex:0.5,filterable:false, sortable:false, valueGetter: (params) => getDataPointAddress(params.row,params.row.access.name)},
+        ];
+
+        const show_rows = this.props.datapoint.dp_content.filter(this.filterData)
         const jsx_component = (
             <Dialog open={this.props.open} scroll='paper'>
                 <DialogTitle variant='h5' align='left' color='text.secondary'>
@@ -86,9 +88,8 @@ class UploadPopup extends React.PureComponent {
                         You are about to upload the following DataPoints to be accessed. Are you sure ?
                     </DialogContentText>
                     <DataTable
-                        headers={["Name","DataSource","Address"]}
+                        headers={header}
                         content_rows={show_rows}
-                        buildContentRow={this.buildContentRow}
                         with_checkbox={false}
                         with_action_items={false}
                         with_pagination={false}/>
@@ -114,6 +115,7 @@ class UploadPopup extends React.PureComponent {
 const reduxStateToProps = (state) =>({
     global: state.global,
     datapoint: state.datapoint,
+    datasource: state.datasource,
     collector: state.collector,
 });
 

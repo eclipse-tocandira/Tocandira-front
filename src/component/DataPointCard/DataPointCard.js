@@ -13,12 +13,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
-import {TableRow, Checkbox} from '@mui/material'
 // Local Imports
 import TitledCard from '../TitledCard/TitledCard';
 import DataTable from '../DataTable/DataTable';
-import TextCell from '../DataTable/TextCell';
-import CheckCell from '../DataTable/CheckCell';
 import { getDataPointAddress } from '../Protocols/Protocols';
 import * as popupsActions from '../../store/popups/actions';
 import * as datapointActions from '../../store/datapoint/actions';
@@ -52,14 +49,17 @@ class DataPointCard extends React.PureComponent {
 
     /** Description.
     * @param ``: */
-    handleRowClick=(name,index) => {
-        const newState = {...this.state};
-        if (name===this.state.selected_row.name){
-            newState.selected_row = {name:null,id:-1};
-        } else {
-            newState.selected_row = {name:name,id:index};
+    handleRowClick=(params,index) => {
+        if (params.field==="__check__") {
+            const name = params.row.name;
+            const newState = {...this.state};
+            if (name===this.state.selected_row.name){
+                newState.selected_row = {name:null,id:-1};
+            } else {
+                newState.selected_row = {name:name,id:index};
+            }
+            this.setState(newState);
         }
-        this.setState(newState);
     }
 
     /** Description.
@@ -112,25 +112,6 @@ class DataPointCard extends React.PureComponent {
     /** Description.
     * @param ``: 
     * @returns */
-     buildContentRow=(row, index) => {
-        const is_selected = row.name===this.state.selected_row.name;
-        const content = <TableRow hover
-            onClick={this.handleRowClick.bind(this,row.name,index)}
-            role="checkbox"
-            tabIndex={-1}
-            key={index}
-            selected={is_selected} >
-                <CheckCell check_component={<Checkbox color="primary" checked={is_selected}/>}/>
-                {[row.name, row.description, getDataPointAddress(row,row.access.name), row.datasource_name].map(
-                    (text, index) => <TextCell text={text} key={index}/>
-                )}
-        </TableRow>
-        return(content);
-    }
-
-    /** Description.
-    * @param ``: 
-    * @returns */
     filterData=(row) => {
         const ds_name = row.datasource_name
         const ds = this.props.datasource.ds_content.filter(row=>row.name===ds_name)[0]
@@ -163,14 +144,18 @@ class DataPointCard extends React.PureComponent {
                 onClose={this.handlePopUpLeave}/>
         }
 
-        // console.info(this.props.datapoint.dp_content)
+        const header = [
+            {field: 'name',headerName:"Name",flex:0.5},
+            {field: 'description',headerName:"Description",flex:1},
+            {field: 'address',headerName:"Address",flex:0.5,filterable:false, sortable:false, valueGetter: (params) => getDataPointAddress(params.row,params.row.access.name)},
+            {field: 'datasource_name',headerName:"Data Souce",flex:0.5},
+        ];
+
         const card_contents=[
             <DataTable key='0'
-                headers={["Name","Description","Address","Data Souce"]}
-                ncols_to_actions={2}
+                headers={header}
                 content_rows={this.props.datapoint.dp_content.filter(this.filterData)}
                 selected_row={this.state.selected_row}
-                buildContentRow={this.buildContentRow}
                 onRowClick={this.handleRowClick}
                 onNewClick={this.handleNewClick}
                 onEditClick={this.handleEditClick}
