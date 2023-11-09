@@ -106,7 +106,6 @@ class Frame extends React.PureComponent {
     render(){
         const dp_list = this.props.datapoint.dp_content.filter(this.filterData);
         const dp_pending_num = dp_list.filter(row=>row.pending).length;
-        const dp_confirmed_num = dp_list.length-dp_pending_num;
         let actions = [];
         let back = <DynamicTypography variant='h3'>&nbsp;</DynamicTypography>
 
@@ -125,7 +124,7 @@ class Frame extends React.PureComponent {
                     VERIFY
                 </Button>
                 </Badge>,
-                <Button variant='contained' fullWidth disabled={dp_confirmed_num===0} key={2}
+                <Button variant='contained' fullWidth key={2}
                     size='large' color='primary' onClick={this.handleClickUpload}>
                     UPLOAD
                 </Button>
