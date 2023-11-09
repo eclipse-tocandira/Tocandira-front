@@ -17,7 +17,9 @@ const initialState = {
         data_error:false,
         help_text:""
     },
-    list:[]
+    list:[],
+    message:null, 
+    type_message:"info",
 };
 
 /** Description.
@@ -52,6 +54,10 @@ const reducer = (state=initialState, action) => {
             break
         case actionTypes.SAVE_DEFAULT_COLLECTOR:
             newState.default = {...action.defcol};
+            break
+        case actionTypes.MESSAGE_TEST:
+            newState.message = action.message;
+            newState.type_message = action.type_message;
             break
         default:
             // console.debug('[reducers/auth]',action)

@@ -12,7 +12,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, Collapse, IconButton, InputAdornment, Stack, TextField } from '@mui/material';
+import { Button, CircularProgress, Collapse, Icon, IconButton, InputAdornment, Stack, TextField} from '@mui/material';
 // Local Imports
 import FormPopup from  './FormPopup'
 import * as popupsActions from '../../store/popups/actions';
@@ -45,21 +45,13 @@ class CollectorPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleSaveClick=() => {
-        let pass_error=false;
-        if(this.state.ssh_pass==='' && !this.state.pass_lock){
-            pass_error=true;
-        }else{
+        this.handleClearPassError()
+        if (!this.passCheck()) {
             if (this.props.collector.selected.id){
                 this.props.onUpdate(this.props.global.backend_instance,{...this.state})
             } else {
                 this.props.onSave(this.props.global.backend_instance,{...this.props.collector.default, ...this.state})
             }
-        }
-        const newState = {...this.state};
-        newState.pass_error = pass_error;
-        this.setState(newState);
-        
-        if(!pass_error){
             this.handleCancelClick()
         }
     }
@@ -70,6 +62,34 @@ class CollectorPopup extends React.PureComponent {
     handleCancelClick=() => {
         this.props.onSelectCollector(null)
         this.props.onClose()
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    passCheck=() => {
+        let pass_error=false;
+        if(this.state.ssh_pass==='' && !this.state.pass_lock){
+            pass_error=true;
+            this.props.onAlertChange('Invalid Password. It can not be Blank.','error')
+        }
+        const newState = {...this.state};
+        newState.pass_error = pass_error;
+        this.setState(newState);
+        return(pass_error)
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleTestClick=() => {
+        this.handleClearPassError();
+        if (!this.passCheck()){
+            this.props.onTest(this.props.global.backend_instance,{...this.props.collector.default, ...this.state})
+            const newState = {...this.state};
+            newState.pass_error = true;
+            this.setState(newState);
+        }
     }
 
     /** Description.
@@ -183,6 +203,8 @@ class CollectorPopup extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleClearPassError=() => {
+        const loading = <Icon sx={{display:'flex', alignItems:'center'}}> <CircularProgress size={'1.5rem'} /> </Icon>
+        this.props.onAlertChange(loading,'info')
         const newState = {...this.state};
         newState.pass_error = false;
         this.setState(newState);
@@ -192,17 +214,21 @@ class CollectorPopup extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
-        const alert = <CustomAlert type='error' elevate
-            reset={this.handleClearPassError} msg={"Invalid Password. It can not be Blank."}/>
+        const alert = <CustomAlert type={this.props.collector.type_message} elevate
+            reset={this.handleClearPassError} msg={this.props.collector.message}/>
         
         let new_col=true;
         if (this.props.collector.selected.id) { new_col=false; }
+
         const jsx_component = (
             <FormPopup
                 open={this.props.open} title={(new_col)?"Create Collector":"Edit Collector"}
                 nameOk={(new_col)?"CREATE":"UPDATE"} nameCancel="CANCEL"
                 onCancelClick={this.handleCancelClick}
-                onOkClick={this.handleSaveClick} cardWidth={'xs'}>
+                onOkClick={this.handleSaveClick} cardWidth={'xs'}
+                onTestClick={this.handleTestClick}
+                nameTest={(this.state.pass_lock)?null:"Check SSH"}
+                >
                 <Stack direction="column" spacing="1rem">
                     <TextField variant="outlined" label="Name" type='text' required
                         fullWidth InputLabelProps={{ shrink: true }}
@@ -293,6 +319,8 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onClose:()=>dispatch(popupsActions.openCollectorPopup(false)),
     onSave:(api,col)=>dispatch(collectorActions.newCollector(api,col)),
+    onTest:(api,col)=>dispatch(collectorActions.newTest(api,col)),
+    onAlertChange:(msg,typ)=>dispatch(collectorActions.changeMessageTest(msg,typ)),
     onUpdate:(api,col)=>dispatch(collectorActions.updateCollector(api,col)),
     onSelectCollector: (id)=>dispatch(collectorActions.selectCollector(id)),
 });

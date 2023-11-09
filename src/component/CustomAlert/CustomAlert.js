@@ -30,7 +30,7 @@ class CustomAlert extends React.PureComponent {
         type: PropTypes.string,
         elevate: PropTypes.bool,
         title: PropTypes.string,
-        msg: PropTypes.string,
+        msg: PropTypes.any,
         reset: PropTypes.func,
     };
     
@@ -50,7 +50,7 @@ class CustomAlert extends React.PureComponent {
         }
         // Build the main component
         let jsx_component = (
-            <Alert severity={this.props.type} action={closeIcon}>
+            <Alert sx={{alignItems:'center'}} severity={this.props.type} action={closeIcon}>
                 {title}
                 {this.props.msg}
             </Alert>

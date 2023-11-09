@@ -35,6 +35,12 @@ export const getParams=(id,api_instance) => (dispatch) => {
 /** Redux action to set an error of invalid entries */
 export const invalidEntry=(msg) => ({type:actionTypes.INVALID_ENTRY, msg:msg});
 
+export const changeMessageTest=(msg, type_message) => ({
+    type:actionTypes.MESSAGE_TEST, 
+    message:msg, 
+    type_message:type_message
+});
+
 /** The request done prior to `saveParams` function */
 export const putParams=(api_instance,info) => (dispatch) => {
     api_instance.put('/collector',info)
@@ -123,6 +129,18 @@ export const newCollector=(api_instance,data) => (dispatch) => {
             } else {
                 dispatch(emitAlert('Error creating collector.','error'));
             }
+        }
+    )
+};
+
+/** The request done prior to `` function */
+export const newTest=(api_instance,data) => (dispatch) => {
+    api_instance.post('/check_ssh_access',data)
+    .then( (res) => {
+        dispatch(changeMessageTest('Connection Ok', 'success'));
+    } )
+    .catch( (req) => {
+            dispatch(changeMessageTest('Connection Error: ' + req.response.data, 'error'));
         }
     )
 };
