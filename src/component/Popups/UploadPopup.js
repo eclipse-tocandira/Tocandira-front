@@ -87,7 +87,7 @@ class UploadPopup extends React.PureComponent {
                     <DialogContentText>
                         You are about to upload the following DataPoints to be accessed. Are you sure ?
                     </DialogContentText>
-                    <DataTable
+                    <DataTable row_height={35} header_height={40}
                         headers={header}
                         content_rows={show_rows}
                         with_checkbox={false}
