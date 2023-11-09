@@ -13,7 +13,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Dialog, DialogContentText, DialogTitle, DialogActions,
-    Button, DialogContent } from '@mui/material';
+    Button, DialogContent} from '@mui/material';
+
 // Local Imports
 import DataTable from '../DataTable/DataTable';
 import * as datapointActions from '../../store/datapoint/actions';
@@ -48,13 +49,13 @@ class UploadPopup extends React.PureComponent {
     }
 
     /** Description.
-        * @param ``:
-        * @returns */
+    * @param ``:
+    * @returns */
     filterData=(row) => {
         const ds_name = row.datasource_name
         const ds = this.props.datasource.ds_content.filter(row=>row.name===ds_name)[0]
         if (ds) {
-            return(row.active && !row.pending && ds.collector_id===this.props.collector.selected.id)
+            return(!row.upload && !row.pending && row.active && ds.collector_id===this.props.collector.selected.id)
         } else {
             return(false)
         }
@@ -78,22 +79,33 @@ class UploadPopup extends React.PureComponent {
         ];
 
         const show_rows = this.props.datapoint.dp_content.filter(this.filterData)
+        let content = null
+        if (show_rows.length === 0){
+            content = (
+                <DialogContent>
+                    <DialogContentText>No DataPoints Verified. Do you want to perform an Empty upload?</DialogContentText>
+                </DialogContent>)
+        } else {
+            content = (
+            <DialogContent>
+                <DialogContentText>
+                    You are about to upload the following DataPoints to be accessed. Are you sure ?
+                </DialogContentText>
+                <DataTable
+                    headers={header}
+                    content_rows={show_rows}
+                    with_checkbox={false}
+                    with_action_items={false}
+                    with_pagination={false}/>
+            </DialogContent>)
+        }
+
         const jsx_component = (
             <Dialog open={this.props.open} scroll='paper'>
                 <DialogTitle variant='h5' align='left' color='text.secondary'>
-                    Add these DataPoins ?
+                    Confirm Upload
                 </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        You are about to upload the following DataPoints to be accessed. Are you sure ?
-                    </DialogContentText>
-                    <DataTable row_height={35} header_height={40}
-                        headers={header}
-                        content_rows={show_rows}
-                        with_checkbox={false}
-                        with_action_items={false}
-                        with_pagination={false}/>
-                </DialogContent>
+                {content}
                 <DialogActions>
                     <Button variant='text' size='medium' color='primary'
                         onClick={this.handleOkClick}>
@@ -108,7 +120,6 @@ class UploadPopup extends React.PureComponent {
         );
         return(jsx_component);
     }
-    
 }
 
 /** Map the Redux state to some component props */
