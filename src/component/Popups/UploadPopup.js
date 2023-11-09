@@ -94,6 +94,7 @@ class UploadPopup extends React.PureComponent {
                     <DataTable row_height={35} header_height={40}
                         headers={header}
                         content_rows={show_rows}
+                        show_empty={false}
                         with_checkbox={false}
                         with_action_items={false}
                         with_pagination={false}/>
