@@ -152,7 +152,7 @@ class DataPointCard extends React.PureComponent {
         ];
 
         const card_contents=[
-            <DataTable key='0'
+            <DataTable key='0' row_height={35} header_height={40}
                 headers={header}
                 content_rows={this.props.datapoint.dp_content.filter(this.filterData)}
                 selected_row={this.state.selected_row}
@@ -160,13 +160,15 @@ class DataPointCard extends React.PureComponent {
                 onNewClick={this.handleNewClick}
                 onEditClick={this.handleEditClick}
                 onDeleteClick={this.handleDeleteClick}/>,
-            popup,
-            delete_popup
             ];
 
         const jsx_component = (
-            <TitledCard cardprops={{flex:'1 1 auto'}}
-                title='Data Points' contents={card_contents}/>
+            <div>
+                <TitledCard cardprops={{flex:'1 1 auto'}}
+                    title='Data Points' contents={card_contents}/>
+                {popup}
+                {delete_popup}
+            </div>
         );
         return(jsx_component);
     }
