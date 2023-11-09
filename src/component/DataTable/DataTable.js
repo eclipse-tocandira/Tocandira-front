@@ -11,12 +11,10 @@
 // Imports from modules;
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box } from '@mui/material'
+import { DataGrid, gridClasses } from '@mui/x-data-grid';
 // Local Imports
-import {Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, TablePagination, TableFooter} from '@mui/material'
 import CardActionItems from '../CardActionItems/CardActionItems'
-import CheckCell from './CheckCell';
-import TextCell from './TextCell';
 
 // #######################################
 
@@ -25,18 +23,13 @@ import TextCell from './TextCell';
 * @method `props.`: */
 class DataTable extends React.PureComponent {
      
-    /** Defines the component state variables */
-    state = {
-        pagination:{
-            page: 0,
-            rows_per_page: 3,
-        },
-    };
-
     /** Defines the component property types */
     static propTypes = {
-        headers:PropTypes.arrayOf(PropTypes.string),
-        ncols_to_actions:PropTypes.number,
+        sx: PropTypes.object,
+        show_empty: PropTypes.bool,
+        headers:PropTypes.any,
+        header_height:PropTypes.number,
+        row_height:PropTypes.number,
         content_rows:PropTypes.array,
         selected_row:PropTypes.object,
         with_checkbox: PropTypes.bool,
@@ -45,11 +38,11 @@ class DataTable extends React.PureComponent {
         onRowClick:PropTypes.func,
         onNewClick:PropTypes.func,
         onEditClick:PropTypes.func,
-        onDeleteClick:PropTypes.func,
-        buildContentRow:PropTypes.func
+        onDeleteClick:PropTypes.func
     };
 
     static defaultProps={
+        show_empty: false,
         with_checkbox: true,
         with_action_items: true,
         with_pagination: true,
@@ -58,84 +51,59 @@ class DataTable extends React.PureComponent {
     /** Description.
     * @param ``: 
     * @returns */
-    handleChangePage=(event,nextpage) => {
-        const newPagination = {...this.state.pagination};
-        newPagination.page = nextpage;
-        this.setState({pagination:newPagination});
-    }
-
-    /** Description.
-    * @param ``: 
-    * @returns */
-    handleChangeRowsPerPage=(event) => {
-        const newPagination = {...this.state.pagination};
-        newPagination.rows_per_page = event.target.value;
-        this.setState({pagination:newPagination});
+    handleSingleRowSelection=(params) => {
+        params.splice(0,params.length)
     }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
-
-        let show_rows=[];
-        const st_pag = this.state.pagination;
-        if(st_pag.rows_per_page<this.props.content_rows.length  && this.props.with_pagination){
-            const ini = st_pag.page*st_pag.rows_per_page;
-            const end = (st_pag.page+1)*st_pag.rows_per_page;
-            show_rows = this.props.content_rows.slice(ini, end);
-        } else {
-            show_rows = this.props.content_rows;
+        
+        const remove_ugly_features = {
+            // This settings removes the ugly outline when selecting the table.
+            // Source: https://github.com/mui/mui-x/issues/2429#issuecomment-1241756853
+            [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]: {outline: "none"},
+            [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]: {outline: "none"},
+            // This settings removes the checkbox that allows to select all items.
+            // Source: https://stackoverflow.com/a/74195359
+            [`& .${gridClasses.columnHeader}Checkbox .${gridClasses.columnHeader}TitleContainer`]: {display: "none"}
         }
 
         let action_items = null;
         if (this.props.with_action_items) {
-            action_items = (
-            <TableCell colSpan={this.props.ncols_to_actions}>
+            action_items = <Box position='absolute' bottom='0.7rem' left='0.5rem'> 
                 <CardActionItems
-                    enable_del_edit={this.props.selected_row.name===null}
-                    onNewClick={this.props.onNewClick}
-                    onEditClick={this.props.onEditClick}
-                    onDeleteClick={this.props.onDeleteClick}/>
-            </TableCell>
-            );
+                enable_del_edit={this.props.selected_row.name===null}
+                onNewClick={this.props.onNewClick}
+                onEditClick={this.props.onEditClick}
+                onDeleteClick={this.props.onDeleteClick}/>
+            </Box>;
         }
 
-        let pagination = null;
-        if (this.props.with_pagination) {
-            pagination = (
-            <TablePagination rowsPerPageOptions={[3, 6, 9, 12]}
-                count={this.props.content_rows.length}
-                rowsPerPage={this.state.pagination.rows_per_page}
-                page={this.state.pagination.page}
-                onPageChange={this.handleChangePage}
-                onRowsPerPageChange={this.handleChangeRowsPerPage}
-            />
-            );
-        }
-
-        let checkbox = null;
-        if (this.props.with_checkbox) {
-            checkbox = <CheckCell/>
+        let table = null
+        if (this.props.content_rows.length>0 | this.props.show_empty) {
+            table = <DataGrid sx={{...remove_ugly_features, ...this.props.sx}}
+                rowHeight={this.props.row_height}
+                columnHeaderHeight={this.props.header_height}
+                columns={this.props.headers}
+                initialState={{pagination:{paginationModel:{pageSize:3}}}}
+                hideFooterPagination={!this.props.with_pagination}
+                checkboxSelection={this.props.with_checkbox}
+                pageSizeOptions={[3, 6, 9, 12]}
+                getRowId={(row) => row.name}
+                rows={this.props.content_rows}
+                hideFooterSelectedRowCount={true}
+                hideFooter={!this.props.with_pagination && !this.props.with_action_items}
+                onCellClick={this.props.onRowClick}
+                disableRowSelectionOnClick
+                onRowSelectionModelChange={this.handleSingleRowSelection}/>
         }
 
         const jsx_component = (
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow hover>
-                        {checkbox}
-                        {this.props.headers.map((text, index) => <TextCell text={text} key={index}/>)}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>{show_rows.map(this.props.buildContentRow)}</TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            {action_items}
-                            {pagination}
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </TableContainer>
+            <Box position='relative' minHeight='3rem'>
+                {table}
+                {action_items}
+            </Box>
         );
         return(jsx_component);
     }

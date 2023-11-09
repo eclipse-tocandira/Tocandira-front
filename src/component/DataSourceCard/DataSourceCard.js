@@ -13,12 +13,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {TableRow, Checkbox} from '@mui/material'
 // Local Imports
 import TitledCard from '../TitledCard/TitledCard';
 import DataTable from '../DataTable/DataTable';
-import TextCell from '../DataTable/TextCell';
-import CheckCell from '../DataTable/CheckCell';
 import DataSourcePopup from '../../component/Popups/DataSourcePopup'
 import DeletePopup from '../../component/Popups/DeletePopup';
 import * as popupsActions from '../../store/popups/actions'
@@ -51,14 +48,17 @@ class DataSourceCard extends React.PureComponent {
 
     /** Description.
     * @param ``: */
-     handleRowClick=(name,index) => {
-        const newState = {...this.state};
-        if (name===this.state.selected_row.name){
-            newState.selected_row = {name:null,id:-1};
-        } else {
-            newState.selected_row = {name:name,id:index};
+     handleRowClick=(params,index) => {
+        if (params.field==="__check__") {
+            const name = params.row.name;
+            const newState = {...this.state};
+            if (name===this.state.selected_row.name){
+                newState.selected_row = {name:null,id:-1};
+            } else {
+                newState.selected_row = {name:name,id:index};
+            }
+            this.setState(newState);
         }
-        this.setState(newState);
     }
     /** Description.
     * @param ``: */
@@ -110,25 +110,6 @@ class DataSourceCard extends React.PureComponent {
     /** Description.
     * @param ``: 
     * @returns */
-    buildContentRow=(row, index) => {
-        const is_selected = row.name===this.state.selected_row.name;
-        const content = <TableRow hover
-            onClick={this.handleRowClick.bind(this,row.name,index)}
-            role="checkbox"
-            tabIndex={-1}
-            key={index}
-            selected={is_selected} >
-                <CheckCell check_component={<Checkbox color="primary" checked={is_selected}/>}/>
-                {[row.name, row.plc_ip, row.protocol.name].map(
-                    (text, index) => <TextCell text={text} key={index}/>
-                )}
-        </TableRow>
-        return(content);
-    }
-
-    /** Description.
-    * @param ``: 
-    * @returns */
     filterData=(row) => {
         return(row.active && row.collector_id===this.props.collector.selected.id)
     }
@@ -154,24 +135,30 @@ class DataSourceCard extends React.PureComponent {
                 selected_row={this.state.selected_row}
                 onClose={this.handlePopUpLeave}/>
         }
+        const header = [
+            {field: 'name',headerName:"Name",flex:1},
+            {field: 'plc_ip',headerName:"IP Address",flex:0.5,filterable:false, sortable:false},
+            {field: 'protocol_name',headerName:"Protocol",flex:0.5, valueGetter: (params) => params.row.protocol.name},
+        ];
+
         const card_contents=[
-            <DataTable key='0'
-                headers={["Name","IP Address","Protocol"]}
-                ncols_to_actions={2}
+            <DataTable key='0' row_height={35} header_height={40}
+                headers={header}
                 content_rows={this.props.datasource.ds_content.filter(this.filterData)}
                 selected_row={this.state.selected_row}
-                buildContentRow={this.buildContentRow}
                 onRowClick={this.handleRowClick}
                 onNewClick={this.handleNewClick}
                 onEditClick={this.handleEditClick}
-                onDeleteClick={this.handleDeleteClick}/>,
-            popup,
-            delete_popup
+                onDeleteClick={this.handleDeleteClick}/>
             ]; 
 
         const jsx_component = (
-            <TitledCard cardprops={{flex:'1 1 auto'}}
-                title='Data Sources' contents={card_contents}/>
+            <div>
+                <TitledCard cardprops={{flex:'1 1 auto'}}
+                    title='Data Sources' contents={card_contents}/>
+                {popup}
+                {delete_popup}
+            </div>
         );
         return(jsx_component);
     }
