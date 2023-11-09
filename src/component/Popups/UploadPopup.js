@@ -78,6 +78,10 @@ class UploadPopup extends React.PureComponent {
         ];
 
         const show_rows = this.props.datapoint.dp_content.filter(this.filterData)
+        let message = "You are about to upload the following DataPoints to be accessed. Are you sure ?"
+        if (show_rows.length===0){
+            message = "You are about to do an empty upload. This will stop all data collections in this collector. Are you sure?"
+        }
         const jsx_component = (
             <Dialog open={this.props.open} scroll='paper'>
                 <DialogTitle variant='h5' align='left' color='text.secondary'>
@@ -85,7 +89,7 @@ class UploadPopup extends React.PureComponent {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        You are about to upload the following DataPoints to be accessed. Are you sure ?
+                        {message}
                     </DialogContentText>
                     <DataTable row_height={35} header_height={40}
                         headers={header}
