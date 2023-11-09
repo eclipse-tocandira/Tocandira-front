@@ -42,7 +42,7 @@ class DataTable extends React.PureComponent {
     };
 
     static defaultProps={
-        show_empty: false,
+        show_empty: true,
         with_checkbox: true,
         with_action_items: true,
         with_pagination: true,
@@ -94,7 +94,9 @@ class DataTable extends React.PureComponent {
         
         let table = null
         if (n_items>0 | this.props.show_empty) {
-            table = <DataGrid sx={{...remove_ugly_features, ...this.props.sx}}
+            table = <DataGrid sx={{'--DataGrid-overlayHeight': '2rem', ...remove_ugly_features, ...this.props.sx}}
+                localeText={{ noRowsLabel: "" }}
+                autoHeight
                 rowHeight={this.props.row_height}
                 columnHeaderHeight={this.props.header_height}
                 columns={this.props.headers}
