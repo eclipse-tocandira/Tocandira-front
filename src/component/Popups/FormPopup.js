@@ -47,6 +47,7 @@ class FormPopup extends React.PureComponent {
         children: PropTypes.object,
         onOkClick: PropTypes.func,
         onCancelClick: PropTypes.func,
+        onExtraClick: PropTypes.func,
     };
 
     static defaultProps = {
