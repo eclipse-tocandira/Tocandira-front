@@ -37,6 +37,8 @@ class CollectorPopup extends React.PureComponent {
         pass_error:false,
         ssh_user:'',
         ssh_pass:'',
+        name:'',
+        ip:'',
     }
     // /** Context Definition*/
     // static contextType ;

@@ -42,7 +42,9 @@ class DataTable extends React.PureComponent {
     };
 
     static defaultProps={
-        show_empty: false,
+        header_height: 30,
+        row_height: 50,
+        show_empty: true,
         with_checkbox: true,
         with_action_items: true,
         with_pagination: true,
@@ -80,22 +82,37 @@ class DataTable extends React.PureComponent {
             </Box>;
         }
 
+        const n_items = this.props.content_rows.length;
+        
+        const page_props = {
+            size: 3,
+            options: [3, 6, 9, 12]
+        }
+
+        if (!this.props.with_pagination){
+            page_props.size = n_items+1
+            page_props.options = null
+        }
+        
         let table = null
-        if (this.props.content_rows.length>0 | this.props.show_empty) {
-            table = <DataGrid sx={{...remove_ugly_features, ...this.props.sx}}
+        if (n_items>0 | this.props.show_empty) {
+            table = <DataGrid sx={{'--DataGrid-overlayHeight': '2rem', ...remove_ugly_features, ...this.props.sx}}
+                localeText={{ noRowsLabel: "" }}
+                autoHeight
                 rowHeight={this.props.row_height}
                 columnHeaderHeight={this.props.header_height}
                 columns={this.props.headers}
-                initialState={{pagination:{paginationModel:{pageSize:3}}}}
+                initialState={{pagination:{paginationModel:{pageSize:page_props.size}}}}
                 hideFooterPagination={!this.props.with_pagination}
                 checkboxSelection={this.props.with_checkbox}
-                pageSizeOptions={[3, 6, 9, 12]}
+                pageSizeOptions={page_props.options}
                 getRowId={(row) => row.name}
                 rows={this.props.content_rows}
                 hideFooterSelectedRowCount={true}
                 hideFooter={!this.props.with_pagination && !this.props.with_action_items}
                 onCellClick={this.props.onRowClick}
                 disableRowSelectionOnClick
+                disableColumnSelector
                 onRowSelectionModelChange={this.handleSingleRowSelection}/>
         }
 

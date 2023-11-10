@@ -11,10 +11,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, Stack, Tooltip } from '@mui/material';
+import { Button, Stack, Tooltip, DialogContentText } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import CancelIcon from '@mui/icons-material/Cancel';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 // Local Imports
 import FormPopup from  './FormPopup';
@@ -97,6 +98,34 @@ class VerifyPopup extends React.PureComponent {
             {field: 'response',headerName:"Response",flex:1,filterable:false, sortable:false},
         ];
 
+        let check = null
+        if (this.props.datapoint.dp_verify.length === 0){
+            check = (
+                <Stack direction="row" spacing='1rem' alignItems='center'>
+                    <DialogContentText>{'No pending data points'} </DialogContentText>
+                    <ThumbUpAltIcon color='primary' />
+                </Stack>
+            )
+        } else {
+            check = (
+                <Stack direction="column" spacing='1rem' flexGrow='1' alignItems="stretch">
+                    <Button
+                        variant='contained' color='primary' size='medium'
+                        onClick={this.handleCheckClick} fullWidth={true}>
+                        CHECK
+                    </Button>
+                    <DataTable
+                        headers={header}
+                        content_rows={this.props.datapoint.dp_verify}
+                        show_empty={false}
+                        with_checkbox={false}
+                        with_action_items={false}
+                        with_pagination={false}
+                    />
+                </Stack>
+            )
+        }
+
         const jsx_component = (
             <FormPopup
                 cardWidth='sm'
@@ -104,22 +133,8 @@ class VerifyPopup extends React.PureComponent {
                 title="Verify Data Points"
                 nameOk="SAVE" nameCancel="CANCEL"
                 onOkClick={this.handleSaveClick}
-                onCancelClick={this.handleCancelClick}>
-                <Stack direction="column" spacing='1rem' flexGrow='1' alignItems="stretch">
-                    <Button
-                        variant='contained' color='primary' size='medium'
-                        onClick={this.handleCheckClick} fullWidth={true}>
-                        CHECK
-                    </Button>
-
-                    <DataTable
-                        headers={header}
-                        content_rows={this.props.datapoint.dp_verify}
-                        with_checkbox={false}
-                        with_action_items={false}
-                        with_pagination={false}
-                    />
-                </Stack>
+                onCancelClick={this.handleCancelClick}> 
+                {check}
             </FormPopup>
         );
         return(jsx_component);

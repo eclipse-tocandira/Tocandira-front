@@ -42,6 +42,8 @@ class FormPopup extends React.PureComponent {
         cardWidth: PropTypes.string,
         nameOk: PropTypes.string,
         nameCancel: PropTypes.string,
+        nameExtra: PropTypes.string,
+        colorExtra: PropTypes.string,
         children: PropTypes.object,
         onOkClick: PropTypes.func,
         onCancelClick: PropTypes.func,
@@ -49,19 +51,21 @@ class FormPopup extends React.PureComponent {
 
     static defaultProps = {
         cardWidth:'xs',
+        colorExtra:'success',
+        nameExtra:null,
     }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
-        let button_test_connection = null
-        if (this.props.nameTest)
-            button_test_connection = (
-                <Button variant='text' size='medium' color='success'
-                    onClick={this.props.onTestClick}>
-                    {this.props.nameTest}
-                </Button>
-            )
+        let extra_button = null
+        if (this.props.nameExtra) {
+            extra_button = < Button
+                variant='text' size='medium' color={this.props.colorExtra}
+                onClick={this.props.onExtraClick} >
+                {this.props.nameExtra}
+            </Button>
+        }
         
         const jsx_component = (
                 <Dialog open={this.props.open} scroll='paper' fullWidth maxWidth={this.props.cardWidth}
@@ -75,17 +79,17 @@ class FormPopup extends React.PureComponent {
                         </FormControl>
                     </DialogContent>
                     <DialogActions sx={{justifyContent:'space-between', flexDirection:'row-reverse'}}>
-                            <Stack direction='row' spacing='0.5rem'>
-                                <Button variant='text' size='medium' color='primary'
-                                    onClick={this.props.onOkClick}>
-                                    {this.props.nameOk}
-                                </Button>
-                                <Button variant='text' size='medium' color='inherit'
-                                    onClick={this.props.onCancelClick}>
-                                    {this.props.nameCancel}
-                                </Button>
-                            </Stack>
-                            {button_test_connection}
+                        <Stack direction='row' spacing='0.5rem'>
+                            <Button variant='text' size='medium' color='primary'
+                                onClick={this.props.onOkClick}>
+                                {this.props.nameOk}
+                            </Button>
+                            <Button variant='text' size='medium' color='inherit'
+                                onClick={this.props.onCancelClick}>
+                                {this.props.nameCancel}
+                            </Button>
+                        </Stack>
+                        {extra_button}
                     </DialogActions>
                 </Dialog>
         );

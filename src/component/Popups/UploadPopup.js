@@ -54,7 +54,7 @@ class UploadPopup extends React.PureComponent {
         const ds_name = row.datasource_name
         const ds = this.props.datasource.ds_content.filter(row=>row.name===ds_name)[0]
         if (ds) {
-            return(row.active && !row.pending && ds.collector_id===this.props.collector.selected.id)
+            return(!row.upload && row.active && !row.pending && ds.collector_id===this.props.collector.selected.id)
         } else {
             return(false)
         }
@@ -78,18 +78,23 @@ class UploadPopup extends React.PureComponent {
         ];
 
         const show_rows = this.props.datapoint.dp_content.filter(this.filterData)
+        let message = "You are about to upload the following DataPoints to be accessed. Are you sure ?"
+        if (show_rows.length===0){
+            message = "You are about to do an empty upload. This will stop all data collections in this collector. Are you sure?"
+        }
         const jsx_component = (
             <Dialog open={this.props.open} scroll='paper'>
                 <DialogTitle variant='h5' align='left' color='text.secondary'>
                     Add these DataPoins ?
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        You are about to upload the following DataPoints to be accessed. Are you sure ?
+                    <DialogContentText marginBottom={'1rem'}>
+                        {message}
                     </DialogContentText>
-                    <DataTable row_height={35} header_height={40}
+                    <DataTable row_height={35}
                         headers={header}
                         content_rows={show_rows}
+                        show_empty={false}
                         with_checkbox={false}
                         with_action_items={false}
                         with_pagination={false}/>
