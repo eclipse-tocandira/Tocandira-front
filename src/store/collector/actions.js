@@ -36,7 +36,7 @@ export const getParams=(id,api_instance) => (dispatch) => {
 export const invalidEntry=(msg) => ({type:actionTypes.INVALID_ENTRY, msg:msg});
 
 export const changeMessageTest=(msg, type_message) => ({
-    type:actionTypes.MESSAGE_TEST, 
+    type:actionTypes.SSH_MESSAGE_TEST, 
     message:msg, 
     type_message:type_message
 });

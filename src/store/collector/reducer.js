@@ -55,7 +55,7 @@ const reducer = (state=initialState, action) => {
         case actionTypes.SAVE_DEFAULT_COLLECTOR:
             newState.default = {...action.defcol};
             break
-        case actionTypes.MESSAGE_TEST:
+        case actionTypes.SSH_MESSAGE_TEST:
             newState.message = action.message;
             newState.type_message = action.type_message;
             break

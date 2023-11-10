@@ -12,4 +12,4 @@ export const INVALID_ENTRY = 'INVALID_ENTRY';
 export const SAVE_LIST = 'SAVE_LIST';
 export const SELECT_ID = 'SELECT_ID';
 export const SAVE_DEFAULT_COLLECTOR = 'SAVE_DEFAULT_COLLECTOR';
-export const MESSAGE_TEST = 'MESSAGE_TEST';
+export const SSH_MESSAGE_TEST = 'SSH_MESSAGE_TEST';
