@@ -11,7 +11,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Dialog, DialogActions, DialogContent,
-    DialogTitle, FormControl, Slide } from '@mui/material';
+    DialogTitle, FormControl, Slide, Stack } from '@mui/material';
 // Local Imports
 
 // #######################################
@@ -42,6 +42,8 @@ class FormPopup extends React.PureComponent {
         cardWidth: PropTypes.string,
         nameOk: PropTypes.string,
         nameCancel: PropTypes.string,
+        nameExtra: PropTypes.string,
+        colorExtra: PropTypes.string,
         children: PropTypes.object,
         onOkClick: PropTypes.func,
         onCancelClick: PropTypes.func,
@@ -49,11 +51,21 @@ class FormPopup extends React.PureComponent {
 
     static defaultProps = {
         cardWidth:'xs',
+        colorExtra:'success',
+        nameExtra:null,
     }
 
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+        let extra_button = null
+        if (this.props.nameExtra) {
+            extra_button = < Button
+                variant='text' size='medium' color={this.props.colorExtra}
+                onClick={this.props.onExtraClick} >
+                {this.props.nameExtra}
+            </Button>
+        }
         
         const jsx_component = (
                 <Dialog open={this.props.open} scroll='paper' fullWidth maxWidth={this.props.cardWidth}
@@ -66,15 +78,18 @@ class FormPopup extends React.PureComponent {
                             {this.props.children}
                         </FormControl>
                     </DialogContent>
-                    <DialogActions>
-                        <Button variant='text' size='medium' color='primary'
-                            onClick={this.props.onOkClick}>
-                            {this.props.nameOk}
-                        </Button>
-                        <Button variant='text' size='medium' color='inherit'
-                            onClick={this.props.onCancelClick}>
-                            {this.props.nameCancel}
-                        </Button>
+                    <DialogActions sx={{justifyContent:'space-between', flexDirection:'row-reverse'}}>
+                        <Stack direction='row' spacing='0.5rem'>
+                            <Button variant='text' size='medium' color='primary'
+                                onClick={this.props.onOkClick}>
+                                {this.props.nameOk}
+                            </Button>
+                            <Button variant='text' size='medium' color='inherit'
+                                onClick={this.props.onCancelClick}>
+                                {this.props.nameCancel}
+                            </Button>
+                        </Stack>
+                        {extra_button}
                     </DialogActions>
                 </Dialog>
         );
