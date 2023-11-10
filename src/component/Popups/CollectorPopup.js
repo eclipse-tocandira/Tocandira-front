@@ -228,8 +228,8 @@ class CollectorPopup extends React.PureComponent {
                 nameOk={(new_col)?"CREATE":"UPDATE"} nameCancel="CANCEL"
                 onCancelClick={this.handleCancelClick}
                 onOkClick={this.handleSaveClick} cardWidth={'xs'}
-                onTestClick={this.handleTestClick}
-                nameTest={(this.state.pass_lock)?null:"Check SSH"}
+                onExtraClick={this.handleTestClick}
+                nameExtra={(this.state.pass_lock)?null:"Check SSH"}
                 >
                 <Stack direction="column" spacing="1rem">
                     <TextField variant="outlined" label="Name" type='text' required
