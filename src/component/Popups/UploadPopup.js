@@ -88,10 +88,10 @@ class UploadPopup extends React.PureComponent {
                     Add these DataPoins ?
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
+                    <DialogContentText marginBottom={'1rem'}>
                         {message}
                     </DialogContentText>
-                    <DataTable row_height={35} header_height={40}
+                    <DataTable row_height={35}
                         headers={header}
                         content_rows={show_rows}
                         show_empty={false}

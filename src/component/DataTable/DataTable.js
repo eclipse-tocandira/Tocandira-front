@@ -42,6 +42,8 @@ class DataTable extends React.PureComponent {
     };
 
     static defaultProps={
+        header_height: 30,
+        row_height: 50,
         show_empty: true,
         with_checkbox: true,
         with_action_items: true,
