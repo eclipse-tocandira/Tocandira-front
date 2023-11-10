@@ -134,7 +134,7 @@ export const newCollector=(api_instance,data) => (dispatch) => {
 };
 
 /** The request done prior to `` function */
-export const newTest=(api_instance,data) => (dispatch) => {
+export const sshTest=(api_instance,data) => (dispatch) => {
     api_instance.post('/check_ssh_access',data)
     .then( (res) => {
         dispatch(changeMessageTest('Connection Ok', 'success'));

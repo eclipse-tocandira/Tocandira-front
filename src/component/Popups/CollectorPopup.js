@@ -87,7 +87,7 @@ class CollectorPopup extends React.PureComponent {
     handleTestClick=() => {
         this.handleClearPassError();
         if (!this.passCheck()){
-            this.props.onTest(this.props.global.backend_instance,{...this.props.collector.default, ...this.state})
+            this.props.onCheckSsh(this.props.global.backend_instance,{...this.props.collector.default, ...this.state})
             const newState = {...this.state};
             newState.pass_error = true;
             this.setState(newState);
@@ -321,7 +321,7 @@ const reduxStateToProps = (state) =>({
 const reduxDispatchToProps = (dispatch) =>({
     onClose:()=>dispatch(popupsActions.openCollectorPopup(false)),
     onSave:(api,col)=>dispatch(collectorActions.newCollector(api,col)),
-    onTest:(api,col)=>dispatch(collectorActions.newTest(api,col)),
+    onCheckSsh:(api,col)=>dispatch(collectorActions.sshTest(api,col)),
     onAlertChange:(msg,typ)=>dispatch(collectorActions.changeMessageTest(msg,typ)),
     onUpdate:(api,col)=>dispatch(collectorActions.updateCollector(api,col)),
     onSelectCollector: (id)=>dispatch(collectorActions.selectCollector(id)),
