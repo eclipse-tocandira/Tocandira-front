@@ -54,7 +54,7 @@ class UploadPopup extends React.PureComponent {
         const ds_name = row.datasource_name
         const ds = this.props.datasource.ds_content.filter(row=>row.name===ds_name)[0]
         if (ds) {
-            return(row.active && !row.pending && ds.collector_id===this.props.collector.selected.id)
+            return(!row.upload && row.active && !row.pending && ds.collector_id===this.props.collector.selected.id)
         } else {
             return(false)
         }
