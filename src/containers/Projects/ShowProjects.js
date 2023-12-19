@@ -16,6 +16,7 @@ import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 // Local Imports
 import './ShowProjects.css';
 import ProjectCard from '../../component/ProjectCard/ProjectCard';
+import DeletePopup from '../../component/Popups/DeletePopup';
 import * as routeNames from '../../routeNames';
 import * as collectorActions from '../../store/collector/actions'
 import * as popupsActions from '../../store/popups/actions'
@@ -33,6 +34,9 @@ class ShowProjects extends React.PureComponent {
     /** Defines the component state variables */
     state = {
         redirect: null,
+        state_popup_delete: false,
+        delete_content: { title: "", msg: "" },
+        id_collector: null
     };
 
     /** Description.
@@ -57,9 +61,40 @@ class ShowProjects extends React.PureComponent {
     * @param ``: 
     * @returns */
     handleDeleteItem=(id) => {
-        this.props.onDeleteCollector(this.props.global.backend_instance,id);
+        const delete_title = 'Delete the collector';
+        const delete_msg = 'Do you really want to delete this collector?';
+
+        const newState = {...this.state};
+        newState.delete_content = { title: delete_title, msg: delete_msg };
+        newState.state_popup_delete = true;
+        newState.id_collector = id;
+        this.setState(newState);
     }
-    
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleDeleteCollector= () => {
+        this.props.onDeleteCollector(
+            this.props.global.backend_instance,
+            this.state.id_collector
+        );
+        const newState = {...this.state};
+        newState.state_popup_delete = false;
+        newState.id_collector = null;
+        this.setState(newState);
+    }
+
+    /** Description.
+    * @param ``: 
+    * @returns */
+    handleDeleteCancel=() => {
+        const newState = {...this.state};
+        newState.state_popup_delete = false;
+        newState.id_collector = null;
+        this.setState(newState);
+    }
+
     /** Description.
     * @param ``: 
     * @returns */
@@ -78,10 +113,18 @@ class ShowProjects extends React.PureComponent {
     /** Defines the component visualization.
     * @returns JSX syntax element */
     render(){
+        const delete_popup = (
+            <DeletePopup open={this.state.state_popup_delete}
+                content={this.state.delete_content}
+                nameOk={"YES"} nameCancel={"CANCEL"}
+                onOkClick={this.handleDeleteCollector}
+                onCancelClick={this.handleDeleteCancel} />
+        );
         const jsx_component = (
             <Grid2 container spacing='2rem' direction="row" alignItems="stretch" marginRight='3rem'>
                 {this.state.redirect}
                 {this.props.collector.list.map(this.buildCards)}
+                {delete_popup}
             </Grid2>
         )
         return(jsx_component);
