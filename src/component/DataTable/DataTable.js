@@ -48,6 +48,10 @@ class DataTable extends React.PureComponent {
         with_checkbox: true,
         with_action_items: true,
         with_pagination: true,
+        pagination_props: {
+            size: 3,
+            options: [3, 6, 9, 12]
+        }
     }
 
     /** Description.
@@ -84,14 +88,19 @@ class DataTable extends React.PureComponent {
 
         const n_items = this.props.content_rows.length;
         
-        const page_props = {
-            size: 3,
-            options: [3, 6, 9, 12]
-        }
+        let page_props = this.props.pagination_props;
+        let with_pagination = this.props.with_pagination;
 
         if (!this.props.with_pagination){
-            page_props.size = n_items+1
-            page_props.options = null
+            if (n_items>99) {
+                // Force pagination with 100 or more lines due to MUI limit
+                with_pagination = true;
+                page_props.size = 100
+                page_props.options = [25,50,100]
+            } else {
+                page_props.size = n_items+1
+                page_props.options = [n_items+1]
+            }
         }
         
         let table = null
@@ -103,13 +112,13 @@ class DataTable extends React.PureComponent {
                 columnHeaderHeight={this.props.header_height}
                 columns={this.props.headers}
                 initialState={{pagination:{paginationModel:{pageSize:page_props.size}}}}
-                hideFooterPagination={!this.props.with_pagination}
+                hideFooterPagination={!with_pagination}
                 checkboxSelection={this.props.with_checkbox}
                 pageSizeOptions={page_props.options}
                 getRowId={(row) => row.name}
                 rows={this.props.content_rows}
                 hideFooterSelectedRowCount={true}
-                hideFooter={!this.props.with_pagination && !this.props.with_action_items}
+                hideFooter={!with_pagination && !this.props.with_action_items}
                 onCellClick={this.props.onRowClick}
                 disableRowSelectionOnClick
                 disableColumnSelector
